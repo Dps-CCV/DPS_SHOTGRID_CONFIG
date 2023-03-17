@@ -1,6 +1,7 @@
 .idea
 install_location.yml
 pipeline_configuration.yml
+roots.yml
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
