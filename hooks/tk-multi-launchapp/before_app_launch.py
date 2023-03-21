@@ -68,6 +68,7 @@ class BeforeAppLaunch(tank.Hook):
         os.environ["PROJECT"] = str(current_context.project["name"])
         os.environ["ARTIST"] = current_context.user["name"]
         project_path = self.parent.tank.roots.get("primary")
+
         os.environ["PROJECT_PATH"] = project_path
         rawMount = os.path.normpath(project_path)
         Mount = rawMount.split(os.sep)[0]
