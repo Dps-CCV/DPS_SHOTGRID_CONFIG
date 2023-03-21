@@ -68,6 +68,7 @@ class BeforeAppLaunch(tank.Hook):
         os.environ["PROJECT"] = str(current_context.project["name"])
         os.environ["ARTIST"] = current_context.user["name"]
         project_path = self.parent.tank.roots.get("primary")
+
         os.environ["PROJECT_PATH"] = project_path
         rawMount = os.path.normpath(project_path)
         Mount = rawMount.split(os.sep)[0]
@@ -110,7 +111,7 @@ class BeforeAppLaunch(tank.Hook):
         os.environ['SHOTGUN_SITE'] = tank.platform.current_engine().sgtk.shotgun_url
 
         os.environ['SHOTGUN_CONFIG_URI'] = "sgtk:descriptor:path?path=" + tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\config"
-        os.environ['SHOTGUN_SGTK_MODULE_PATH'] = tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\instal\core\python"
+        os.environ['SHOTGUN_SGTK_MODULE_PATH'] = tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\install\core\python"
 
         ###Empty variables fro clip and lmt. Later they are set at context change
         os.environ["CLIP"] = " "
