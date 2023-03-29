@@ -351,7 +351,8 @@ def _nuke_find_additional_script_dependencies():
         if not file_path:
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)
-        dependency_paths.append(file_path)
+        if file_path not in dependency_paths:
+            dependency_paths.append(file_path)
     for readgeo_node in nuke.allNodes("ReadGeo2"):
         # make sure we have a file path and normalize it
         # file knobs set to "" in Python will evaluate to None. This is
@@ -361,6 +362,18 @@ def _nuke_find_additional_script_dependencies():
         if not file_path:
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)
+        if file_path not in dependency_paths:
+            dependency_paths.append(file_path)
+    for cam_node in nuke.allNodes("Camera2"):
+        # make sure we have a file path and normalize it
+        # file knobs set to "" in Python will evaluate to None. This is
+        # different than if you set file to an empty string in the UI, which
+        # will evaluate to ""!
+        file_path = cam_node.knob("file").value().replace(os.sep, "/")
+        if not file_path:
+            continue
+        file_path = sgtk.util.ShotgunPath.normalize(file_path)
+        if file_path not in dependency_paths:
         dependency_paths.append(file_path)
 
     return dependency_paths

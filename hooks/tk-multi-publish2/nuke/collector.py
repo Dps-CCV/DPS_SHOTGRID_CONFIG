@@ -325,7 +325,7 @@ class NukeSessionCollector(HookBaseClass):
             # the sequence path, template knowledge provided by the
             # tk-nuke-writenode app. The base collector makes some "zero config"
             # assupmtions about the path that we don't need to make here.
-            if node.knob('tk_profile_list').value()=="Exr 16bits":
+            if node.knob('tk_profile_list').value() in ["Exr 16bits", "IMAGE_PLANE", "IMAGE_PLANE_LOW"]:
                 item_type = "%s.sequence" % (item_info["item_type"],)
             else:
                 item_type = "%s.precompSequence" % (item_info["item_type"],)
@@ -701,10 +701,14 @@ class NukeSessionCollector(HookBaseClass):
         nodeslist = []
 
         def select_node_dependencies_recursive(node):
-            if node.Class() == 'Read' or node.Class() == 'ReadGeo2':
-                nodeslist.append(node['file'].value())
+            if node.Class() in ['Read', 'Camera2', 'ReadGeo2']:
+                file_path = node['file'].value()
+                if not file_path:
+                    pass
+                else:
+                    if node['file'].value() not in nodeslist:
+                        nodeslist.append(node['file'].value())
             for dep in node.dependencies():
-
                 try:
                     select_node_dependencies_recursive(dep)
                 except:

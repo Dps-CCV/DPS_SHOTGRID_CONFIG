@@ -34,18 +34,18 @@ settings.tk-multi-launchapp.shotgun:
 
 # app-specific launchapp configurations
 
-# hiero
-settings.tk-multi-launchapp.hiero:
-  engine: tk-hiero
-  icon: "{target_engine}/icon_hiero_256.png"
-  linux_path: "@path.linux.hiero"
-  linux_args: --hiero
-  mac_path: "@path.mac.hiero"
-  windows_path: "@path.windows.hiero"
-  windows_args: --hiero
-  menu_name: Hiero
-  hook_before_app_launch: "{config}/tk-multi-launchapp/before_app_launch.py"
-  location: "@apps.tk-multi-launchapp.location"
+## hiero
+#settings.tk-multi-launchapp.hiero:
+#  engine: tk-hiero
+#  icon: "{target_engine}/icon_hiero_256.png"
+#  linux_path: "@path.linux.hiero"
+#  linux_args: --hiero
+#  mac_path: "@path.mac.hiero"
+#  windows_path: "@path.windows.hiero"
+#  windows_args: --hiero
+#  menu_name: Hiero
+#  hook_before_app_launch: "{config}/tk-multi-launchapp/before_app_launch.py"
+#  location: "@apps.tk-multi-launchapp.location"
 
 # mari
 settings.tk-multi-launchapp.mari:
@@ -69,12 +69,14 @@ settings.tk-multi-launchapp.nuke:
   hook_before_app_launch: "{config}/tk-multi-launchapp/before_app_launch.py"
   location: "@apps.tk-multi-launchapp.location"
 
-# Hiero
-settings.tk-multi-launchapp.hiero:
-  engine: tk-hiero
-  windows_args: --hiero
-  hook_before_app_launch: "{config}/tk-multi-launchapp/before_app_launch.py"
-  location: "@apps.tk-multi-launchapp.location"
+## Hiero
+#settings.tk-multi-launchapp.hiero:
+#  engine: tk-hiero
+#  windows_args: --hiero
+#  menu_name: Hiero
+#  icon: "{target_engine}/icon_hiero_256.png"
+#  hook_before_app_launch: "{config}/tk-multi-launchapp/before_app_launch.py"
+#  location: "@apps.tk-multi-launchapp.location"
 
 # maya
 settings.tk-multi-launchapp.maya:

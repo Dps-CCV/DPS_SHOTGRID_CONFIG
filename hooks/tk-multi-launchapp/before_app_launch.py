@@ -16,10 +16,8 @@ to set environment variables or run scripts as part of the app initialization.
 """
 
 import os
-import sys
-import ConfigParser  # Python 3 issue.
-
 import tank
+import sys
 
 
 class BeforeAppLaunch(tank.Hook):
@@ -78,10 +76,10 @@ class BeforeAppLaunch(tank.Hook):
         )
         os.environ["OCIO"] = ocio_path
 
-        arnold_plugin_path = os.path.join(
-            project_path, "CONFIG", "MAYA", "ARNOLD_SHADERS"
-        )
-        os.environ["ARNOLD_PLUGIN_PATH"] = arnold_plugin_path
+        # arnold_plugin_path = os.path.join(
+        #     project_path, "CONFIG", "MAYA", "ARNOLD_SHADERS"
+        # )
+        # os.environ["ARNOLD_PLUGIN_PATH"] = arnold_plugin_path
 
         # filters = [["code" "is" ]]
         getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["sg_espacio___color"])
@@ -175,6 +173,7 @@ class BeforeAppLaunch(tank.Hook):
                 project_path, "CONFIG/MAYA/color_prefs.xml"
             ))
             os.environ["MAYA_COLOR_MANAGEMENT_POLICY_FILE"] = color_environ_path
+            #os.environ["MAYA_COLOR_MANAGEMENT_POLICY_LOCK"] = "1"
 
             os.environ["BIFROST_LIB_CONFIG_FILES"] = 'P:\\LIBRERIA\\MAYA_ASSETS\\BiphostGraphs\\DarePlanetConfigurations.json'
 
@@ -207,15 +206,15 @@ class BeforeAppLaunch(tank.Hook):
 
         elif engine_name == "tk-houdini":
             folder = "Houdini " + version
-            houdini_environ_path = os.path.abspath(os.path.join(
-                project_path, "CONFIG/HOUDINI/", folder
-            ))
+            # houdini_environ_path = os.path.abspath(os.path.join(
+            #     project_path, "CONFIG/HOUDINI/", folder
+            # ))
             # os.environ['HOUDINI_USER_PREF_DIR'] = houdini_environ_path
             houdini_dps_plugins_path = os.path.abspath(os.path.join(
-                os.environ['CONFIG_FOLDER'], "bundles", "CONFIG/HOUDINI/", folder
-            ))
-            os.environ['HOUDINI_USER_PREF_DIR'] = houdini_environ_path
-            os.environ['HOUDINI_DPS_PLUGINS'] = houdini_dps_plugins_path
+            #     os.environ['CONFIG_FOLDER'], "bundles", "CONFIG/HOUDINI/", folder
+            # ))
+            os.environ['HOUDINI_USER_PREF_DIR'] = "P:\\LIBRERIA\\HOUDINI_CONFIG\\Houdini 19.5.435"
+            # os.environ['HOUDINI_DPS_PLUGINS'] = houdini_dps_plugins_path
 
             self.logger.info("Test %s", houdini_environ_path)
 

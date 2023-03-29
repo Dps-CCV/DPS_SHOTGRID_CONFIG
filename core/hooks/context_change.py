@@ -125,25 +125,26 @@ class ContextChange(get_hook_baseclass()):
                     reloadConfig = nuke.root().knob('reloadConfig')
                     reloadConfig.execute()
                     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    ####DPS Write Shortcuts
+                    # # CUSTOM SHORTCUTS
+                    write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+                    write_node_item.setShortcut("")
 
-                elif current_engine._Engine__engine_instance_name == 'tk-maya':
-                    import nuke
-                    reloadConfig = nuke.root().knob('reloadConfig')
-                    reloadConfig.execute()
-                    self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+                    nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+                    nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+
+                # elif current_engine._Engine__engine_instance_name == 'tk-maya':
+                #     import nuke
+                #     reloadConfig = nuke.root().knob('reloadConfig')
+                #     reloadConfig.execute()
+                #     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
 
                 elif current_engine._Engine__engine_instance_name == 'tk-houdini':
                     hou.Color.reloadOCIO()
                     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
 
-            # DPS Write shortcuts for Shotgun Writes
-            if sgtk.platform.current_engine() == "tk-nuke":
-                import sys
-                import os
-                sys.path.append(os.path.dirname(__file__))
-                import WriteShortCuts
 
-                WriteShortCuts.WriteShortCuts()
         except:
             pass
         pass

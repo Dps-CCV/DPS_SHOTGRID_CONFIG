@@ -183,7 +183,7 @@ class SceneOperation(HookClass):
             if i == 'breed_gene' or i == 'vaccine_gene':
                 cmds.delete(i)
 
-        scripts2 = cmds.ls(type='script')
+
 
     def unknownFix(self):
         ###Rutina limpieza de nodos UNKWNOWN
