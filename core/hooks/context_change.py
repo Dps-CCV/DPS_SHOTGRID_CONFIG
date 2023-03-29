@@ -69,6 +69,8 @@ class ContextChange(get_hook_baseclass()):
         try:
             os.environ["PROJECT"] = str(current_context.project["name"])
             self.logger.info("Environment variable PROJECT changed to %s", str(current_context.project["name"]))
+            self.logger.info("Environment asasasaasasavariasasasanged to %s", str(current_context.project["name"]))
+
             arnold_plugin_path = os.path.join(
                 os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
             )
