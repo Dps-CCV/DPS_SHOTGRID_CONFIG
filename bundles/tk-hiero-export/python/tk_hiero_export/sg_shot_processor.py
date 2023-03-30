@@ -865,7 +865,7 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
                         sg.create("CutItem", data1)
                         cut_item_data_list[itemL["index"]]["cut_order"] = cut_orderS
 
-                if itemL["endf"] == en:
+                if itemL["endf"] == (en-sequence.timecodeStart()):
                     print("no final clip")
                 else:
                     if item_idx == len(itemsL) - 1:
