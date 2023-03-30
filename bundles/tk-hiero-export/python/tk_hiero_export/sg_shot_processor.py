@@ -912,7 +912,7 @@ class ShotgunShotProcessorPreset(ShotgunHieroObjectBase, FnShotProcessor.ShotPro
         # just map the standard "status" tags in hiero against
         # the standard task statuses in Shotgun. If a user wants
         # to change these, they can just create a new preset :)
-        default_properties["sg_status_hiero_tags"] = [ ("Ready To Start", "rdy"),
+        default_properties["sg_status_hiero_tags"] = [ ("Ready To Start", "rts"),
                                                        ("In Progress", "ip"),
                                                        ("On Hold", "hld"),
                                                        ("Final", "fin"), ]
