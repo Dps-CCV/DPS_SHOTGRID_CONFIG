@@ -853,7 +853,7 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
                 if itemL["startf"] == sequence.timecodeStart():
                     print("no initial clip")
                 else:
-                    if gap1_start_f != gap1_end_f:
+                    if gap1_end_f - gap1_start_f > 1:
                         gap1_start = self._timecode(gap1_start_f, fps, drop_frame)
                         gap1_end = self._timecode(gap1_end_f, fps, drop_frame)
                         if item_idx != 0:
