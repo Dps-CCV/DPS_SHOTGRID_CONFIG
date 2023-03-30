@@ -802,9 +802,7 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
         self._app.log_debug("Created Cut in ShotGrid: %s" % (cut,))
         self._app.log_info("Created Cut '%s' in ShotGrid!" % (cut["code"],))
 
-        # make sure the cut item data dicts are updated with the cut info
-        for cut_item_data in cut_item_data_list:
-            cut_item_data["cut"] = {"id": cut["id"], "type": "Cut"}
+
 
         try:
             itemsL = []
@@ -855,16 +853,17 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
                 if itemL["startf"] == sequence.timecodeStart():
                     print("no initial clip")
                 else:
-                    gap1_start = self._timecode(gap1_start_f, fps, drop_frame)
-                    gap1_end = self._timecode(gap1_end_f, fps, drop_frame)
-                    if item_idx != 0:
-                        cut_order = cut_item_data_list[itemL["index"]-1]["cut_order"]+1
-                    else:
-                        cut_order = 1
-                    cut_orderS = cut_order+1
-                    data1 = {"timecode_cut_item_in_text": gap1_start, "timecode_cut_item_out_text": gap1_end, "timecode_edit_in_text": gap1_start, "timecode_edit_out_text": gap1_end, "cut": {"id": cut["id"], "type": "Cut"}, "project": self.app.context.project, "cut_order": cut_order, "cut_item_in": gap1_start_f, "cut_item_out": gap1_end_f, "cut_item_duration": gap1_duration, "edit_in": gap1_start_f-sequence.timecodeStart()+1, "edit_out": gap1_end_f-sequence.timecodeStart()-1}
-                    sg.create("CutItem", data1)
-                    cut_item_data_list[itemL["index"]]["cut_order"] = cut_orderS
+                    if gap1_start_f != gap1_end_f:
+                        gap1_start = self._timecode(gap1_start_f, fps, drop_frame)
+                        gap1_end = self._timecode(gap1_end_f, fps, drop_frame)
+                        if item_idx != 0:
+                            cut_order = cut_item_data_list[itemL["index"]-1]["cut_order"]+1
+                        else:
+                            cut_order = 1
+                        cut_orderS = cut_order+1
+                        data1 = {"timecode_cut_item_in_text": gap1_start, "timecode_cut_item_out_text": gap1_end, "timecode_edit_in_text": gap1_start, "timecode_edit_out_text": gap1_end, "cut": {"id": cut["id"], "type": "Cut"}, "project": self.app.context.project, "cut_order": cut_order, "cut_item_in": gap1_start_f, "cut_item_out": gap1_end_f, "cut_item_duration": gap1_duration, "edit_in": gap1_start_f-sequence.timecodeStart()+1, "edit_out": gap1_end_f-sequence.timecodeStart()-1}
+                        sg.create("CutItem", data1)
+                        cut_item_data_list[itemL["index"]]["cut_order"] = cut_orderS
 
                 if itemL["endf"] == en:
                     print("no final clip")
@@ -875,8 +874,15 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
                         cut_order = cut_orderS + 1
                         data2 = {"timecode_cut_item_in_text": gap2_start, "timecode_cut_item_out_text": gap2_end, "timecode_edit_in_text": gap2_start, "timecode_edit_out_text": gap2_end, "cut": {"id": cut["id"], "type": "Cut"}, "project": self.app.context.project, "cut_order": cut_order, "cut_item_in": gap2_start_f, "cut_item_out": gap2_end_f, "cut_item_duration": gap2_duration, "edit_in": gap2_start_f-sequence.timecodeStart()+1, "edit_out": gap2_end_f-sequence.timecodeStart()-1}
                         sg.create("CutItem", data2)
+
         except Exception as e:
             print (e)
+
+        # make sure the cut item data dicts are updated with the cut info
+        for cut_item_data in cut_item_data_list:
+            cut_item_data["cut"] = {"id": cut["id"], "type": "Cut"}
+            cut_item_data["edit_in"] = cut_item_data["edit_in"]-sequence.timecodeStart()
+            cut_item_data["edit_out"] = cut_item_data["edit_out"] -sequence.timecodeStart()
 
     def _timecode(self, frame, fps, drop_frame=False):
         """Convenience wrapper to convert a given frame and fps to a timecode.

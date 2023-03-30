@@ -374,7 +374,7 @@ def _nuke_find_additional_script_dependencies():
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)
         if file_path not in dependency_paths:
-        dependency_paths.append(file_path)
+            dependency_paths.append(file_path)
 
     return dependency_paths
 
