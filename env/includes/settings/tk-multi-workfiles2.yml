@@ -55,9 +55,10 @@ settings.tk-multi-workfiles2: &settings_tk-multi-workfiles2
       hierarchy: [step]
   my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
+  hook_get_badge: "{config}/tk-multi-workfiles2/get_badge.py"
   location: "@apps.tk-multi-workfiles2.location"
 
 # launches at startup.
@@ -380,6 +381,7 @@ settings.tk-multi-workfiles2.nuke.asset_step:
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-nuke.py"
+  hook_get_badge: "{config}/tk-multi-workfiles2/get_badge.py"
   location: "@apps.tk-multi-workfiles2.location"
 
 # shot_step
@@ -417,6 +419,7 @@ settings.tk-multi-workfiles2.nuke.shot_step:
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-nuke.py"
+  hook_get_badge: "{config}/tk-multi-workfiles2/get_badge.py"
   location: "@apps.tk-multi-workfiles2.location"
 
 ################################################################################

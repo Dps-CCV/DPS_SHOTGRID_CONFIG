@@ -29,6 +29,21 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
         CollatingExporter.__init__(self)
         self._cut_order = None
 
+    def _timecode(self, frame, fps, drop_frame=False):
+        """Convenience wrapper to convert a given frame and fps to a timecode.
+
+        :param frame: Frame number
+        :param fps: Frames per seconds (float)
+        :return: timecode string
+        """
+
+        if drop_frame:
+            display_type = hiero.core.Timecode.kDisplayDropFrameTimecode
+        else:
+            display_type = hiero.core.Timecode.kDisplayTimecode
+
+        return hiero.core.Timecode.timeToString(frame, fps, display_type)
+
     def get_cut_item_data(self):
         """
         Return some computed values for use when creating cut items.
@@ -104,6 +119,16 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
             tail_out -= self.HEAD_ROOM_OFFSET
 
         # return the computed cut information
+        hiero_sequence = self._item.sequence()
+
+        # the sequence fps, used to calculate timecodes for cut items
+        fps = hiero_sequence.framerate().toFloat()
+
+        # get whether sequence timecode is displayed in drop frame format
+        drop_frame = hiero_sequence.dropFrame()
+        tc_cut_item_in = self._timecode(self._item.source().mediaSource().timecodeStart(), fps, drop_frame)
+        tc_cut_item_out = self._timecode((self._item.source().mediaSource().timecodeStart() + cut_duration), fps,
+                                         drop_frame)
         return {
             "cut_item_in": cut_in,
             "cut_item_out": cut_out,
@@ -114,6 +139,8 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
             "head_in": head_in,
             "tail_out": tail_out,
             "working_duration": working_duration,
+            "timecode_cut_item_in_text": tc_cut_item_in,
+            "timecode_cut_item_out_text": tc_cut_item_out,
         }
 
     def taskStep(self):
@@ -321,7 +348,6 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
 
         # create the CutItem with the data populated by the shot processor
         cut = None
-
         if hasattr(self, "_cut_item_data"):
             cut_item_data = self._cut_item_data
             cut_item = self.app.execute_hook_method(

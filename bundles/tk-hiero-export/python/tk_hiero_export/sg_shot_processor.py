@@ -735,10 +735,11 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
 
             # translate some of the cut item data into timecodes that will also
             # be populated in the cut item
-            tc_cut_item_in = self._timecode(cut_item_data["cut_item_in"], fps, drop_frame)
-            tc_cut_item_out = self._timecode(cut_item_data["cut_item_out"], fps, drop_frame)
+
+
             tc_edit_in = self._timecode(cut_item_data["edit_in"], fps, drop_frame)
             tc_edit_out = self._timecode(cut_item_data["edit_out"], fps, drop_frame)
+
 
             # get the shot so that we have all we need for the cut item.
             # this may create the shot if it doesn't exist already
@@ -758,8 +759,6 @@ class ShotgunShotProcessor(ShotgunHieroObjectBase, FnShotProcessor.ShotProcessor
                 "project": self.app.context.project,
                 "shot": {"id": shot["id"], "type": "Shot"},
                 "cut_order": cut_order,
-                "timecode_cut_item_in_text": tc_cut_item_in,
-                "timecode_cut_item_out_text": tc_cut_item_out,
                 "timecode_edit_in_text": tc_edit_in,
                 "timecode_edit_out_text": tc_edit_out,
             })

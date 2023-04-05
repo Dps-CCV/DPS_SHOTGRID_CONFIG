@@ -14,6 +14,7 @@ class HieroGetShot(Hook):
        # get the parent entity for the Shot
        parent = self.get_shot_parent(item.parentSequence(), data, item=item)
 
+
        # shot parent field
        parent_field = "sg_sequence"
 

@@ -179,7 +179,7 @@ class BeforeAppLaunch(tank.Hook):
 
 
         elif engine_name == "tk-nuke":
-            tank.util.append_path_to_env_var("NUKE_PATH", 'P:\\LIBRERIA\\NUKE_CONFIG')
+            #tank.util.append_path_to_env_var("NUKE_PATH", 'P:\\LIBRERIA\\NUKE_CONFIG')
             ##Variables de Nuke
             nuke_environ_path = os.path.join(
                 project_path, "CONFIG/NUKE"
@@ -192,10 +192,6 @@ class BeforeAppLaunch(tank.Hook):
             os.environ['OPTICAL_FLARES_PATH'] = "P:\\LIBRERIA\\SCRIPTS"
             os.environ['NUKE_INSTALL'] = str(app_path)
 
-            nnflow_path = 'P:\\LIBRERIA\\NUKE_CONFIG\\GIZMOS\\NNFlowVector'
-            sys.path.append(nnflow_path)
-            tank.util.append_path_to_env_var("NUKE_PATH", nnflow_path)
-            
 
 
         elif engine_name == "tk-hiero" or engine_name == "tk-nukestudio":
@@ -215,7 +211,7 @@ class BeforeAppLaunch(tank.Hook):
             os.environ['HOUDINI_USER_PREF_DIR'] = "P:\\LIBRERIA\\HOUDINI_CONFIG\\Houdini 19.5.435"
             # os.environ['HOUDINI_DPS_PLUGINS'] = houdini_dps_plugins_path
 
-            self.logger.info("Test %s", houdini_environ_path)
+            # self.logger.info("Test %s", houdini_environ_path)
 
 
 
