@@ -1,0 +1,149 @@
+set cut_paste_input [stack 0]
+version 13.2 v3
+BackdropNode {
+ inputs 0
+ name backdrop_hub6
+ knobChanged backdrop_hub.bd_CB()
+ tile_color 0x7f4154ff
+ label "REFERENCIAS PLUMAJE"
+ note_font "Arial Black Bold"
+ note_font_size 100
+ note_font_color 0xffffffff
+ selected true
+ xpos 2378
+ ypos 2372
+ bdwidth 1431
+ bdheight 375
+ addUserKnob {20 User}
+ addUserKnob {68 preset l PRESETS M {SOURCES /PARAFX /DENOISE /RENDER_CG /LAYER REFERENCES _/REF_SHOTS _/PREVIOUS_VERSIONS _/VREF MASK __/KEYING __/ROTO TRANSFORM ___/MATCHMOVE ___/STABILIZE ___/DISTORT GRADING ____/COLORMATCH ____/DESPILL CLEANING _____/PAINT _____/MARKER_REMOVAL _____/RIG_REMOVAL 3D ______/CAMPROJ ______/RELIGHT ______/FX OUT _______/FINAL _______/PRECOMP}}
+ addUserKnob {6 display -STARTLINE}
+ addUserKnob {1 Title l "" -STARTLINE}
+ Title "REFERENCIAS PLUMAJE"
+ addUserKnob {22 addFloatingText l "add Floating Text" T backdrop_hub.addFloatingText() +STARTLINE}
+ addUserKnob {1 FloatingText l "" -STARTLINE}
+ FloatingText "REFERENCIAS PLUMAJE"
+ addUserKnob {26 ""}
+ addUserKnob {22 enlarge_backdrop_to_sel l "enlarge\nBACKDROP\nto selection" T backdrop_hub.enlargeBDtoSel() +STARTLINE}
+ addUserKnob {3 border -STARTLINE}
+ border 50
+ addUserKnob {6 allowReduceSize l "Allow Reducing Size (beta)" -STARTLINE}
+ addUserKnob {22 go_behind l "go Behind" -STARTLINE T backdrop_hub.BDgoBehind()}
+ addUserKnob {22 random_color1 l "<font size=3 color=#7f7760><B>random color</B></font>" t 2138530047 T "backdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color3')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color2')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color1')" +STARTLINE}
+ addUserKnob {22 random_color2 l "<font size=3 color=#546e7f><B>random color</B></font>" t 1416527871 -STARTLINE T "backdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color3')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color1')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color2')"}
+ addUserKnob {22 random_color3 l "<font size=3 color=#7f755e><B>random color</B></font>" t 2138398463 -STARTLINE T "backdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color1')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color2')\nbackdrop_hub.giveRandomColor(nuke.thisNode(), 'random_color3')"}
+ addUserKnob {6 colorful -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {22 infos T backdrop_hub.infos() +STARTLINE}
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0070_v01/PLUMAS_PINGUINO_0070_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1142
+ origfirst 981
+ origlast 1142
+ origset true
+ name Read32
+ tile_color 0x3890cbff
+ selected true
+ xpos 2662
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0010_v01/PLUMAS_PINGUINO_0010_v01.####.exr
+ format "4096 2160 0 0 4096 2160 1 4K_DCP"
+ first 981
+ last 1608
+ origfirst 981
+ origlast 1608
+ origset true
+ name Read33
+ tile_color 0x3890cbff
+ selected true
+ xpos 2772
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0020_v01/PLUMAS_PINGUINO_0020_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1244
+ origfirst 981
+ origlast 1244
+ origset true
+ name Read34
+ tile_color 0x3890cbff
+ selected true
+ xpos 2882
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0030_v01/PLUMAS_PINGUINO_0030_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1109
+ origfirst 981
+ origlast 1109
+ origset true
+ name Read35
+ tile_color 0x3890cbff
+ selected true
+ xpos 2992
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0040_v01/PLUMAS_PINGUINO_0040_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1191
+ origfirst 981
+ origlast 1191
+ origset true
+ name Read36
+ tile_color 0x3890cbff
+ selected true
+ xpos 3102
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0050_v01/PLUMAS_PINGUINO_0050_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1214
+ origfirst 981
+ origlast 1214
+ origset true
+ name Read37
+ tile_color 0x3890cbff
+ selected true
+ xpos 3212
+ ypos 2584
+}
+Read {
+ inputs 0
+ file_type exr
+ file P:/PROYECTOS/DIN_DIM/VFX/ASSETS_PRO/PLUMAS_PINGUINO/SOURCE/PLUMAS_PINGUINO_0060_v01/PLUMAS_PINGUINO_0060_v01.####.exr
+ format "8192 4320 0 0 8192 4320 1 "
+ first 981
+ last 1106
+ origfirst 981
+ origlast 1106
+ origset true
+ name Read38
+ tile_color 0x3890cbff
+ selected true
+ xpos 3322
+ ypos 2584
+}

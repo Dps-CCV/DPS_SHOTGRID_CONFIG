@@ -145,4 +145,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-/core/schema/project/CONFIG/
+#/core/schema/project/CONFIG/
