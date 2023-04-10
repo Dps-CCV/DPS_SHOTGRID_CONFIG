@@ -558,7 +558,7 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                 if os.path.exists(self._quicktime_path):
                     self.app.log_debug("Uploading quicktime to Shotgun... (%s)" % self._quicktime_path)
                     self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                    time.sleep(1.0)
+                    # time.sleep(1.0)
                     shutil.rmtree(os.path.dirname(self._quicktime_path))
 
             # Post creation hook

@@ -467,7 +467,7 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                 )
                 self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
                 if self._temp_quicktime:
-                    time.sleep(1.0)
+                    # time.sleep(1.0)
                     shutil.rmtree(os.path.dirname(self._quicktime_path))
 
 
