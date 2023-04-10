@@ -167,6 +167,16 @@ class MayaActions(HookBaseClass):
                 }
             )
 
+        if "audio" in actions:
+            action_instances.append(
+                {
+                    "name": "audio",
+                    "params": None,
+                    "caption": "Create audio node",
+                    "description": "Creates audio from selected file",
+                }
+            )
+
         return action_instances
 
     def execute_multiple_actions(self, actions):
@@ -247,6 +257,9 @@ class MayaActions(HookBaseClass):
 
         if name == "volume":
             self._create_volume(path, sg_publish_data)
+
+        if name == "audio":
+            self._create_audio(path, sg_publish_data)
 
     ##############################################################################################################
     # helper methods which can be subclassed in custom hooks to fine tune the behaviour of things
@@ -534,6 +547,21 @@ class MayaActions(HookBaseClass):
         node = cmds.createNode('aiStandIn')
         cmds.setAttr('{}.filename'.format(node), path, type='string')
         cmds.setAttr('{}.useFrameExtension'.format(node), 1)
+
+    def _create_audio(self, path, sg_publish_data):
+        """
+        Create an audio node
+
+        :param path: Path to file.
+        :param sg_publish_data: Shotgun data dictionary with all the standard
+            publish fields.
+        :returns: The newly created volume node
+        """
+        link = sg_publish_data['entity']['id']
+        offset = sgtk.platform.current_engine().shotgun.find_one('Shot', [['id', 'is', link]], ['sg_cut_in'])
+        audio = cmds.sound(offset=offset['sg_cut_in'], file=path)
+        gPlayBackSlider = mel.eval('$tmpVar=$gPlayBackSlider')
+        cmds.timeControl(gPlayBackSlider, edit=True, sound=audio)
 
     def _get_maya_version(self):
         """

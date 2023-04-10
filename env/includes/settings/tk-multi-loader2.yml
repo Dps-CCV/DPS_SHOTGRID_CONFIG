@@ -187,6 +187,7 @@ settings.tk-multi-loader2.maya:
     RENDER_MAYA: [texture_node, image_plane]
     RENDER_NUKE: [texture_node, image_plane]
     ALPHA RENDER: [texture_node, image_plane]
+    Hiero Audio: [audio]
   entities:
   - caption: Current_Shot
     entity_type: Task
