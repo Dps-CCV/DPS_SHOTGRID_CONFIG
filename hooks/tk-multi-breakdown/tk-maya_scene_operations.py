@@ -131,6 +131,19 @@ class BreakdownSceneOperations(HookBaseClass):
 
             refs.append({"node_name": volume, "node_type": "volume", "path": path})
 
+        for audio in cmds.ls(l=True, type="audio"):
+            # ensure this is actually part of this scene and not referenced
+            if cmds.referenceQuery(audio, isNodeReferenced=True):
+                # this is embedded in another reference, so don't include it in the breakdown
+                continue
+
+            # get path and make it platform dependent (maya uses C:/style/paths)
+            path = cmds.getAttr("%s.filename" % audio).replace(
+                "/", os.path.sep
+            )
+
+            refs.append({"node_name": audio, "node_type": "audio", "path": path})
+
         return refs
 
     def update(self, item):
@@ -211,3 +224,14 @@ class BreakdownSceneOperations(HookBaseClass):
             )
             file_name = cmds.getAttr("%s.filename" % node_name)
             cmds.setAttr("%s.filename" % node_name, new_path, type="string")
+
+        elif node_type == "audio":
+            # audio node
+            self.logger.debug(
+                "Audio node %s: Updating to version %s" % (node_name, new_path)
+            )
+            file_name = cmds.getAttr("%s.filename" % node_name)
+            cmds.setAttr("%s.filename" % node_name, new_path, type="string")
+            link = sg_publish_data['entity']['id']
+            offset = sgtk.platform.current_engine().shotgun.find_one('Shot', [['id', 'is', link]], ['sg_cut_in'])
+            cmds.setAttr("%s.offset" % node_name, float(offset['sg_cut_in']), type="float")
