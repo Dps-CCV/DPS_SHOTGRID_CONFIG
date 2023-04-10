@@ -511,13 +511,13 @@ paths:
 #    nuke_tech_precomp:
 #        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_v{version}/{Shot}_{nuke.output}_v{version}.{SEQ}.exr'
     nuke_imageplane:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Shot}_IMP_v{version}.{SEQ}.exr'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
     nuke_imageplane_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_v{version}/{Shot}_IMP_v{version}.{SEQ}.exr'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
     nuke_imageplane_low:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_v{version}/{Shot}_IPL_v{version}.{SEQ}.png'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_{task_name}_v{version}/{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
     nuke_imageplane_low_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_v{version}/{Shot}_IPL_v{version}.{SEQ}.png'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_{task_name}_v{version}/{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
     nuke_mattepaint:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_mattepaint_pub:
