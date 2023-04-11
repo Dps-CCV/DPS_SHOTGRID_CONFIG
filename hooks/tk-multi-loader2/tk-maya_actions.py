@@ -561,7 +561,7 @@ class MayaActions(HookBaseClass):
         offset = sgtk.platform.current_engine().shotgun.find_one('Shot', [['id', 'is', link]], ['sg_cut_in'])
         audio = cmds.sound(offset=offset['sg_cut_in'], file=path)
         gPlayBackSlider = mel.eval('$tmpVar=$gPlayBackSlider')
-        cmds.timeControl(gPlayBackSlider, edit=True, sound=audio)
+        cmds.timeControl(gPlayBackSlider, edit=True, sound=audio, ds=True)
 
     def _get_maya_version(self):
         """

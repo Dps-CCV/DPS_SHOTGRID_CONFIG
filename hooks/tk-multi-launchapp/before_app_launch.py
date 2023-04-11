@@ -179,7 +179,7 @@ class BeforeAppLaunch(tank.Hook):
 
 
         elif engine_name == "tk-nuke":
-            #tank.util.append_path_to_env_var("NUKE_PATH", 'P:\\LIBRERIA\\NUKE_CONFIG')
+            tank.util.append_path_to_env_var("NUKE_PATH", 'P:\\LIBRERIA\\NUKE_CONFIG')
             ##Variables de Nuke
             nuke_environ_path = os.path.join(
                 project_path, "CONFIG/NUKE"

@@ -25,6 +25,8 @@ includes:
 - ./tk-multi-workfiles2.yml
 - ./tk-nuke-writenode.yml
 - ./tk-nuke-quickreview.yml
+- ./tk-multi-bugreporter.yml
+
 
 ################################################################################
 # Hiero
@@ -43,6 +45,7 @@ settings.tk-nuke.hiero.project:
     tk-hiero-export: "@settings.tk-hiero-export"
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
@@ -98,6 +101,7 @@ settings.tk-nuke.asset:
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   favourite_directories:
@@ -131,6 +135,7 @@ settings.tk-nuke.asset_step:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -159,6 +164,8 @@ settings.tk-nuke.project:
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
+
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -176,6 +183,7 @@ settings.tk-nuke.sequence:
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -193,6 +201,8 @@ settings.tk-nuke.shot:
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2.launch_at_startup"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
+
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   favourite_directories:
@@ -227,6 +237,8 @@ settings.tk-nuke.shot_step:
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2.nuke.shot_step"
     tk-nuke-quickreview: "@settings.tk-nuke-quickreview"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
+
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -266,6 +278,7 @@ settings.tk-nuke.nukestudio.asset_step:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false
@@ -308,6 +321,7 @@ settings.tk-nuke.nukestudio.project:
     tk-hiero-export: "@settings.tk-hiero-export"
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
@@ -367,6 +381,7 @@ settings.tk-nuke.nukestudio.shot_step:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false

@@ -26,6 +26,8 @@ includes:
 - ./tk-houdini-arnoldnode.yml
 - ./tk-houdini-geometrynode.yml
 - ./tk-houdini-flipbook.yml
+- ./tk-multi-bugreporter.yml
+
 
 ################################################################################
 
@@ -37,6 +39,7 @@ settings.tk-houdini.asset:
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2.launch_at_startup"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   location: "@engines.tk-houdini.location"
@@ -60,6 +63,7 @@ settings.tk-houdini.asset_step:
     tk-houdini-arnoldnode: "@settings.tk-houdini-arnoldnode.asset_step"
     tk-houdini-geometrynode: "@settings.tk-houdini-geometrynode.asset_step"
     tk-houdini-flipbook: "@settings.tk-houdini-flipbook.asset_step"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -75,6 +79,7 @@ settings.tk-houdini.project:
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   location: "@engines.tk-houdini.location"
@@ -87,6 +92,7 @@ settings.tk-houdini.sequence:
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   location: "@engines.tk-houdini.location"
@@ -99,6 +105,7 @@ settings.tk-houdini.shot:
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   location: "@engines.tk-houdini.location"
@@ -124,6 +131,7 @@ settings.tk-houdini.shot_step:
     tk-houdini-arnoldnode: "@settings.tk-houdini-arnoldnode.shot_step"
     tk-houdini-geometrynode: "@settings.tk-houdini-geometrynode.shot_step"
     tk-houdini-flipbook: "@settings.tk-houdini-flipbook.shot_step"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}

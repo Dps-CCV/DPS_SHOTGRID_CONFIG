@@ -31,6 +31,10 @@ apps.tk-multi-breakdown.location:
 apps.tk-multi-breakdown2.location:
   type: app_store
   name: tk-multi-breakdown2
+  version: v0.2.5
+apps.tk-multi-breakdown2.mayalocation:
+  type: app_store
+  name: tk-multi-breakdown2
   version: v0.2.3
 apps.tk-multi-data-validation.location:
   type: app_store
@@ -191,3 +195,8 @@ apps.tk-mari-projectmanager.location:
   type: app_store
   version: v1.3.1
 frameworks: '@frameworks'
+# bug report
+apps.tk-multi-bugreporter.location:
+  name: tk-multi-bugreporter
+  type: path
+  path: '{CONFIG_FOLDER}/bundles/tk-multi-bugreporter'

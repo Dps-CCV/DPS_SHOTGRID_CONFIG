@@ -17,6 +17,7 @@ includes:
 - ./tk-multi-launchapp.yml
 - ./tk-multi-publish2.yml
 - ./tk-multi-screeningroom.yml
+- ./tk-multi-bugreporter.yml
 
 ################################################################################
 
@@ -41,6 +42,7 @@ settings.tk-desktop.project:
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-demo:
       location: "@apps.tk-multi-demo.location"
+    tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   groups:
   - matches:
     - "*Fla*"
