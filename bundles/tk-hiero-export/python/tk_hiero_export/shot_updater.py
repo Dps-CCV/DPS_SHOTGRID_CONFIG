@@ -126,8 +126,8 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
 
         # get whether sequence timecode is displayed in drop frame format
         drop_frame = hiero_sequence.dropFrame()
-        tc_cut_item_in = self._timecode(self._item.source().mediaSource().timecodeStart(), fps, drop_frame)
-        tc_cut_item_out = self._timecode((self._item.source().mediaSource().timecodeStart() + cut_duration), fps,
+        tc_cut_item_in = self._timecode((self._item.source().mediaSource().timecodeStart() + in_handle), fps, drop_frame)
+        tc_cut_item_out = self._timecode((self._item.source().mediaSource().timecodeStart() + in_handle + cut_duration), fps,
                                          drop_frame)
         return {
             "cut_item_in": cut_in,
