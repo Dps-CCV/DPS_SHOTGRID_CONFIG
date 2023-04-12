@@ -522,17 +522,19 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                         self._thumbnail
                     )
 
-        # if self._temp_quicktime:
-        #     shutil.rmtree(os.path.dirname(self._quicktime_path))
-        #     # time.sleep(1.0)
-        #     # # shutil.rmtree(os.path.dirname(self._quicktime_path))
-        #     # os.remove(self._quicktime_path)
+
         # Log usage metrics
         try:
             self.app.log_metric("Transcode & Publish", log_version=True)
         except:
             # ingore any errors. ex: metrics logging not supported
             pass
+
+        if os.path.exists(self._quicktime_path):
+            if self._temp_quicktime:
+                # time.sleep(1.0)
+                # shutil.rmtree(os.path.dirname(self._quicktime_path))
+                os.remove(self._quicktime_path)
 
 
 class ShotgunTranscodePreset(ShotgunHieroObjectBase, FnTranscodeExporter.TranscodePreset, CollatedShotPreset):
