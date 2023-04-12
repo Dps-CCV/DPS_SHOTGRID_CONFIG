@@ -59,3 +59,4 @@ class HieroUpdateShot(HookBaseClass):
             "Updating info for %s %s: %s" % (entity_type, entity_id, entity_data)
         )
         self.parent.sgtk.shotgun.update(entity_type, entity_id, entity_data)
+

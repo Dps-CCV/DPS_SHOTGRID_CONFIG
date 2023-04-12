@@ -16,6 +16,8 @@ import tempfile
 import time
 # import inspect
 # import re
+import random
+import string
 
 
 # from hiero.exporters import FnFrameExporter
@@ -141,7 +143,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         self._shot_name = None
         self._thumbnail = None
         # self._quicktime_path = os.path.join(os.path.dirname(self.resolvedExportPath()), 'preview.mov')
-        self._quicktime_path = os.path.join(tempfile.mkdtemp(), 'preview.mov')
+        randomName = ''.join(random.choices(string.ascii_lowercase, k=5))
+        baseName = randomName + '_' + 'preview.mov'
+        print(baseName)
+        self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
 
 
 
@@ -401,18 +406,34 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                 FileIn = self._sg_shot["sg_cut_in"]
                 FileOut = self._sg_shot["sg_cut_out"]
 
-            self._version_data = {
-                "user": sg_current_user,
-                "created_by": sg_current_user,
-                "entity": self._sg_shot,
-                "project": self.app.context.project,
-                "sg_path_to_movie": self._resolved_export_path,
-                "code": file_name,
-                "sg_first_frame": FileIn,
-                "sg_last_frame": FileOut,
-                "frame_range": "%s-%s" % (FileIn, FileOut),
-                "sg_status_list": "psu"
-            }
+            file_type = self._preset.properties()["file_type"]
+
+            if file_type in ["mov", "ffmpeg"]:
+                self._version_data = {
+                    "user": sg_current_user,
+                    "created_by": sg_current_user,
+                    "entity": self._sg_shot,
+                    "project": self.app.context.project,
+                    "sg_path_to_movie": self._resolved_export_path,
+                    "code": file_name,
+                    "sg_first_frame": FileIn,
+                    "sg_last_frame": FileOut,
+                    "frame_range": "%s-%s" % (FileIn, FileOut),
+                    "sg_status_list": "psu",
+                }
+            else:
+                self._version_data = {
+                    "user": sg_current_user,
+                    "created_by": sg_current_user,
+                    "entity": self._sg_shot,
+                    "project": self.app.context.project,
+                    "sg_path_to_frames": self._resolved_export_path,
+                    "code": file_name,
+                    "sg_first_frame": FileIn,
+                    "sg_last_frame": FileOut,
+                    "frame_range": "%s-%s" % (FileIn, FileOut),
+                    "sg_status_list": "psu",
+                }
 
             if self._sg_task is not None:
                 self._version_data["sg_task"] = self._sg_task

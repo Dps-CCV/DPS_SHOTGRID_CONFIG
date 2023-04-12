@@ -66,4 +66,20 @@ class HieroUpdateShot(HookBaseClass):
         self.parent.logger.debug(
             "Updating info for %s %s: %s" % (entity_type, entity_id, entity_data)
         )
+        # tasksFromTemplate = self.app.tank.shotgun.find("Task", [['task_template.TaskTemplate.code', 'is', entity_data['task_template']['name']]], ['content', 'est_in_mins', 'sg_status_list', 'step', 'sg_person', 'task_assignees'])
+        # project = self.app.context.project
+        # tasksOnShot = self.app.tank.shotgun.find("Task", [['entity.Shot.id', 'is', entity_id]], ['content'])
+        # batch_data = []
+        # Shot = self.app.tank.shotgun.find_one("Shot", [['id', 'is', entity_id]], [])
+        # for t in tasksFromTemplate:
+        #     for old in tasksOnShot:
+        #         if t['content'] == old['content']:
+        #             tasksFromTemplate.remove(t)
+        #         else:
+        #             data = {"request_type": "create", "entity_type": "Task",
+        #                     "data": {"content": t['content'], "project": project, "est_in_mins": t["est_in_mins"],
+        #                     "sg_status_list": t["sg_status_list"], "step": t["step"], "sg_person": t["sg_person"],
+        #                     "task_assignees": t["task_assignees"], "entity": Shot}}
+        #             batch_data.append(data)
         self.parent.sgtk.shotgun.update(entity_type, entity_id, entity_data)
+        # self.parent.sgtk.shotgun.batch(batch_data)

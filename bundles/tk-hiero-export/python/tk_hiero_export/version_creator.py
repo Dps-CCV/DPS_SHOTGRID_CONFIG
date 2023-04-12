@@ -15,6 +15,8 @@ import shutil
 import tempfile
 import inspect
 import time
+import random
+import string
 
 from hiero.exporters import FnExternalRender
 from hiero.exporters import FnTranscodeExporter
@@ -182,8 +184,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
             self._quicktime_path = self.resolvedExportPath()
             self._temp_quicktime = False
             return
-
-        self._quicktime_path = os.path.join(tempfile.mkdtemp(), "preview.mov")
+        randomName = ''.join(random.choices(string.ascii_lowercase, k=5))
+        baseName = randomName + '_' + 'preview.mov'
+        print(baseName)
+        self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
+        #self._quicktime_path = os.path.join(tempfile.mkdtemp(), "preview.mov")
         self._temp_quicktime = True
         nodeName = "SG Screening Room Media"
 
@@ -348,20 +353,34 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                 FileIn = self._sg_shot["sg_cut_in"]
                 FileOut = self._sg_shot["sg_cut_out"]
 
+            file_type = self._preset.properties()["file_type"]
 
-            self._version_data = {
-                "user": sg_current_user,
-                "created_by": sg_current_user,
-                "entity": self._sg_shot,
-                "project": self.app.context.project,
-                "sg_path_to_movie": self._resolved_export_path,
-                "code": file_name,
-                "sg_first_frame": FileIn,
-                "sg_last_frame": FileOut,
-                "frame_range": "%s-%s" % (FileIn, FileOut),
-                "sg_status_list": "psu",
-            }
-
+            if file_type in ["mov", "ffmpeg"]:
+                self._version_data = {
+                    "user": sg_current_user,
+                    "created_by": sg_current_user,
+                    "entity": self._sg_shot,
+                    "project": self.app.context.project,
+                    "sg_path_to_movie": self._resolved_export_path,
+                    "code": file_name,
+                    "sg_first_frame": FileIn,
+                    "sg_last_frame": FileOut,
+                    "frame_range": "%s-%s" % (FileIn, FileOut),
+                    "sg_status_list": "psu",
+                }
+            else:
+                self._version_data = {
+                    "user": sg_current_user,
+                    "created_by": sg_current_user,
+                    "entity": self._sg_shot,
+                    "project": self.app.context.project,
+                    "sg_path_to_frames": self._resolved_export_path,
+                    "code": file_name,
+                    "sg_first_frame": FileIn,
+                    "sg_last_frame": FileOut,
+                    "frame_range": "%s-%s" % (FileIn, FileOut),
+                    "sg_status_list": "psu",
+                }
             if self._sg_task is not None:
                 self._version_data["sg_task"] = self._sg_task
 
