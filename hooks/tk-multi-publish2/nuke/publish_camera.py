@@ -860,34 +860,35 @@ class NukeCameraPublishPlugin(HookBaseClass):
                 "Copied work file '%s' to publish file '%s'."
                 % (work_file, publish_file)
             )
-        self.logger.info(
-            "Starting unregister and deletion of old publishes. For publish %s" % (publish_file)
-        )
-        normalizedpath = os.path.normpath(publish_file)
-        pathsep = normalizedpath.split(os.sep)
-        imagesFolder = os.path.join(pathsep[0], os.sep, os.path.join(*pathsep[1:-2]))
-        renderFolder = os.path.join(*pathsep[-2:-1])
-        olderVersionsList = []
-        for renderVersion in os.listdir(imagesFolder):
-            if renderFolder[:-3] in renderVersion:
-                olderVersionsList.append(renderVersion)
-
-        if len(olderVersionsList) > 4:
-            oldFolder = os.path.join(imagesFolder, olderVersionsList[0]) + os.sep
-            self.logger.info(
-                "Unregistering %s " % (oldFolder)
-            )
-            # Grab the unregister command
-            publisher = self.parent
-            tk = publisher.sgtk
-            unreg_cmd = sgtk.get_command('unregister_folders', tk)
-            parameters = {"path": oldFolder}
-            unreg_cmd.execute(parameters)
-            import shutil
-            shutil.rmtree(oldFolder)
-            self.logger.info(
-                " Folder %s was deleted" % (oldFolder)
-            )
+        ###DPS unregister publishes for cams is deactivated
+        # self.logger.info(
+        #     "Starting unregister and deletion of old publishes. For publish %s" % (publish_file)
+        # )
+        # normalizedpath = os.path.normpath(publish_file)
+        # pathsep = normalizedpath.split(os.sep)
+        # imagesFolder = os.path.join(pathsep[0], os.sep, os.path.join(*pathsep[1:-2]))
+        # renderFolder = os.path.join(*pathsep[-2:-1])
+        # olderVersionsList = []
+        # for renderVersion in os.listdir(imagesFolder):
+        #     if renderFolder[:-3] in renderVersion:
+        #         olderVersionsList.append(renderVersion)
+        #
+        # if len(olderVersionsList) > 4:
+        #     oldFolder = os.path.join(imagesFolder, olderVersionsList[0]) + os.sep
+        #     self.logger.info(
+        #         "Unregistering %s " % (oldFolder)
+        #     )
+        #     # Grab the unregister command
+        #     publisher = self.parent
+        #     tk = publisher.sgtk
+        #     unreg_cmd = sgtk.get_command('unregister_folders', tk)
+        #     parameters = {"path": oldFolder}
+        #     unreg_cmd.execute(parameters)
+        #     import shutil
+        #     shutil.rmtree(oldFolder)
+        #     self.logger.info(
+        #         " Folder %s was deleted" % (oldFolder)
+        #     )
 
 
 

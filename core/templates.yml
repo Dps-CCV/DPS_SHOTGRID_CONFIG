@@ -527,13 +527,13 @@ paths:
     nuke_shot_render_pub_dpx:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_v{version}/{Shot}_{Step}_v{version}.{SEQ}.dpx'
     nuke_shot_camera_work:
-        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Shot}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_camera_publish:
-        definition: '@shot_root/PUBLISH/CAM/{Step}/{Shot}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@shot_root/PUBLISH/CAM/{Step}/{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_geo_work:
-        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Shot}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_geo_publish:
-        definition: '@shot_root/PUBLISH/GEO/{Step}/{Shot}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@shot_root/PUBLISH/GEO/{Step}/{Shot}_{Step}_{name}_v{version}.{extension}'
     # review output
     shot_quicktime_quick:
         definition: '@shot_root/DAILIES/LOW/{Shot}_{Step}_{task_name}_v{version}_{iteration}.mov'
@@ -805,13 +805,13 @@ paths:
     nuke_asset_mattepaint_pub:
         definition: '@asset_root/PUBLISH/IMAGE_PLANE/BMP/{Step}/NUKE_BMP_{task_name}_v{version}/{Asset}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_asset_camera_work:
-        definition: '@asset_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Asset}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@asset_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Asset}_{Step}_{name}_v{version}.{extension}'
     nuke_asset_camera_publish:
-        definition: '@asset_root/PUBLISH/CAM/{Step}/{Asset}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@asset_root/PUBLISH/CAM/{Step}/{Asset}_{Step}_{name}_v{version}.{extension}'
     nuke_asset_geo_work:
-        definition: '@asset_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Asset}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@asset_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Asset}_{Step}_{name}_v{version}.{extension}'
     nuke_asset_geo_publish:
-        definition: '@asset_root/PUBLISH/GEO/{Step}/{Asset}_{Step}_{name}_{task_name}_v{version}.{extension}'
+        definition: '@asset_root/PUBLISH/GEO/{Step}/{Asset}_{Step}_{name}_v{version}.{extension}'
     # review output
     nuke_asset_render_movie:
         definition: '@asset_root/DAILIES/HIGH/{Asset}_{Step}_{task_name}_v{version}.mov'
