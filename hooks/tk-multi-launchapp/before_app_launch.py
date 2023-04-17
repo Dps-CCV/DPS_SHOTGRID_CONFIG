@@ -164,9 +164,12 @@ class BeforeAppLaunch(tank.Hook):
                 os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
 
             render_environ_path = os.path.abspath(os.path.join(
-                project_path, "CONFIG/MAYA/render_settings/"
+                project_path, "CONFIG/MAYA/RSTemplates/"
             ))
-            os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = render_environ_path
+            renderTemplate_environ_path = os.path.abspath(os.path.join(
+                project_path, "CONFIG/MAYA/RSTemplates/"
+            ))
+            os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = renderTemplate_environ_path
             os.environ["MAYA_RENDER_SETUP_GLOBAL_PRESETS_PATH"] = render_environ_path
 
             color_environ_path = os.path.abspath(os.path.join(
