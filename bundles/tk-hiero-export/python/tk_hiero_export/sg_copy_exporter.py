@@ -13,7 +13,6 @@ import ast
 import sys
 import shutil
 import tempfile
-import time
 # import inspect
 # import re
 import random
@@ -145,8 +144,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         # self._quicktime_path = os.path.join(os.path.dirname(self.resolvedExportPath()), 'preview.mov')
         randomName = ''.join(random.choices(string.ascii_lowercase, k=5))
         baseName = randomName + '_' + 'preview.mov'
-        print(baseName)
-        self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
+        self._quicktime_path = os.path.join("C:\\TEMP_HIERO", baseName)
+        if not os.path.exists("C:\\TEMP_HIERO\\"):
+            os.makedirs("C:\\TEMP_HIERO\\")
+        #self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
 
 
 
@@ -288,12 +289,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
 
             if not os.path.exists(scriptPath):
 
-                print
-                "Failed to write %s" % scriptPath
+                print ("Failed to write %s" % scriptPath)
 
             else:
-                print
-                "Successfully wrote %s. Executing now..." % scriptPath
+                print ("Successfully wrote %s. Executing now..." % scriptPath)
                 sys.stdout.flush()
 
                 # get hiero to call nuke to execute the script
@@ -308,24 +307,21 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                     # if the return code hasn't been set, Nuke is still running
                     if returnCode == None:
 
-                        print
-                        "Still executing..."
+                        print("Still executing...")
                         sys.stdout.flush()
 
                         # fire a timer to poll again
                         QtCore.QTimer.singleShot(100, poll)
                     else:
 
-                        print
-                        "execution finished"
+                        print("execution finished")
 
                         # check if the path exists now
                         if os.path.exists(writeNodeOutput):
-                            print
-                            "%s successfully rendered (from %s)" % (writeNodeOutput, scriptPath)
+                            print("%s successfully rendered (from %s)" % (writeNodeOutput, scriptPath))
+                            process.kill()
                         else:
-                            print
-                            "%s failed to render" % writeNodeOutput
+                            print("%s failed to render" % writeNodeOutput)
 
 
                 # start polling
@@ -580,8 +576,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                 if os.path.exists(self._quicktime_path):
                     self.app.log_debug("Uploading quicktime to Shotgun... (%s)" % self._quicktime_path)
                     self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                    # time.sleep(1.0)
-                    # shutil.rmtree(os.path.dirname(self._quicktime_path))
+                    try:
+                        shutil.rmtree(os.path.dirname(self._quicktime_path))
+                    except Exception:
+                        pass
 
             # Post creation hook
             ####################
@@ -631,9 +629,9 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         util.filesystem.makeDirs(dstdir)
 
         self._tryCopy(src, dst)
-        if os.path.exists(self._quicktime_path):
-            # shutil.rmtree(os.path.dirname(self._quicktime_path))
-            os.remove(self._quicktime_path)
+        # if os.path.exists(self._quicktime_path):
+        #     shutil.rmtree(os.path.dirname(self._quicktime_path))
+        #     #os.remove(self._quicktime_path)
 
 
 

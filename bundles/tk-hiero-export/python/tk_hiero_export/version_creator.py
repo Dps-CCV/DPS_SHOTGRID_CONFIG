@@ -14,7 +14,6 @@ import sys
 import shutil
 import tempfile
 import inspect
-import time
 import random
 import string
 
@@ -186,10 +185,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
             return
         randomName = ''.join(random.choices(string.ascii_lowercase, k=5))
         baseName = randomName + '_' + 'preview.mov'
-        print(baseName)
-        self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
+        self._quicktime_path = os.path.join("C:\\TEMP_HIERO", baseName)
         #self._quicktime_path = os.path.join(tempfile.mkdtemp(), "preview.mov")
         self._temp_quicktime = True
+        if not os.path.exists("C:\\TEMP_HIERO\\"):
+            os.makedirs("C:\\TEMP_HIERO\\")
         nodeName = "SG Screening Room Media"
 
         framerate = None
@@ -485,9 +485,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                     "Uploading quicktime to ShotGrid... (%s)" % self._quicktime_path
                 )
                 self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                if self._temp_quicktime:
-                    # time.sleep(1.0)
-                    shutil.rmtree(os.path.dirname(self._quicktime_path))
+                try:
+                    if self._temp_quicktime:
+                        shutil.rmtree(os.path.dirname(self._quicktime_path))
+                except Exception:
+                    pass
 
 
         # Post creation hook
@@ -530,11 +532,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
             # ingore any errors. ex: metrics logging not supported
             pass
 
-        if os.path.exists(self._quicktime_path):
-            if self._temp_quicktime:
-                # time.sleep(1.0)
-                # shutil.rmtree(os.path.dirname(self._quicktime_path))
-                os.remove(self._quicktime_path)
+        # if os.path.exists(self._quicktime_path):
+        #     if self._temp_quicktime:
+        #         # time.sleep(1.0)
+        #         shutil.rmtree(os.path.dirname(self._quicktime_path))
+        #         #os.remove(self._quicktime_path)
 
 
 class ShotgunTranscodePreset(ShotgunHieroObjectBase, FnTranscodeExporter.TranscodePreset, CollatedShotPreset):
