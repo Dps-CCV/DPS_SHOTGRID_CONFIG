@@ -65,7 +65,8 @@ class ContextChange(get_hook_baseclass()):
         :param current_context: The current context of the engine.
         :type current_context: :class:`~sgtk.Context`
         """
-
+        from sgtk.platform import current_engine
+        engine = current_engine()
         try:
             os.environ["PROJECT"] = str(current_context.project["name"])
             self.logger.info("Environment variable PROJECT changed to %s", str(current_context.project["name"]))
@@ -148,6 +149,37 @@ class ContextChange(get_hook_baseclass()):
                     import maya.cmds as cmds
                     import maya.mel as mel
                     mel.eval("colorManagementPrefs -refresh;")
+
+                    def SetResolution(self):
+                        import maya.cmds as cmds
+                        import maya.mel as mel
+                        import sgtk
+                        engine = sgtk.platform.current_engine()
+                        sg = engine.shotgun
+                        context = engine.context.entity
+                        shot = sg.find_one(context['type'], [['id', 'is', context['id']]],
+                                           ['sg_width', 'sg_height'])
+                        if shot['sg_width'] != None:
+                            pAx = maya.cmds.getAttr("defaultResolution.pixelAspect")
+                            pAr = maya.cmds.getAttr("defaultResolution.deviceAspectRatio")
+                            maya.cmds.setAttr("defaultResolution.aspectLock", 0)
+                            maya.cmds.setAttr("defaultResolution.width", shot['sg_width'])
+                            maya.cmds.setAttr("defaultResolution.height", shot['sg_height'])
+                            maya.cmds.setAttr("defaultResolution.pixelAspect", pAx)
+                            maya.cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
+                            maya.cmds.setAttr("defaultResolution.aspectLock", 1)
+                            texto = "Render settings resolution changed to: " + str(shot['sg_width']) + "x" + str(shot['sg_height'])
+                            cmds.confirmDialog(title="Change status", message=texto)
+                        else:
+                            texto = "Resolution fields could not be found in Shotgun"
+                            cmds.confirmDialog(title="Change status", message=texto)
+
+                    # first, set up our callback, calling out to a method inside the app module contained
+                    # in the python folder of the app
+                    menu_callback = lambda: SetResolution(self)
+
+                    # now register the command with the engine
+                    engine.register_command("Set Shot Resolution", menu_callback)
 
 
         except:
