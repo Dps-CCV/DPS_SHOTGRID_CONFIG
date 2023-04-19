@@ -120,12 +120,12 @@ class BreakdownSceneOperations(HookBaseClass):
         # now look at Volume nodes
         for volume in cmds.ls(l=True, type="aiVolume"):
             # ensure this is actually part of this scene and not referenced
-            if cmds.referenceQuery(standIn, isNodeReferenced=True):
+            if cmds.referenceQuery(volume, isNodeReferenced=True):
                 # this is embedded in another reference, so don't include it in the breakdown
                 continue
 
             # get path and make it platform dependent (maya uses C:/style/paths)
-            path = cmds.getAttr("%s.filename" % standIn).replace(
+            path = cmds.getAttr("%s.filename" % volume).replace(
                 "/", os.path.sep
             )
 
