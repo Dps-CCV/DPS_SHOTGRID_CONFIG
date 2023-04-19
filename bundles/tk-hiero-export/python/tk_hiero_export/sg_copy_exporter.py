@@ -141,13 +141,14 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         self._sequence_name = None
         self._shot_name = None
         self._thumbnail = None
-        # self._quicktime_path = os.path.join(os.path.dirname(self.resolvedExportPath()), 'preview.mov')
+
         randomName = ''.join(random.choices(string.ascii_lowercase, k=5))
-        baseName = randomName + '_' + 'preview.mov'
-        self._quicktime_path = os.path.join("C:\\TEMP_HIERO", baseName)
-        if not os.path.exists("C:\\TEMP_HIERO\\"):
-            os.makedirs("C:\\TEMP_HIERO\\")
-        #self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
+        baseName = randomName + 'preview.mov'
+        self._quicktime_path = os.path.join(os.path.dirname(self.resolvedExportPath()), baseName)
+        # self._quicktime_path = os.path.join("C:\\TEMP_HIERO", baseName)
+        # if not os.path.exists("C:\\TEMP_HIERO\\"):
+        #    os.makedirs("C:\\TEMP_HIERO\\")
+        # self._quicktime_path = os.path.join(tempfile.mkdtemp(), baseName)
 
 
 
@@ -319,7 +320,7 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                         # check if the path exists now
                         if os.path.exists(writeNodeOutput):
                             print("%s successfully rendered (from %s)" % (writeNodeOutput, scriptPath))
-                            process.kill()
+                            #process.kill()
                         else:
                             print("%s failed to render" % writeNodeOutput)
 
@@ -511,6 +512,11 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
 
     def doFrame(self, src, dst):
         """ Run Task """
+        # Find the base destination directory, if it doesn't exist create it
+        dstdir = os.path.dirname(dst)
+        util.filesystem.makeDirs(dstdir)
+
+        self._tryCopy(src, dst)
 
         if self._currentPathIndex == len(self._paths)-1:
 
@@ -537,18 +543,50 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                 "published_file_type": published_file_type,
             }
 
+
             if self._sg_task is not None:
                 args["task"] = self._sg_task
+
+            print(args)
 
             published_file_entity_type = sgtk.util.get_published_file_entity_type(self.app.sgtk)
 
             # register publish
             self.app.log_debug("Register publish in shotgun: %s" % str(args))
             pub_data = tank.util.register_publish(**args)
+
+
             if self._extra_publish_data is not None:
                 self.app.log_debug(
                     "Updating Shotgun %s %s" % (published_file_entity_type, str(self._extra_publish_data)))
                 self.app.shotgun.update(pub_data["type"], pub_data["id"], self._extra_publish_data)
+
+            ## DPS metadata inject
+            if '_VREF_' not in os.path.basename(self._resolved_export_path):
+                try:
+                    meta = self._item.source().mediaSource().metadata()
+                    width = int(meta['media.input.width'])
+                    height = int(meta['media.input.height'])
+                    data = {'sg_width': width, 'sg_height': height}
+                    try:
+                        focal = float(meta['media.exr.camera_focal'])/1000
+                        reel = meta['media.exr.shoot_scene_reel_number']
+                        iso = int(meta['media.exr.camera_iso'])
+                        wb = int(meta['media.exr.camera_white_kelvin'])
+                        camera = meta['media.exr.camera_type']
+
+                        data['sg_focal_length'] = focal
+                        data['sg_reel_name'] = reel
+                        data['sg_iso'] = iso
+                        data['sg_wb'] = wb
+                        data['sg_camera_model'] = camera
+                    except Exception as e:
+                        print (e)
+                        print("Unable to inject exr metadata to published_file")
+                    self.app.shotgun.update(pub_data["type"], pub_data["id"], data)
+                except Exception as e:
+                    print(e)
+                    print("Unable to inject metadata to published_file")
 
             # upload thumbnail for publish
             if self._thumbnail:
@@ -576,10 +614,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
                 if os.path.exists(self._quicktime_path):
                     self.app.log_debug("Uploading quicktime to Shotgun... (%s)" % self._quicktime_path)
                     self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                    try:
-                        shutil.rmtree(os.path.dirname(self._quicktime_path))
-                    except Exception:
-                        pass
+                    #try:
+                    #    shutil.rmtree(os.path.dirname(self._quicktime_path))
+                    #except Exception:
+                    #    pass
 
             # Post creation hook
             ####################
@@ -620,18 +658,13 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         #         # ingore any errors. ex: metrics logging not supported
         #         pass
 
+            if vers:
+                if os.path.exists(self._quicktime_path):
+                    #shutil.rmtree(os.path.dirname(self._quicktime_path))
+                    os.remove(self._quicktime_path)
         hiero.core.log.info("CopyExporter:")
         hiero.core.log.info("  - source: " + str(src))
         hiero.core.log.info("  - destination: " + str(dst))
-
-        # Find the base destination directory, if it doesn't exist create it
-        dstdir = os.path.dirname(dst)
-        util.filesystem.makeDirs(dstdir)
-
-        self._tryCopy(src, dst)
-        # if os.path.exists(self._quicktime_path):
-        #     shutil.rmtree(os.path.dirname(self._quicktime_path))
-        #     #os.remove(self._quicktime_path)
 
 
 

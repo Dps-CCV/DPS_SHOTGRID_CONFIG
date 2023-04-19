@@ -57,6 +57,12 @@ class HieroCustomizeExportUI(HookBaseClass):
                 name="custom_sourceClip_bool_property",
                 value=True,
                 tooltip="Update 'sg_source_clip' on the Shot entity.",
+            ),
+            dict(
+                label="Metadata:",
+                name="custom_metadata_bool_property",
+                value=True,
+                tooltip="Update metadata fields on the Shot entity.",
             )
         ]
 

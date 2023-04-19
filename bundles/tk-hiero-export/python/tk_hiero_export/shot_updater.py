@@ -319,6 +319,32 @@ class ShotgunShotUpdater(ShotgunHieroObjectBase, FnShotExporter.ShotTask, Collat
 
             sg_shot['sg_source_clip'] = sourceClip
 
+        #DPS metadata extract
+        try:
+            meta = self._item.source().mediaSource().metadata()
+            width = meta['media.input.width']
+            height = meta['media.input.height']
+            sg_shot['sg_width'] = int(width)
+            sg_shot['sg_height'] = int(height)
+            try:
+                focal = meta['media.exr.camera_focal']
+                reel = meta['media.exr.shoot_scene_reel_number']
+                iso = meta['media.exr.camera_iso']
+                wb = meta['media.exr.camera_white_kelvin']
+                camera = meta['media.exr.camera_type']
+                sg_shot['sg_focal_length_metadata'] = float(focal)/1000
+                sg_shot['sg_reel_name'] = reel
+                sg_shot['sg_iso'] = int(iso)
+                sg_shot['sg_wb'] = int(wb)
+                sg_shot['sg_camera_model'] = camera
+            except Exception as e:
+                print(e)
+                print("Unable to retrieve metadata")
+
+        except Exception as e:
+            print(e)
+            print("Unable to retrieve metadata")
+
         # commit the changes and update the thumbnail
         self.app.execute_hook_method(
             "hook_update_shot",

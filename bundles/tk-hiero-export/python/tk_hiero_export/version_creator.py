@@ -434,6 +434,7 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
         basename = os.path.splitext(os.path.basename(self._resolved_export_path))[0]
         finalName = '_'.join(basename.split('_')[:-1])
 
+
         args = {
             "tk": self.app.tank,
             "context": ctx,
@@ -441,6 +442,7 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
             "name": finalName,
             "version_number": int(self._tk_version),
             "published_file_type": published_file_type,
+
         }
 
 
@@ -458,6 +460,33 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                 % (published_file_entity_type, str(self._extra_publish_data))
             )
             self.app.shotgun.update(pub_data["type"], pub_data["id"], self._extra_publish_data)
+
+        # DPS metadata inject
+        if '_VREF_' not in os.path.basename(self._resolved_export_path):
+            try:
+                meta = self._item.source().mediaSource().metadata()
+                width = int(meta['media.input.width'])
+                height = int(meta['media.input.height'])
+                data = {'sg_width': width, 'sg_height': height}
+                try:
+                    focal = float(meta['media.exr.camera_focal'])/1000
+                    reel = meta['media.exr.shoot_scene_reel_number']
+                    iso = int(meta['media.exr.camera_iso'])
+                    wb = int(meta['media.exr.camera_white_kelvin'])
+                    camera = meta['media.exr.camera_type']
+
+                    data['sg_focal_length'] = focal
+                    data['sg_reel_name'] = reel
+                    data['sg_iso'] = iso
+                    data['sg_wb'] = wb
+                    data['sg_camera_model'] = camera
+                except Exception as e:
+                    print (e)
+                    print("Unable to inject exr metadata to published_file")
+                self.app.shotgun.update(pub_data["type"], pub_data["id"], data)
+            except Exception as e:
+                print(e)
+                print("Unable to inject metadata to published_file")
 
         # upload thumbnail for publish
         if self._thumbnail:
@@ -486,10 +515,10 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                 )
                 self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
                 try:
-                    if self._temp_quicktime:
-                        shutil.rmtree(os.path.dirname(self._quicktime_path))
+                   if self._temp_quicktime:
+                       shutil.rmtree(os.path.dirname(self._quicktime_path))
                 except Exception:
-                    pass
+                   pass
 
 
         # Post creation hook

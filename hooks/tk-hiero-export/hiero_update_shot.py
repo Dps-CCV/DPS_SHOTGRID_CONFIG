@@ -62,6 +62,21 @@ class HieroUpdateShot(HookBaseClass):
             del entity_data["sg_head_in"]
         if not preset_properties.get("custom_tail_out_bool_property", True):
             del entity_data["sg_tail_out"]
+        if not preset_properties.get("custom_metadata_bool_property", True):
+            if 'sg_width' in entity_data.keys():
+                del entity_data['sg_width']
+            if 'sg_height' in entity_data.keys():
+                del entity_data['sg_height']
+            if 'sg_focal_length_metadata' in entity_data.keys():
+                del entity_data['sg_focal_length_metadata']
+            if 'sg_reel_name' in entity_data.keys():
+                del entity_data['sg_reel_name']
+            if 'sg_iso' in entity_data.keys():
+                del entity_data['sg_iso']
+            if 'sg_wb' in entity_data.keys():
+                del entity_data['sg_wb']
+            if 'sg_camera_model' in entity_data.keys():
+                del entity_data['sg_camera_model']
 
         self.parent.logger.debug(
             "Updating info for %s %s: %s" % (entity_type, entity_id, entity_data)
