@@ -180,7 +180,10 @@ class ShotgunNukeShotExporter(ShotgunHieroObjectBase, FnNukeShotExporter.NukeSho
         published_file_type = self.app.get_setting("nuke_script_published_file_type")
 
         basename = os.path.splitext(os.path.basename(self._resolved_export_path))[0]
-        finalName = '_'.join(basename.split('_')[:-1])
+        if 'mov' in os.path.splitext(os.path.basename(self._resolved_export_path))[1]:
+            finalName = '_'.join(basename.split('_')[:-1]) + '_mov'
+        else:
+            finalName = '_'.join(basename.split('_')[:-1])
         args = {
             "tk": self.app.tank,
             "context": ctx,
