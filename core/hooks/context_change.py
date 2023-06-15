@@ -176,7 +176,10 @@ class ContextChange(get_hook_baseclass()):
 
                     # first, set up our callback, calling out to a method inside the app module contained
                     # in the python folder of the app
-                    menu_callback = lambda: SetResolution(self)
+                    try:
+                        menu_callback = lambda: SetResolution(self)
+                    except Exception as e:
+                        self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
 
                     # now register the command with the engine
                     engine.register_command("Set Shot Resolution", menu_callback)

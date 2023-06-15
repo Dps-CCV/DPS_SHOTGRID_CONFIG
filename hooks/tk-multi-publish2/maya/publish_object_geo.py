@@ -211,7 +211,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # collector and remove any non-alphanumeric characters
 
         work_fields["maya.object_name"] = item.properties.get("object_name")
-        item.properties["publish_name"] = str(work_fields["maya.object_name"]) + "_" + str(work_fields["Step"])
+        item.properties["publish_name"] = os.path.basename(str(item.properties.get("path")))[:-9]
 
 
 
@@ -287,7 +287,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # find the animated frame range to use:
         if _geo_has_animation(cmds.ls(selection=True)[0]) == True:
             start_frame, end_frame = _find_scene_animation_range()
-            alembic_args.insert(0, "-frameRange %d %d" % (start_frame, end_frame))
+            alembic_args.insert(0, "-frameRange %d %d" % (950, end_frame))
 
         alembic_args.append(cmds.ls(selection=True)[0])
 

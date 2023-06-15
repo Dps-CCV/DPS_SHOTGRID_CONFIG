@@ -13,9 +13,58 @@ import hou
 import sgtk
 
 from tank_vendor import six
+import pprint
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
+
+try:
+    from sgtk.platform.qt import QtCore, QtGui
+except ImportError:
+    CustomWidgetController = None
+else:
+    class PlayblastWidget(QtGui.QWidget):
+        """
+        This is the plugin's custom UI.
+        It is meant to allow the user to generate a playblast and upload it as a version
+        """
+
+        def __init__(self, parent):
+            super(PlayblastWidget, self).__init__(parent)
+
+            # Create a nice simple layout with a checkbox in it.
+            layout = QtGui.QFormLayout(self)
+            self.setLayout(layout)
+
+            label = QtGui.QLabel(
+                "Clicking this checkbox will create a playblast of the scene during publish.",
+                self
+            )
+            label.setWordWrap(True)
+            layout.addRow(label)
+
+            self._check_box = QtGui.QCheckBox("Create Playblast", self)
+            self._check_box.setTristate(False)
+            layout.addRow(self._check_box)
+
+        @property
+        def state(self):
+            """
+            :returns: ``True`` if the checkbox is checked, ``False`` otherwise.
+            """
+            return self._check_box.checkState() == QtCore.Qt.Checked
+
+        @state.setter
+        def state(self, is_checked):
+            """
+            Update the status of the checkbox.
+            :param bool is_checked: When set to ``True``, the checkbox will be
+                checked.
+            """
+            if is_checked:
+                self._check_box.setCheckState(QtCore.Qt.Checked)
+            else:
+                self._check_box.setCheckState(QtCore.Qt.Unchecked)
 
 class HoudiniSessionPublishPlugin(HookBaseClass):
     """
@@ -28,7 +77,7 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
         hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session.py"
 
     """
-
+    _CREATE_PLAYBLAST = "Create Playblast"
     # NOTE: The plugin icon and name are defined by the base file plugin.
 
     @property
@@ -119,13 +168,60 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
                 "description": "Template path for published work files. Should"
                 "correspond to a template defined in "
                 "templates.yml.",
-            }
+            },
+            "Dailies Template": {
+                "type": "template",
+                "default": None,
+                "description": "Template path for dailies work files. Should"
+                               "correspond to a template defined in "
+                               "templates.yml.",
+            },
+            self._CREATE_PLAYBLAST: {
+                "type": "bool",
+                "default": False,
+                "description": "Create Playblast for maya scene."
+            },
         }
 
         # update the base settings
         base_settings.update(houdini_publish_settings)
 
         return base_settings
+
+
+    def create_settings_widget(self, parent):
+        """
+        Creates the widget for our plugin.
+        :param parent: Parent widget for the settings widget.
+        :type parent: :class:`QtGui.QWidget`
+        :returns: Custom widget for this plugin.
+        :rtype: :class:`QtGui.QWidget`
+        """
+        return PlayblastWidget(parent)
+
+    def get_ui_settings(self, widget):
+        """
+        Retrieves the state of the ui and returns a settings dictionary.
+        :param parent: The settings widget returned by :meth:`create_settings_widget`
+        :type parent: :class:`QtGui.QWidget`
+        :returns: Dictionary of settings.
+        """
+        return {self._CREATE_PLAYBLAST: widget.state}
+
+    def set_ui_settings(self, widget, settings):
+        """
+        Populates the UI with the settings for the plugin.
+        :param parent: The settings widget returned by :meth:`create_settings_widget`
+        :type parent: :class:`QtGui.QWidget`
+        :param list(dict) settings: List of settings dictionaries, one for each
+            item in the publisher's selection.
+        :raises NotImplementeError: Raised if this implementation does not
+            support multi-selection.
+        """
+        if len(settings) > 1:
+            raise NotImplementedError()
+        settings = settings[0]
+        widget.state = settings[self._CREATE_PLAYBLAST]
 
     @property
     def item_filters(self):
@@ -276,8 +372,7 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
         # ---- populate the necessary properties and call base class validation
 
         # populate the publish template on the item if found
-        publish_template_setting = settings.get("Pu+"
-                                                " blish Template")
+        publish_template_setting = settings.get("Publish Template")
         publish_template = publisher.engine.get_template_by_name(
             publish_template_setting.value
         )
@@ -314,6 +409,97 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
         # let the base class register the publish
         super(HoudiniSessionPublishPlugin, self).publish(settings, item)
 
+        if settings[self._CREATE_PLAYBLAST].value == True:
+
+            uploadPath = self.get_dailies_path(settings, item)
+            publisher = self.parent
+            first = hou.playbar.playbackRange()[0]
+            last = hou.playbar.playbackRange()[1]
+
+            cur_desktop = hou.ui.curDesktop()
+            scene_viewer = hou.paneTabType.SceneViewer
+            scene = cur_desktop.paneTabOfType(scene_viewer)
+            scene.flipbookSettings().stash()
+            flip_book_options = scene.flipbookSettings()
+
+            flip_book_options.output(uploadPath)  # Provide flipbook full path with padding.
+            flip_book_options.frameRange((first, last))  # Enter Frame Range Here in x & y
+            flip_book_options.useResolution(1)
+            flip_book_options.resolution((1920, 1080))  # Based on your camera resolution
+            scene.flipbook(scene.curViewport(), flip_book_options)
+            # Start generation of shotgun version
+
+            path = item.properties["path"]
+
+            publish_name = item.properties.get("publish_name")
+            versionName = os.path.splitext(os.path.basename(uploadPath))[0]
+            if not publish_name:
+                self.logger.debug("Using path info hook to determine publish name.")
+
+            # use the path's filename as the publish name
+            # path_components = publisher.util.get_file_path_components(path)
+            # publish_name = '_'.join(path_components["filename"].split('_')[:-1])
+
+            self.logger.debug("Publish name: %s" % (publish_name,))
+
+            self.logger.info("Creating Version...")
+            version_data = {
+                "project": item.context.project,
+                "code": versionName,
+                "description": item.description,
+                "entity": self._get_version_entity(item),
+                "sg_task": item.context.task,
+                "sg_first_frame": int(first),
+                "sg_last_frame": int(last),
+                "frame_range": str(int(first)) + "-" + str(int(last)),
+            }
+
+            if "sg_publish_data" in item.properties:
+                publish_data = item.properties["sg_publish_data"]
+            version_data["published_files"] = [publish_data]
+
+            version_data["sg_path_to_movie"] = uploadPath
+
+            # log the version data for debugging
+            self.logger.debug(
+                "Populated Version data...",
+                extra={
+                    "action_show_more_info": {
+                        "label": "Version Data",
+                        "tooltip": "Show the complete Version data dictionary",
+                        "text": "<pre>%s</pre>" % (pprint.pformat(version_data),),
+                    }
+                },
+            )
+
+            # Create the version
+            version = publisher.shotgun.create("Version", version_data)
+            self.logger.info("Version created!")
+
+            # stash the version info in the item just in case
+            item.properties["sg_version_data"] = version
+
+            self.logger.info("Uploading content...")
+
+            # on windows, ensure the path is utf-8 encoded to avoid issues with
+            # the shotgun api
+            if sgtk.util.is_windows():
+                upload_path = six.ensure_text(uploadPath)
+            else:
+                upload_path = uploadPath
+
+            self.parent.shotgun.upload(
+                "Version", version["id"], upload_path, "sg_uploaded_movie"
+
+            )
+
+            self.logger.info("Upload complete!")
+
+        status = {"sg_status_list": "rev"}
+        self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
+
+        # self.parent.sgtk.shotgun.update("Shot", item.context.entity['id'], status)
+
     def finalize(self, settings, item):
         """
         Execute the finalization pass. This pass executes once all the publish
@@ -330,6 +516,89 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
 
         # bump the session file to the next version
         self._save_to_next_version(item.properties["path"], item, _save_session)
+
+
+    def _get_version_entity(self, item):
+        """
+        Returns the best entity to link the version to.
+        """
+
+        if item.context.entity:
+            return item.context.entity
+        elif item.context.project:
+            return item.context.project
+        else:
+            return None
+
+
+    def get_dailies_template(self, settings, item):
+        """
+        Get a publish template for the supplied settings and item.
+
+        :param settings: This plugin instance's configured settings
+        :param item: The item to determine the publish template for
+
+        :return: A template representing the publish path of the item or
+            None if no template could be identified.
+        """
+
+        publisher = self.parent
+        template_name = settings["Dailies Template"].value
+        dailies_template = publisher.get_template_by_name(template_name)
+        item.properties["dailies_template"] = dailies_template
+
+        return dailies_template
+
+
+    def get_dailies_path(self, settings, item):
+        """
+        Get a publish path for the supplied settings and item.
+
+        :param settings: This plugin instance's configured settings
+        :param item: The item to determine the publish path for
+
+        :return: A string representing the output path to supply when
+            registering a publish for the supplied item
+
+        Extracts the publish path via the configured work and publish templates
+        if possible.
+        """
+
+        # fall back to template/path logic
+        path = _session_path()
+
+        work_template = item.properties.get("work_template")
+        dailies_template = self.get_dailies_template(settings, item)
+
+        work_fields = []
+        dailies_path = None
+
+        # We need both work and publish template to be defined for template
+        # support to be enabled.
+        if work_template and dailies_template:
+
+            if work_template.validate(path):
+                work_fields = work_template.get_fields(path)
+                work_fields["extension"] = "avi"
+
+            missing_keys = dailies_template.missing_keys(work_fields)
+
+            if missing_keys:
+                self.logger.warning(
+                    "Not enough keys to apply work fields (%s) to "
+                    "publish template (%s)" % (work_fields, dailies_template)
+                )
+            else:
+                dailies_path = dailies_template.apply_fields(work_fields)
+                self.logger.debug(
+                    "Used publish template to determine the publish path: %s"
+                    % (dailies_path,)
+                )
+        else:
+            self.logger.debug("dailies_template: %s" % dailies_template)
+            self.logger.debug("work_template: %s" % work_template)
+
+        return dailies_path
 
 
 def _save_session(path):

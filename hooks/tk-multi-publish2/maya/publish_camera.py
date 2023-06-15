@@ -282,7 +282,7 @@ class MayaCameraPublishPlugin(HookBaseClass):
         # get the normalized path
         path = sgtk.util.ShotgunPath.normalize(path)
 
-        cam_name = item.properties["camera_name"]
+        cam_name = item.properties["camera_shape"]
 
         # check that the camera still exists in the file
         if not cmds.ls(cam_name):

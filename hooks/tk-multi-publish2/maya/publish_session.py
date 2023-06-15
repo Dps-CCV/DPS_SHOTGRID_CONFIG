@@ -298,7 +298,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
 
         publisher = self.parent
         path = _session_path()
-        print("KKKKKKKKKKKKKK")
+
 
 
         # ---- ensure the session has been saved

@@ -416,6 +416,8 @@ paths:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/HOUDINI/{name}_v{version}/{Shot}_{Step}_{name}_v{version}.{SEQ}.exr'
     houdini_shot_flipbook:
         definition: '@shot_root/DAILIES/HIGH/{Shot}_{Step}_{name}_{name}_v{version}.mov'
+#    houdini_shot_low_dailies_publish:
+#        definition: '@shot_root/DAILIES/LOW/{Shot}_{Step}_{name}_v{version}.{extension}'
 
     # Additional mantra outputs
     houdini_shot_ifd:
@@ -712,6 +714,8 @@ paths:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/HOUDINI/{name}_v{version}/{Asset}_{Step}_{name}_v{version}.{SEQ}.exr'
     houdini_asset_flipbook:
         definition: '@asset_root/DAILIES/HIGH/{Asset}_{Step}_{name}_{name}_v{version}.mov'
+#    houdini_asset_low_dailies_publish:
+#        definition: '@asset_root/DAILIES/LOW/{Asset}_{Step}_{name}_v{version}.{extension}'
 
     # Additional mantra outputs
     houdini_asset_ifd:

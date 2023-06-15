@@ -407,10 +407,16 @@ class MayaSessionCollector(HookBaseClass):
 
             # try to determine the camera display name
             try:
-                camera_name = cmds.listRelatives(camera_shape, parent=True)[0]
+                camera_name = cmds.listRelatives(camera_shape, parent=True)[0].split(":")[0]
+
             except Exception:
                 # could not determine the name, just use the shape
-                camera_name = camera_shape
+                try:
+                    camera_name = camera_shape.split(":")[0]
+                except:
+                    camera_name = camera_shape
+
+                print (camera_name)
 
             # create a new item parented to the supplied session item. We
             # define an item type (maya.session.camera) that will be
@@ -429,7 +435,7 @@ class MayaSessionCollector(HookBaseClass):
             # camera this item represents!
             cam_item.properties["camera_name"] = camera_name
             cam_item.properties["camera_shape"] = camera_shape
-            cam_item.properties["publish_name"] = camera_name
+            cam_item.properties["publish_name"] = camera_name + '_' + self.parent.context.step["name"]
 
     # def _collect_abc_sets(self, parent_item):
     #     """
@@ -476,14 +482,18 @@ class MayaSessionCollector(HookBaseClass):
                         nodeName = cmds.listRelatives(node, p=True)[0]
                     else:
                         nodeExport = node
-                        nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[0].split("_")[0]
+                        try:
+                            nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[1]
+                        except:
+                            nodeName = str(cmds.listRelatives(node, p=True)[0])
+                        displaynodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
 
                     # if not cmds.ls(object_geo, dag=True, type="mesh"):
                     #     # ignore non-meshes
                     #     continue
 
                     geo_object_item = parent_item.create_item(
-                        "maya.session.object_geo", "Object Geometry", nodeName
+                        "maya.session.object_geo", "Object Geometry", displaynodeName
                     )
 
                     # set the icon for the item

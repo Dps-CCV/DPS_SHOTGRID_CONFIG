@@ -254,7 +254,10 @@ class RenderMedia(HookBaseClass):
         if nuke.allNodes("AudioRead", nuke.root()):
             if nuke.toNode("AudioRead1"):
                 if nuke.toNode("AudioRead1")['file'].value() != "":
-                    node["mov64_audiofile"].setValue(nuke.toNode("AudioRead1")['file'].value())
+                    if os.path.isfile(nuke.toNode("AudioRead1")['file'].value()):
+                        node["mov64_audiofile"].setValue(nuke.toNode("AudioRead1")['file'].value())
+                    else:
+                        self.__app.log_info("No valid audio file found in AudioRead node")
                 else:
                     self.__app.log_info("No valid audio file found in AudioRead node")
             else:
