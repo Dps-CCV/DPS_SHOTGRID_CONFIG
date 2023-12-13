@@ -335,6 +335,7 @@ class HoudiniActions(HookBaseClass):
 
 
         alembicarchive_node.parm("fileName").set(path)
+        alembicarchive_node.parm("buildHierarchy").pressButton()
 
 
         _show_node(alembicarchive_node)
@@ -392,7 +393,7 @@ class HoudiniActions(HookBaseClass):
 
         ass_node.parm("ar_filename").set(path)
 
-        ass_node.parm("reload").pressButton()
+        #ss_node.parm("reload").pressButton()
 
         _show_node(ass_node)
 
@@ -429,7 +430,7 @@ class HoudiniActions(HookBaseClass):
         ass_node.parm("ar_includes").set(1)
         ass_node.parm("ar_filename1").set(path)
 
-        ass_node.parm("reload").pressButton()
+        #ass_node.parm("reload").pressButton()
 
         _show_node(ass_node)
 

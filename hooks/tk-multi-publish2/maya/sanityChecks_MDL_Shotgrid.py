@@ -77,6 +77,7 @@ def checkRefs():
     global labelChkRefs, myListRefs, colorTextRefs, numRowsRefs, references
     global moveOn
     myListRefs = []
+    numRowsRefs = 1
     '''Leemos todas las referencias de la escena si existe alguna'''
     references = cmds.file(query = True, reference = True)
     if len(references) != 0:

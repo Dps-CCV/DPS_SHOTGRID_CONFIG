@@ -27,15 +27,15 @@ apps.tk-multi-about.location:
 apps.tk-multi-breakdown.location:
   type: app_store
   name: tk-multi-breakdown
-  version: v1.8.1
+  version: v1.8.2
 apps.tk-multi-breakdown2.location:
   type: app_store
   name: tk-multi-breakdown2
-  version: v0.2.5
+  version: v0.2.9
 apps.tk-multi-breakdown2.mayalocation:
   type: app_store
   name: tk-multi-breakdown2
-  version: v0.2.3
+  version: v0.2.9
 apps.tk-multi-data-validation.location:
   type: app_store
   name: tk-multi-data-validation
@@ -47,19 +47,19 @@ apps.tk-multi-demo.location:
 apps.tk-multi-launchapp.location:
   type: app_store
   name: tk-multi-launchapp
-  version: v0.12.2
+  version: v0.12.6
 apps.tk-multi-loader2.location:
   type: app_store
   name: tk-multi-loader2
-  version: v1.22.1
+  version: v1.23.2
 apps.tk-multi-publish2.location:
   type: app_store
   name: tk-multi-publish2
-  version: v2.6.5
+  version: v2.6.9
 apps.tk-multi-pythonconsole.location:
   type: app_store
   name: tk-multi-pythonconsole
-  version: v1.3.1
+  version: v1.3.2
 apps.tk-multi-reviewsubmission.location:
   type: app_store
   name: tk-multi-reviewsubmission
@@ -75,7 +75,7 @@ apps.tk-multi-setframerange.location:
 apps.tk-multi-shotgunpanel.location:
   type: app_store
   name: tk-multi-shotgunpanel
-  version: v1.8.6
+  version: v1.8.8
 apps.tk-multi-snapshot.location:
   type: app_store
   name: tk-multi-snapshot
@@ -83,7 +83,7 @@ apps.tk-multi-snapshot.location:
 apps.tk-multi-workfiles2.location:
   type: app_store
   name: tk-multi-workfiles2
-  version: v0.13.4
+  version: v0.14.0
 apps.tk-multi-devutils.location:
   type: app_store
   name: tk-multi-devutils
@@ -107,7 +107,7 @@ apps.tk-shotgun-launchpublish.location:
 apps.tk-shotgun-launchvredreview.location:
   type: app_store
   name: tk-shotgun-launchvredreview
-  version: v1.1.3
+  version: v1.1.4
 
 #apps.tk-hiero-export.location:
 #  type: app_store
@@ -189,7 +189,7 @@ apps.tk-flame-export.location:
 apps.tk-flame-review.location:
   name: tk-flame-review
   type: app_store
-  version: v1.4.5
+  version: v1.4.6
 apps.tk-mari-projectmanager.location:
   name: tk-mari-projectmanager
   type: app_store

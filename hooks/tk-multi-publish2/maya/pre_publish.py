@@ -14,7 +14,7 @@ import os
 import maya.cmds as cmds
 
 sys.path.append(os.path.dirname(__file__))
-import sanityChecks_MDL_Shotgrid
+import sanityChecks_MDL
 #import sanityChecks
 
 
@@ -40,8 +40,8 @@ class PrePublishHook(HookBaseClass):
                 cmds.delete(i)
 
         scripts2 = cmds.ls(type='script')
-        if app.context.step['name'] == "MODEL":
-            if sanityChecks_MDL_Shotgrid.createUI() == False:
+        if app.context.step['name'] == "MODEL" or app.context.step['name'] == "MODEL_A":
+            if sanityChecks_MDL.createUI() == False:
             #if sanityChecks.createUI() == False:
                 return False
             else:

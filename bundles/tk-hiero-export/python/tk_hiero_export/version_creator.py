@@ -517,11 +517,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                     "Uploading quicktime to ShotGrid... (%s)" % self._quicktime_path
                 )
                 self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                try:
-                   if self._temp_quicktime:
-                       shutil.rmtree(os.path.dirname(self._quicktime_path))
-                except Exception:
-                   pass
+                # try:
+                #    if self._temp_quicktime:
+                #        shutil.rmtree(os.path.dirname(self._quicktime_path))
+                # except Exception:
+                #    pass
 
 
         # Post creation hook
@@ -569,7 +569,10 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
         #         # time.sleep(1.0)
         #         shutil.rmtree(os.path.dirname(self._quicktime_path))
         #         #os.remove(self._quicktime_path)
-
+        # if vers:
+        #     if os.path.exists(self._quicktime_path):
+        #         # shutil.rmtree(os.path.dirname(self._quicktime_path))
+        #         os.remove(self._quicktime_path)
 
 class ShotgunTranscodePreset(ShotgunHieroObjectBase, FnTranscodeExporter.TranscodePreset, CollatedShotPreset):
     """ Settings for the SG transcode step """

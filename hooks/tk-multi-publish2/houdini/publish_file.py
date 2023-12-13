@@ -11,6 +11,7 @@
 import os
 import pprint
 import traceback
+import platform
 
 import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
@@ -454,6 +455,7 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         # get the data for the publish that was just created in SG
         publish_data = item.properties.sg_publish_data
+        publish_data["sg_status_list"] = 'wtg'
 
         # ensure conflicting publishes have their status cleared
         publisher.util.clear_status_for_conflicting_publishes(

@@ -661,10 +661,10 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
         #         # ingore any errors. ex: metrics logging not supported
         #         pass
 
-            if vers:
-                if os.path.exists(self._quicktime_path):
-                    #shutil.rmtree(os.path.dirname(self._quicktime_path))
-                    os.remove(self._quicktime_path)
+            # if vers:
+            #     if os.path.exists(self._quicktime_path):
+            #         #shutil.rmtree(os.path.dirname(self._quicktime_path))
+            #         os.remove(self._quicktime_path)
         hiero.core.log.info("CopyExporter:")
         hiero.core.log.info("  - source: " + str(src))
         hiero.core.log.info("  - destination: " + str(dst))

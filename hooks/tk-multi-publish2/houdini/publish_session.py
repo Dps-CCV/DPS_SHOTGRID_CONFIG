@@ -11,6 +11,8 @@
 import os
 import hou
 import sgtk
+import subprocess
+import shutil
 
 from tank_vendor import six
 import pprint
@@ -413,20 +415,118 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
 
             uploadPath = self.get_dailies_path(settings, item)
             publisher = self.parent
+
+            # Obtén una lista de todas las cámaras en la escena
+            cameras = hou.nodeType(hou.objNodeTypeCategory(), 'cam').instances()
+
+            # Crea una lista de nombres de cámaras
+            camera_names = [cam.name() for cam in cameras]
+            ShotCam = False
+
             first = hou.playbar.playbackRange()[0]
             last = hou.playbar.playbackRange()[1]
 
+            for c in camera_names:
+                if "camMain" in c:
+                    chosen_camera_index = camera_names.index(c)
+                    ShotCam = True
+                else:
+                    camera_names.remove(cam)
+            if len(camera_names)==0:
+                obj = hou.node('/obj')
+                gira = obj.createNode('Giratutto')
+                gira_camera = hou.node(gira.path() + '/Giratutto')
+
+            # # Define el nombre de la cámara que quieres seleccionar
+            # desired_camera_name = "RD_Pipehoudini_FX_Flipbook_v001"
+
+            # # Comprueba si el nombre de la cámara deseada está en la lista de cámaras
+            # if desired_camera_name in camera_names:
+            #     # Si está en la lista, obtén el índice de ese nombre
+            #     chosen_camera_index = camera_names.index(desired_camera_name)
+            # else:
+            #     # Si no está en la lista, muestra un mensaje de error y termina el script
+            #     print("Error: No se encontró ninguna cámara con el nombre '" + desired_camera_name + "'.")
+            #     exit()
+
+
+
+            # Configura las opciones de flipbook
             cur_desktop = hou.ui.curDesktop()
             scene_viewer = hou.paneTabType.SceneViewer
             scene = cur_desktop.paneTabOfType(scene_viewer)
             scene.flipbookSettings().stash()
             flip_book_options = scene.flipbookSettings()
 
-            flip_book_options.output(uploadPath)  # Provide flipbook full path with padding.
-            flip_book_options.frameRange((first, last))  # Enter Frame Range Here in x & y
+            # Configura la cámara seleccionada en el visor de la escena
+            if ShotCam == True:
+                # Obtén la cámara seleccionada
+                chosen_camera = cameras[chosen_camera_index]
+                scene.curViewport().setCamera(chosen_camera)
+            else:
+                scene.curViewport().setCamera(gira_camera)
+
+            # Define la nueva ruta de salida para las imágenes del flipbook
+            hip = os.path.dirname(hou.hipFile.path())
+            hip_name = hou.hipFile.basename()[:-4]
+            flipbookPath = hip + '/Temp/flipbook/flipbook.$F4.jpeg'
+
+            flipbook_path = flipbookPath
+            flip_book_options.output(flipbook_path)  # Proporciona la ruta completa del flipbook con relleno.
+            flip_book_options.frameRange(hou.playbar.playbackRange())  # Usa el rango de fotogramas de la escena
             flip_book_options.useResolution(1)
-            flip_book_options.resolution((1920, 1080))  # Based on your camera resolution
+            flip_book_options.resolution((1920, 1080))  # Basado en la resolución de tu cámara
+
+            # Crea la carpeta si no existe
+            flipbook_dir = os.path.dirname(flipbook_path)
+            if not os.path.exists(flipbook_dir):
+                os.makedirs(flipbook_dir)
+
+            # Genera el flipbook
             scene.flipbook(scene.curViewport(), flip_book_options)
+
+            # Define la ruta de salida para el video
+            video_output_path = uploadPath
+
+            # Crea la carpeta si no existe
+            video_dir = os.path.dirname(video_output_path)
+            if not os.path.exists(video_dir):
+                os.makedirs(video_dir)
+
+            # Reemplaza '$F4' con '%04d' en flipbook_path
+            flipbook_path_format = flipbook_path.replace('$F4', '%04d')
+
+            # Comando ffmpeg para convertir el video
+            ffmpeg_command = f"C:/ffmpeg/bin/ffmpeg.exe -framerate 24 -start_number {first} -i {flipbook_path_format} -c:v prores_ks -profile:v 3 -vf scale=1920:1080 -an -loglevel debug {video_output_path}"
+
+            # Ejecutar el comando ffmpeg
+            try:
+                subprocess.run(ffmpeg_command, shell=True, check=True)
+                print("Conversión exitosa.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error al ejecutar ffmpeg: {e}")
+
+
+            ###### ANTIGUO
+            # uploadPath = self.get_dailies_path(settings, item)
+            # publisher = self.parent
+            # first = hou.playbar.playbackRange()[0]
+            # last = hou.playbar.playbackRange()[1]
+            #
+            # cur_desktop = hou.ui.curDesktop()
+            # scene_viewer = hou.paneTabType.SceneViewer
+            # scene = cur_desktop.paneTabOfType(scene_viewer)
+            # scene.flipbookSettings().stash()
+            # flip_book_options = scene.flipbookSettings()
+            #
+            # flip_book_options.output(uploadPath)  # Provide flipbook full path with padding.
+            # flip_book_options.frameRange((first, last))  # Enter Frame Range Here in x & y
+            # flip_book_options.useResolution(1)
+            # flip_book_options.resolution((1920, 1080))  # Based on your camera resolution
+            # scene.flipbook(scene.curViewport(), flip_book_options)
+
+
+
             # Start generation of shotgun version
 
             path = item.properties["path"]
@@ -497,6 +597,11 @@ class HoudiniSessionPublishPlugin(HookBaseClass):
 
         status = {"sg_status_list": "rev"}
         self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
+
+        if settings[self._CREATE_PLAYBLAST].value == True:
+            shutil.rmtree(os.path.dirname(flipbookPath))
+            if ShotCam == False:
+                gira.destroy()
 
         # self.parent.sgtk.shotgun.update("Shot", item.context.entity['id'], status)
 

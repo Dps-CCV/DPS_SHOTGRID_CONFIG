@@ -91,18 +91,17 @@ class ContextChange(get_hook_baseclass()):
                     self.logger.info("Environment variable SHOT changed to %s", str(current_context.entity["name"]))
                     self.logger.info("Environment variable SHOT_FOLDER changed to %s", str(shot_path))
 
-                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["sg_sequence", "sg_efecto_a_hacer", "sg_method"])
+                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
                     os.environ["SEQ"] = str(seq["sg_sequence"]["name"])
-                    os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
-                    methods = ''
-                    for i in seq["sg_method"]:
-                        methods += ' ' + i['name'] + ','
-                    os.environ["METHODS"] = methods
+                    # os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
+                    # methods = ''
+                    # for i in seq["sg_method"]:
+                    #     methods += ' ' + i['name'] + ','
+                    # os.environ["METHODS"] = methods
                     self.logger.info("Environment variable SEQ changed to %s", str(seq["sg_sequence"]["name"]))
 
 
-                    clip = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]],
-                                                                ["sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
+                    clip = seq
 
                     ###Fill clip and lmt settings if we have those values. If we don't we set empty variables because OCIO configs don't work if there are no env variables created
                     if clip["sg_source_clip"]:
@@ -123,17 +122,17 @@ class ContextChange(get_hook_baseclass()):
 
                 if current_engine._Engine__engine_instance_name == 'tk-nuke':
                     import nuke
-                    reloadConfig = nuke.root().knob('reloadConfig')
-                    reloadConfig.execute()
-                    self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
-                    ####DPS Write Shortcuts
-                    # # CUSTOM SHORTCUTS
-                    write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-                    write_node_item.setShortcut("")
-
-                    nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-                    nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-                    nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+                    # reloadConfig = nuke.root().knob('reloadConfig')
+                    # reloadConfig.execute()
+                    # self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    # ####DPS Write Shortcuts
+                    # # # CUSTOM SHORTCUTS
+                    # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+                    # write_node_item.setShortcut("")
+                    #
+                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
 
                 # elif current_engine._Engine__engine_instance_name == 'tk-maya':
                 #     import nuke
@@ -142,6 +141,7 @@ class ContextChange(get_hook_baseclass()):
                 #     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
 
                 elif current_engine._Engine__engine_instance_name == 'tk-houdini':
+                    import hou
                     hou.Color.reloadOCIO()
                     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
 

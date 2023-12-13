@@ -70,3 +70,8 @@ frameworks:
       version: v0.2.3
       type: app_store
       name: tk-framework-aliastranslations
+  tk-framework-alias_v1.x.x:
+    location:
+      type: app_store
+      name: tk-framework-alias
+      version: v1.0.2

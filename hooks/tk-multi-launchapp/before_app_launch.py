@@ -163,20 +163,21 @@ class BeforeAppLaunch(tank.Hook):
                 os.environ["PYTHONPATH"] = scripts_environ_path
                 os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
 
-            render_environ_path = os.path.abspath(os.path.join(
-                project_path, "CONFIG/MAYA/render_settings/"
-            ))
-            renderTemplate_environ_path = os.path.abspath(os.path.join(
-                project_path, "CONFIG/MAYA/RSTemplates/"
-            ))
-            os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = renderTemplate_environ_path
-            os.environ["MAYA_RENDER_SETUP_GLOBAL_PRESETS_PATH"] = render_environ_path
-
-            color_environ_path = os.path.abspath(os.path.join(
-                project_path, "CONFIG/MAYA/color_prefs.xml"
-            ))
-            os.environ["MAYA_COLOR_MANAGEMENT_POLICY_FILE"] = color_environ_path
-            #os.environ["MAYA_COLOR_MANAGEMENT_POLICY_LOCK"] = "1"
+            # desconectado test
+            # render_environ_path = os.path.abspath(os.path.join(
+            #     project_path, "CONFIG/MAYA/render_settings/"
+            # ))
+            # renderTemplate_environ_path = os.path.abspath(os.path.join(
+            #     project_path, "CONFIG/MAYA/RSTemplates/"
+            # ))
+            # os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = renderTemplate_environ_path
+            # os.environ["MAYA_RENDER_SETUP_GLOBAL_PRESETS_PATH"] = render_environ_path
+            #
+            # color_environ_path = os.path.abspath(os.path.join(
+            #     project_path, "CONFIG/MAYA/color_prefs.xml"
+            # ))
+            # os.environ["MAYA_COLOR_MANAGEMENT_POLICY_FILE"] = color_environ_path
+            # #os.environ["MAYA_COLOR_MANAGEMENT_POLICY_LOCK"] = "1"
 
             os.environ["BIFROST_LIB_CONFIG_FILES"] = 'P:\\LIBRERIA\\MAYA_ASSETS\\BiphostGraphs\\DarePlanetConfigurations.json'
 

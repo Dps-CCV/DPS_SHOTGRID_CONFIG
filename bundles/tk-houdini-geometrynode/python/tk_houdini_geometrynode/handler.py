@@ -279,8 +279,14 @@ class TkGeometryNodeHandler(object):
 
         output_parm = node.parm(cls.NODE_OUTPUT_PATH_PARM)
         if hou.applicationVersion()[0] >= 18:
+            print("un")
+            print(hou.text.expandString(output_parm.menuLabels()[output_parm.eval()]))
+            print("y ahora...")
+            testa = hou.text.expandString(output_parm.menuLabels()[output_parm.eval()])
+            print(testa.replace('\\', '/'))
             return hou.text.expandString(output_parm.menuLabels()[output_parm.eval()])
         else:
+            print("ddd")
             return hou.expandString(output_parm.menuLabels()[output_parm.eval()])
 
     ############################################################################
@@ -336,6 +342,9 @@ class TkGeometryNodeHandler(object):
         # create the geometry node and set the filename parm
         geometry_node = current_node.parent().createNode(
             self.HOU_SOP_GEOMETRY_TYPE)
+        testa= output_path_parm.menuLabels()[output_path_parm.eval()]
+        print("KKKK")
+        print(testa.replace('\\', '/'))
         geometry_node.parm(self.NODE_OUTPUT_PATH_PARM).set(
             output_path_parm.menuLabels()[output_path_parm.eval()])
         geometry_node.setName(geometry_node_name, unique_name=True)
@@ -717,11 +726,12 @@ class TkGeometryNodeHandler(object):
 
     # remove underscores or minus in node and create camelcase name
     def _getNodeName(self, node):
-        name = node.name()
-        name = name.replace("-", " ").replace("_", " ")
-        name = name.split()
+        name = node.parm('basename').evalAsString()
+        name = name.replace("-", "").replace("_", "")
+        # name = name.split()
         
-        return name[0] + ''.join(i.capitalize() for i in name[1:])
+        # return name[0] + ''.join(i.capitalize() for i in name[1:])
+        return name
 
     # compute the output path based on the current work file and backup template
     def _compute_backup_output_path(self, node):
@@ -794,9 +804,10 @@ class TkGeometryNodeHandler(object):
         fields.update(self._app.context.as_template_fields(
             output_cache_template))
 
-        path = output_cache_template.apply_fields(fields)
+        path = output_cache_template.apply_fields(fields).replace('\\', '/')
         node.setCachedUserData('pathCache', path)
-        return path
+        node.parm('cachednodepath').set(path.replace('\\', '//'))
+        return path.replace('\\', '//')
 
     # get the current output profile
     def _get_output_profile(self, node=None):

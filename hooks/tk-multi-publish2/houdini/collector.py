@@ -295,7 +295,10 @@ class HoudiniSessionCollector(HookBaseClass):
             render_path_fields = render_template.get_fields(render_path)
             publish_template = alembicnode_app.get_template_by_name(output_profile["publish_cache_template"])
 
-            rp_name = str(render_path_fields.get("houdini.node")) + "_" + str(render_path_fields.get("Step"))
+            Nname = node.parm('basename').evalAsString()
+            Nname = Nname.replace("-", " ").replace("_", " ")
+
+            rp_name = Nname + "_" + str(render_path_fields.get("Step"))
             context = publisher.engine.context
             self.logger.info("Name: %s" % (rp_name,))
 
@@ -457,7 +460,10 @@ class HoudiniSessionCollector(HookBaseClass):
             render_path_fields = render_template.get_fields(render_path)
             publish_template = geometrynode_app.get_template_by_name(output_profile["publish_cache_template"])
 
-            rp_name = str(render_path_fields.get("houdini.node")) + "_" + str(render_path_fields.get("Step"))
+            Nname = node.parm('basename').evalAsString()
+            Nname = Nname.replace("-", " ").replace("_", " ")
+
+            rp_name = Nname + "_" + str(render_path_fields.get("Step"))
             context = publisher.engine.context
             self.logger.info("Name: %s" % (rp_name,))
 

@@ -53,7 +53,7 @@ settings.tk-multi-workfiles2: &settings_tk-multi-workfiles2
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
@@ -87,7 +87,7 @@ settings.tk-multi-workfiles2.launch_at_startup:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
     - [ task_assignees, is, '{context.user}']
@@ -219,7 +219,7 @@ settings.tk-multi-workfiles2.houdini.asset_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
     - [ task_assignees, is, '{context.user}']
@@ -256,7 +256,7 @@ settings.tk-multi-workfiles2.houdini.shot_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
     - [ task_assignees, is, '{context.user}']
@@ -297,7 +297,7 @@ settings.tk-multi-workfiles2.maya.asset_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
@@ -334,7 +334,7 @@ settings.tk-multi-workfiles2.maya.shot_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
@@ -375,7 +375,7 @@ settings.tk-multi-workfiles2.nuke.asset_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
@@ -413,7 +413,7 @@ settings.tk-multi-workfiles2.nuke.shot_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}']
@@ -455,7 +455,7 @@ settings.tk-multi-workfiles2.photoshop.asset_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}' ]
@@ -492,7 +492,7 @@ settings.tk-multi-workfiles2.photoshop.shot_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}' ]
@@ -528,7 +528,7 @@ settings.tk-multi-workfiles2.aftereffects:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}' ]
@@ -565,7 +565,7 @@ settings.tk-multi-workfiles2.aftereffects.asset_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}' ]
@@ -602,7 +602,7 @@ settings.tk-multi-workfiles2.aftereffects.shot_step:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
     - [ task_assignees, is, '{context.user}' ]
@@ -791,6 +791,6 @@ settings.tk-multi-workfiles2.mari:
         - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_operador.Tag.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
   allow_task_creation: False
   location: "@apps.tk-multi-workfiles2.location"

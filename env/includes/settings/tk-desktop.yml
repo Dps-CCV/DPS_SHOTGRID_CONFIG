@@ -29,6 +29,8 @@ settings.tk-desktop.site:
 
 # project
 settings.tk-desktop.project:
+  display_name: "Dare Planet Studio"
+#  sg_software_entity:
   apps:
     tk-multi-pythonconsole:
       location: "@apps.tk-multi-pythonconsole.location"
@@ -45,20 +47,34 @@ settings.tk-desktop.project:
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   groups:
   - matches:
+    - "*Hiero*"
+    - "*DaviDinci Resolve*"
+    name: Editorial Tools
+  - matches:
+    - "*RV*"
+    name: Review
+  - matches:
     - "*Fla*"
+    - "*Nuke*"
+    - "*Photoshop*"
+    - "*After*"
+    - "*Effects*"
+    name: Compo
+  - matches:
     - "*Houdini*"
     - "*Mari*"
     - "*Max*"
     - "*Maya*"
     - "*Motion*"
-    - "*Nuke*"
+    name: 3D
+  - matches:
+    - "*Houdini*"
+    - "*Maya*"
+    name: FX Tools
+  - matches:
     - "*Photoshop*"
     - "*After*"
-    - "*Effects*"
-    name: Creative Tools
-  - matches:
-    - "*Hiero*"
-    name: Editorial Tools
+    name: Motion Graphics
   - matches:
     - "*Alias*"
     - "*VRED*"
