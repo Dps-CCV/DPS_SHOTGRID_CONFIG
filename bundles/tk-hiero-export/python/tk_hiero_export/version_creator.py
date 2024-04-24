@@ -517,11 +517,11 @@ class ShotgunTranscodeExporter(ShotgunHieroObjectBase, FnTranscodeExporter.Trans
                     "Uploading quicktime to ShotGrid... (%s)" % self._quicktime_path
                 )
                 self.app.shotgun.upload("Version", vers["id"], self._quicktime_path, "sg_uploaded_movie")
-                # try:
-                #    if self._temp_quicktime:
-                #        shutil.rmtree(os.path.dirname(self._quicktime_path))
-                # except Exception:
-                #    pass
+                try:
+                   if self._temp_quicktime:
+                       shutil.rmtree(os.path.dirname(self._quicktime_path))
+                except Exception:
+                   pass
 
 
         # Post creation hook

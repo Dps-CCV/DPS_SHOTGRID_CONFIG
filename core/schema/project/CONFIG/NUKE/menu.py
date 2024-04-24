@@ -34,6 +34,7 @@ ScriptsMenu = projectMenu.addMenu('Scripts', index= 1)
 ScriptsMenu.addCommand('Review Shots', lambda: reviewShots.reviewShots())
 ScriptsMenu.addCommand('Export Template', lambda: exportTemplate.exportTemplate())
 ScriptsMenu.addCommand('UpVersion last Render', lambda: upVersion.upVersionBase(), 'Alt+p')
+ScriptsMenu.addCommand('UpVersion last Render_v02', lambda: upVersion_v02.upVersionBase(), 'Alt+p')
 ScriptsMenu.addCommand('Open last Render', lambda: openLastRender.openLastRender(), 'Ctrl+r')
 
 

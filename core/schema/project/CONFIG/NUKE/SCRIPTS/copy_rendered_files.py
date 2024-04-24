@@ -27,7 +27,7 @@ class cacheAndCopy:
 		# print (local)
 		proj = os.environ['PROJECT']
 		index = self.filename.lower().find(proj.lower())
-		unidad = os.environ['MOUNT'] + "\\PROYECTOS\\"
+		unidad = os.environ['MOUNT'] + "\\"
 		serverFile = os.path.dirname(unidad + self.filename[index:])
 		print("createfolders_serverfile" + os.path.normpath(serverFile))
 		if not os.path.exists(os.path.abspath(os.path.normpath(serverFile))):
@@ -48,7 +48,7 @@ class cacheAndCopy:
 		# print (local)
 		proj = os.environ['PROJECT']
 		index = self.filename.lower().find(proj.lower())
-		unidad = os.environ['MOUNT'] + "\\PROYECTOS\\"
+		unidad = os.environ['MOUNT'] + "\\"
 		serverFile = unidad + self.filename[index:]
 		print("copyFiles_serverfile" + os.path.normpath(serverFile))
 		serverFileNorm = os.path.normpath(serverFile)

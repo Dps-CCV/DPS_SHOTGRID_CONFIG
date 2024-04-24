@@ -132,14 +132,14 @@ class BeforeAppLaunch(tank.Hook):
             # )
             # os.environ["MAYA_APP_DIR"] = maya_environ_path
 
-            shelves_environ_path = "P:\LIBRERIA\MAYA_SCRIPTS\SHELVES"
+            shelves_environ_path = "L:\MAYA_SCRIPTS\SHELVES"
             os.environ["MAYA_SHELF_PATH"] = shelves_environ_path
 
             ###YETI IMPORTS
             os.environ['peregrinel_LICENSE'] = '5053@servidor-licencias-api'
-            yeti_path = "P:\\LIBRERIA\\MAYA_PLUGINS\\YETI"
-            yeti_bin_path = "P:\\LIBRERIA\\MAYA_PLUGINS\\YETI\\bin"
-            yeti_plugins_path = "P:\\LIBRERIA\\MAYA_PLUGINS\\YETI\\plug-ins"
+            yeti_path = "L:\\MAYA_PLUGINS\\YETI"
+            yeti_bin_path = "L:\\MAYA_PLUGINS\\YETI\\bin"
+            yeti_plugins_path = "L:\\MAYA_PLUGINS\\YETI\\plug-ins"
             if "MAYA_MODULE_PATH" in os.environ.keys():
                 os.environ["MAYA_MODULE_PATH"] += os.pathsep + yeti_path
             else:
@@ -154,7 +154,7 @@ class BeforeAppLaunch(tank.Hook):
             # os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + os.pathsep + yeti_bin_path
             tank.util.append_path_to_env_var("ARNOLD_PLUGIN_PATH", yeti_bin_path)
 
-            scripts_environ_path = "P:\LIBRERIA\MAYA_SCRIPTS"
+            scripts_environ_path = "L:\MAYA_SCRIPTS"
             os.environ["MAYA_SCRIPT_PATH"] = scripts_environ_path
             if os.environ.get("PYTHONPATH") is not None:
                 os.environ["PYTHONPATH"] += ";" + scripts_environ_path
@@ -164,26 +164,26 @@ class BeforeAppLaunch(tank.Hook):
                 os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
 
             # desconectado test
-            # render_environ_path = os.path.abspath(os.path.join(
-            #     project_path, "CONFIG/MAYA/render_settings/"
-            # ))
-            # renderTemplate_environ_path = os.path.abspath(os.path.join(
-            #     project_path, "CONFIG/MAYA/RSTemplates/"
-            # ))
-            # os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = renderTemplate_environ_path
-            # os.environ["MAYA_RENDER_SETUP_GLOBAL_PRESETS_PATH"] = render_environ_path
-            #
-            # color_environ_path = os.path.abspath(os.path.join(
-            #     project_path, "CONFIG/MAYA/color_prefs.xml"
-            # ))
-            # os.environ["MAYA_COLOR_MANAGEMENT_POLICY_FILE"] = color_environ_path
-            # #os.environ["MAYA_COLOR_MANAGEMENT_POLICY_LOCK"] = "1"
+            render_environ_path = os.path.abspath(os.path.join(
+                project_path, "CONFIG/MAYA/render_settings/"
+            ))
+            renderTemplate_environ_path = os.path.abspath(os.path.join(
+                project_path, "CONFIG/MAYA/RSTemplates/"
+            ))
+            os.environ["MAYA_RENDER_SETUP_GLOBAL_TEMPLATE_PATH"] = renderTemplate_environ_path
+            os.environ["MAYA_RENDER_SETUP_GLOBAL_PRESETS_PATH"] = render_environ_path
 
-            os.environ["BIFROST_LIB_CONFIG_FILES"] = 'P:\\LIBRERIA\\MAYA_ASSETS\\BiphostGraphs\\DarePlanetConfigurations.json'
+            color_environ_path = os.path.abspath(os.path.join(
+                project_path, "CONFIG/MAYA/color_prefs.xml"
+            ))
+            os.environ["MAYA_COLOR_MANAGEMENT_POLICY_FILE"] = color_environ_path
+            #os.environ["MAYA_COLOR_MANAGEMENT_POLICY_LOCK"] = "1"
+
+            os.environ["BIFROST_LIB_CONFIG_FILES"] = 'L:\\MAYA_ASSETS\\BiphostGraphs\\DarePlanetConfigurations.json'
 
 
         elif engine_name == "tk-nuke":
-            tank.util.append_path_to_env_var("NUKE_PATH", 'P:\\LIBRERIA\\NUKE_CONFIG')
+            tank.util.append_path_to_env_var("NUKE_PATH", 'L:\\NUKE_CONFIG')
             ##Variables de Nuke
             nuke_environ_path = os.path.join(
                 project_path, "CONFIG/NUKE"
@@ -191,20 +191,20 @@ class BeforeAppLaunch(tank.Hook):
             tank.util.append_path_to_env_var("NUKE_PATH", nuke_environ_path)
 
             # DPS IMPORT OPTICAL FLARES loacted in path P:\LIBRERIA\SCRIPTS
-            os.environ['OPTICAL_FLARES_LICENSE_PATH'] = "P:\\LIBRERIA\\SCRIPTS"
-            os.environ['OPTICAL_FLARES_PRESET_PATH'] = "P:\\LIBRERIA\\SCRIPTS"
-            os.environ['OPTICAL_FLARES_PATH'] = "P:\\LIBRERIA\\SCRIPTS"
+            os.environ['OPTICAL_FLARES_LICENSE_PATH'] = "L:\\SCRIPTS"
+            os.environ['OPTICAL_FLARES_PRESET_PATH'] = "L:\\SCRIPTS"
+            os.environ['OPTICAL_FLARES_PATH'] = "L:\\SCRIPTS"
             os.environ['NUKE_INSTALL'] = str(app_path)
 
 
 
         elif engine_name == "tk-hiero" or engine_name == "tk-nukestudio":
-            hieroPlugin_environ_path = "P:\\LIBRERIA\\HIERO_PLUGIN_PATH"
+            hieroPlugin_environ_path = "L:\\HIERO_PLUGIN_PATH"
             tank.util.append_path_to_env_var("HIERO_PLUGIN_PATH", hieroPlugin_environ_path)
 
 
-        elif engine_name == "tk-houdini":
-            folder = "Houdini " + version
+        # elif engine_name == "tk-houdini":
+        #     folder = "Houdini " + version
             # houdini_environ_path = os.path.abspath(os.path.join(
             #     project_path, "CONFIG/HOUDINI/", folder
             # ))
@@ -212,7 +212,7 @@ class BeforeAppLaunch(tank.Hook):
             #houdini_dps_plugins_path = os.path.abspath(os.path.join(
             #     os.environ['CONFIG_FOLDER'], "bundles", "CONFIG/HOUDINI/", folder
             # ))
-            os.environ['HOUDINI_USER_PREF_DIR'] = "P:\\LIBRERIA\\HOUDINI_CONFIG\\Houdini 19.5.435"
+            # os.environ['HOUDINI_USER_PREF_DIR'] = "L:\\HOUDINI_CONFIG\\Houdini 19.5.435"
             # os.environ['HOUDINI_DPS_PLUGINS'] = houdini_dps_plugins_path
 
             # self.logger.info("Test %s", houdini_environ_path)

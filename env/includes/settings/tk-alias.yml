@@ -74,4 +74,9 @@ frameworks:
     location:
       type: app_store
       name: tk-framework-alias
-      version: v1.0.2
+      version: v1.3.0
+  tk-framework-lmv_v1.x.x:
+    location:
+      type: app_store
+      name: tk-framework-lmv
+      version: v1.1.0
