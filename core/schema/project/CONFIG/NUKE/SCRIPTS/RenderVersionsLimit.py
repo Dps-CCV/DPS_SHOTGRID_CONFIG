@@ -11,7 +11,7 @@ def DeleteOldVersions():
     proj = os.environ['PROJECT']
     print(proj)
     index = filename.lower().find(proj.lower())
-    unidad = os.environ['MOUNT'] + "\\PROYECTOS\\"
+    unidad = os.environ['MOUNT']
     serverFile = unidad + filename[index:]
     print(serverFile)
     normalizedpath = os.path.normpath(serverFile)
