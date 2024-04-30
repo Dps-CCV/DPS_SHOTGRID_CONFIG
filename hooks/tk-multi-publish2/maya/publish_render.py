@@ -354,7 +354,7 @@ class RenderPublishPlugin(HookBaseClass):
             cmds.setAttr("%s.depth" % (img_plane_shape,), 0.1)
             cmds.setAttr("%s.displayMode" % (img_plane_shape,), 2)
             if 'EXR' in path:
-                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'ACES - ACEScg', type='string')
+                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'ACEScg', type='string')
             elif 'JPG' in path:
                 cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'Output - Rec.709', type='string')
             cmds.lookThru(dumyCam)

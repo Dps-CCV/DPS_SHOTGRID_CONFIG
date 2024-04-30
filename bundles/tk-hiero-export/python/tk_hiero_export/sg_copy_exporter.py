@@ -278,7 +278,7 @@ class ShotgunCopyExporter(ShotgunHieroObjectBase, FnCopyExporter.CopyExporter, C
             writeNode.setKnob("mov64_fps", fps)
             writeNode.setKnob("mov_h264_codec_profile", 1)
             writeNode.setKnob("mov64_quality", "Low")
-            writeNode.setKnob("colorspace", "Output - sRGB")
+            writeNode.setKnob("colorspace", "Output - Rec.709")
 
             # add the write node to the script
             script.addNode(writeNode)

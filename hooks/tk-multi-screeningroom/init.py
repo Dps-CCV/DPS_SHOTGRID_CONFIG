@@ -47,7 +47,7 @@ class ScreeningroomInit(HookBaseClass):
         Mount = rawMount.split(os.sep)[0]
         os.environ["MOUNT"] = Mount
         ocio_path = os.path.join(
-            project_path, "CONFIG", "COLOR", "ACES_1.2", "config.ocio"
+            project_path, "CONFIG", "COLOR", "ACES", "studio-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio"
         )
         os.environ["OCIO"] = ocio_path
 

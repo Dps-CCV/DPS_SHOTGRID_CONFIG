@@ -107,11 +107,11 @@ class RenderMedia(HookBaseClass):
             if "_IPL_" in read['file'].value():
                 read["colorspace"].setValue('Output - Rec.709')
             elif "_IMP_" in read['file'].value():
-                read["colorspace"].setValue('ACES - ACEScg')
+                read["colorspace"].setValue('ACEScg')
             elif "_ALPHA_" in read['file'].value():
                 read["colorspace"].setValue('Utility - Raw')
             elif "_TECH_PRECOMP_" in read['file'].value():
-                read["colorspace"].setValue('ACES - ACEScg')
+                read["colorspace"].setValue('ACEScg')
             else:
                 projectColorspace = os.environ['PROJECTCOLORSPACE']
                 read["colorspace"].setValue(projectColorspace)

@@ -52,7 +52,7 @@ group = nuke.nodes.Group()
 company_name = "NFA"
 today = datetime.date.today()
 date_formatted = time.strftime("%d/%m/%Y %H:%M")
-color_space = "Output - sRGB"
+color_space = "Output - Rec.709"
 
 # operate in group
 group.begin()
@@ -96,7 +96,7 @@ def __get_quicktime_settings():
 
         # If OCIO is set, output - rec709
         if colorspace:
-            settings["colorspace"] = "Output - sRGB"
+            settings["colorspace"] = "Output - Rec.709"
 
         # If no OCIO is set, detect if ACES is used or nuke_default
         else:
@@ -106,7 +106,7 @@ def __get_quicktime_settings():
                 settings["colorspace"] = "sRGB"
 
             else:
-                settings["colorspace"] = "Output - sRGB"
+                settings["colorspace"] = "Output - Rec.709"
 
     else:
         settings["codec"] = "jpeg"

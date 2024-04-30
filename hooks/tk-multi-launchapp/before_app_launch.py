@@ -72,16 +72,10 @@ class BeforeAppLaunch(tank.Hook):
         Mount = rawMount.split(os.sep)[0]
         os.environ["MOUNT"] = Mount
         ocio_path = os.path.join(
-            project_path, "CONFIG", "COLOR", "ACES_1.2", "config.ocio"
+            project_path, "CONFIG", "COLOR", "ACES", "studio-config-v1.0.0_aces-v1.3_ocio-v2.1.ocio"
         )
         os.environ["OCIO"] = ocio_path
 
-        # arnold_plugin_path = os.path.join(
-        #     project_path, "CONFIG", "MAYA", "ARNOLD_SHADERS"
-        # )
-        # os.environ["ARNOLD_PLUGIN_PATH"] = arnold_plugin_path
-
-        # filters = [["code" "is" ]]
         getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["sg_espacio___color"])
 
         os.environ["PROJECTCOLORSPACE"] = str(getColor["sg_espacio___color"])

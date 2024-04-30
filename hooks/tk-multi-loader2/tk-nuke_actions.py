@@ -357,20 +357,20 @@ class NukeActions(HookBaseClass):
         elif "/LAYERS/" in path:
             read_node.knob("colorspace").setValue(os.environ["PROJECTCOLORSPACE"])
         elif "/LGT/" in path:
-            read_node.knob("colorspace").setValue("ACES - ACEScg")
+            read_node.knob("colorspace").setValue("ACEScg")
         elif "/DMP/" in path:
             read_node.knob("colorspace").setValue("Output - Rec.709")
         # elif "/REFERENCIAS/" in path:
         #     i.knob("colorspace").setValue(24529407)
         # elif "/MEDIA/" in path:
         #     i.knob("colorspace").setValue(1148596479)
-        elif "_CMP_v" in path:
+        elif "_CMP_" in path:
             read_node.knob("colorspace").setValue(os.environ["PROJECTCOLORSPACE"])
-        elif "_ALPHA_v" in path:
+        elif "_ALPHA_" in path:
             read_node.knob("colorspace").setValue("Utility - Raw")
-        elif "_IMP_v" in path:
-            read_node.knob("colorspace").setValue("ACES - ACEScg")
-        elif "_IPL_v" in path:
+        elif "_IMP_" in path:
+            read_node.knob("colorspace").setValue("ACEScg")
+        elif "_IPL_" in path:
             read_node.knob("colorspace").setValue("Output - Rec.709")
 
         # read_node["file"].fromUserText(path)

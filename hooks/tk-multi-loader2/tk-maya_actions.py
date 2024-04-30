@@ -516,9 +516,9 @@ class MayaActions(HookBaseClass):
             # the current frame.
             cmds.setAttr("%s.useFrameExtension" % (img_plane_shape,), 1)
             if 'EXR' in path:
-                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'ACES - ACEScg', type='string')
+                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'ACEScg', type='string')
             elif 'JPG' in path:
-                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'Output - sRGB', type='string')
+                cmds.setAttr("%s.colorSpace" % (img_plane_shape,), 'Output - Rec.709', type='string')
 
     def _create_standIn(self, path, sg_publish_data):
         """
