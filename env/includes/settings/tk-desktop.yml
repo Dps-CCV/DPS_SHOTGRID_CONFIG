@@ -56,12 +56,9 @@ settings.tk-desktop.project:
   - matches:
     - "*Fla*"
     - "*Nuke*"
-    - "*Photoshop*"
-    - "*After*"
     - "*Effects*"
     name: Compo
   - matches:
-    - "*Houdini*"
     - "*Mari*"
     - "*Max*"
     - "*Maya*"
@@ -69,7 +66,6 @@ settings.tk-desktop.project:
     name: 3D
   - matches:
     - "*Houdini*"
-    - "*Maya*"
     name: FX Tools
   - matches:
     - "*Photoshop*"
