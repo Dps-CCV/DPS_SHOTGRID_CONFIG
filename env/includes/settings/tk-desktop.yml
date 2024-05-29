@@ -47,11 +47,12 @@ settings.tk-desktop.project:
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
   groups:
   - matches:
-    - "*Hiero*"
+    - "*Hiero *"
     - "*DaviDinci Resolve*"
     name: Editorial Tools
   - matches:
     - "*RV*"
+    - "*Hiero-Player*"
     name: Review
   - matches:
     - "*Fla*"
