@@ -23,9 +23,10 @@ includes:
 - ./tk-multi-shotgunpanel.yml
 - ./tk-multi-snapshot.yml
 - ./tk-multi-workfiles2.yml
-- ./${FormExt}/tk-nuke-writenode.yml
+
 - ./tk-nuke-quickreview.yml
 - ./tk-multi-bugreporter.yml
+include: - "./${FormExt}/tk-nuke-writenode.yml"
 
 
 ################################################################################
