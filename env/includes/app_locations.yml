@@ -31,11 +31,11 @@ apps.tk-multi-breakdown.location:
 apps.tk-multi-breakdown2.location:
   type: app_store
   name: tk-multi-breakdown2
-  version: v0.3.0
+  version: v0.4.0
 apps.tk-multi-breakdown2.mayalocation:
   type: app_store
   name: tk-multi-breakdown2
-  version: v0.3.0
+  version: v0.4.0
 apps.tk-multi-data-validation.location:
   type: app_store
   name: tk-multi-data-validation
@@ -55,7 +55,7 @@ apps.tk-multi-loader2.location:
 apps.tk-multi-publish2.location:
   type: app_store
   name: tk-multi-publish2
-  version: v2.8.2
+  version: v2.8.4
 apps.tk-multi-pythonconsole.location:
   type: app_store
   name: tk-multi-pythonconsole
@@ -83,7 +83,7 @@ apps.tk-multi-snapshot.location:
 apps.tk-multi-workfiles2.location:
   type: app_store
   name: tk-multi-workfiles2
-  version: v0.15.0
+  version: v0.15.1
 apps.tk-multi-devutils.location:
   type: app_store
   name: tk-multi-devutils
@@ -109,32 +109,48 @@ apps.tk-shotgun-launchvredreview.location:
   name: tk-shotgun-launchvredreview
   version: v1.2.0
 
-#apps.tk-hiero-export.location:
-#  type: app_store
-#  name: tk-hiero-export
-#  version: v0.7.2
-
-# hiero export
 apps.tk-hiero-export.location:
-  name: tk-hiero-export
-  type: path
-  path: '{CONFIG_FOLDER}/bundles/tk-hiero-export'
-apps.tk-hiero-openinshotgun.location:
   type: app_store
-  name: tk-hiero-openinshotgun
-  version: v0.5.0
+  name: tk-hiero-export
+  version: v0.8.0
+
+## hiero export
+#apps.tk-hiero-export.location:
+#  name: tk-hiero-export
+#  type: path
+#  path: '{CONFIG_FOLDER}/bundles/tk-hiero-export'
+
+apps.k-hiero-export.location:
+  type: github_release
+  organization: Dps-CCV
+  repository: tk-hiero-export.location
+  version: v0.8.0
+  private: true
+
+#apps.tk-hiero-openinshotgun.location:
+#  type: app_store
+#  name: tk-hiero-openinshotgun
+#  version: v0.5.0
 
   ###Houdini apps
 #apps.tk-houdini-alembicnode.location:
 #  type: app_store
 #  name: tk-houdini-alembicnode
-#  version: v0.5.1
+#  version: v0.6.0
 
-# houdini alembicnode
+## houdini alembicnode
+#apps.tk-houdini-alembicnode.location:
+#  type: path
+#  name: tk-houdini-alembicnode
+#  path: '{CONFIG_FOLDER}/bundles/tk-houdini-alembicnode'
+
 apps.tk-houdini-alembicnode.location:
-  type: path
-  name: tk-houdini-alembicnode
-  path: '{CONFIG_FOLDER}/bundles/tk-houdini-alembicnode'
+  type: github_release
+  organization: Dps-CCV
+  repository: tk-houdini-alembicnode
+  version: v0.6.0
+
+
 apps.tk-houdini-mantranode.location:
   type: app_store
   name: tk-houdini-mantranode
@@ -175,21 +191,28 @@ apps.tk-nuke-quickreview.location:
 #apps.tk-nuke-writenode.location:
 #  name: tk-nuke-writenode
 #  type: app_store
-#  version: v1.6.1
+#  version: v1.7.0
 
-# writenode
+## writenode
+#apps.tk-nuke-writenode.location:
+#  name: tk-nuke-writenode
+#  type: path
+#  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
 apps.tk-nuke-writenode.location:
-  name: tk-nuke-writenode
-  type: path
-  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
+  type: github_release
+  organization: Dps-CCV
+  repository: tk-nuke-writenode
+  version: v1.7.0
+
+
 apps.tk-flame-export.location:
   name: tk-flame-export
   type: app_store
-  version: v1.11.0
+  version: v1.11.1
 apps.tk-flame-review.location:
   name: tk-flame-review
   type: app_store
-  version: v1.5.0
+  version: v1.5.1
 apps.tk-mari-projectmanager.location:
   name: tk-mari-projectmanager
   type: app_store
