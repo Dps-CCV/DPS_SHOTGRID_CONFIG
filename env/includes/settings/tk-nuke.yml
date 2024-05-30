@@ -26,7 +26,7 @@ includes:
 
 - ./tk-nuke-quickreview.yml
 - ./tk-multi-bugreporter.yml
-include: "./dpx/tk-nuke-writenode.yml"
+include: "{CONFIG_FOLDER}/env/includes/settings/$FormExt/tk-nuke-writenode.yml"
 
 
 ################################################################################
