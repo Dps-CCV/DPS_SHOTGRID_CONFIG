@@ -91,7 +91,7 @@ class ContextChange(get_hook_baseclass()):
                     self.logger.info("Environment variable SHOT changed to %s", str(current_context.entity["name"]))
                     self.logger.info("Environment variable SHOT_FOLDER changed to %s", str(shot_path))
 
-                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
+                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["project.Project.sg_format", "sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
                     os.environ["SEQ"] = str(seq["sg_sequence"]["name"])
                     # os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
                     # methods = ''
@@ -102,6 +102,8 @@ class ContextChange(get_hook_baseclass()):
 
 
                     clip = seq
+
+                    os.environ["FormExt"] = str(clip["project.Project.sg_format"])
 
                     ###Fill clip and lmt settings if we have those values. If we don't we set empty variables because OCIO configs don't work if there are no env variables created
                     if clip["sg_source_clip"]:
@@ -117,6 +119,9 @@ class ContextChange(get_hook_baseclass()):
 
 
                 elif current_context.entity["type"] == 'Asset':
+                    seq = current_context.sgtk.shotgun.find_one("Asset", [["id", "is", current_context.entity["id"]]],
+                                                                ["project.Project.sg_format"])
+                    os.environ["FormExt"] = str(seq["project.Project.sg_format"])
                     os.environ["ASSET"] = current_context.entity["name"]
                     self.logger.info("Environment variable ASSET changed to %s", str(current_context.entity["name"]))
 

@@ -35,6 +35,10 @@ keys:
     Episode:
         type: str
         shotgun_entity_type: Episode
+    FormExt:
+        type: str
+        shotgun_entity_type: Project
+        shotgun_field_name: sg_format
 
     Sequence:
         type: str
@@ -498,18 +502,18 @@ paths:
     nuke_shot_publish:
         definition: '@shot_root/PUBLISH/SCENES/{Step}/NUKE/{Shot}_{Step}_{task_name}_v{version}.nk'
     # write node outputs
-    nuke_shot_render_exr:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.exr'
-    nuke_shot_render_pub_exr:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.exr'
-    nuke_shot_render_alpha_exr:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.exr'
-    nuke_shot_render_alpha_pub_exr:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.exr'
+    nuke_shot_render:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_pub:
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}{FormExt}'
+    nuke_shot_render_alpha:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_alpha_pub:
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp:
-        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
 #    nuke_tech_precomp:
 #        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_v{version}/{Shot}_{nuke.output}_v{version}.{SEQ}.exr'
     nuke_imageplane:
@@ -789,13 +793,13 @@ paths:
 #        definition: '@asset_root/PUBLISH'
     # outputs from the Shotgun Write Node for assets
     nuke_asset_precomp:
-        definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_precomp_pub:
-        definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.exr'
-    nuke_asset_render_exr:
-        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.exr'
-    nuke_asset_render_pub_exr:
-        definition: '@asset_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_render:
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_render_pub:
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_imageplane:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.exr'
     nuke_asset_imageplane_pub:

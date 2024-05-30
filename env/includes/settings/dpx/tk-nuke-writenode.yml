@@ -20,22 +20,21 @@ settings.tk-nuke-writenode.asset:
   template_script_work: nuke_asset_work
   show_convert_actions: True
   write_nodes:
-    - file_type: ${FormExt}
-      name: Exr 16bits
+    - file_type: dpx
+      name: dpx 16bits
       proxy_publish_template:
       proxy_render_template:
-      publish_template: nuke_asset_render_pub_exr
-      render_template: nuke_asset_render_exr
+      publish_template: nuke_asset_render_pub
+      render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
         channels: rgba
         metadata: "all metadata"
-        write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
       promote_write_knobs: [ ]
-    - file_type: exr
+    - file_type: dpx
       name: PRECOMP
       proxy_publish_template:
       proxy_render_template:
@@ -45,7 +44,6 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: rgba
         metadata: "all metadata"
-        write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
@@ -114,27 +112,26 @@ settings.tk-nuke-writenode.shot:
   template_script_work: nuke_shot_work
   show_convert_actions: True
   write_nodes:
-  - file_type: exr
-    name: Exr 16bits
+  - file_type: dpx
+    name: dpx 16bits
     proxy_publish_template:
     proxy_render_template:
-    publish_template: nuke_shot_render_pub_exr
-    render_template: nuke_shot_render_exr
+    publish_template: nuke_shot_render_pub
+    render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
       channels: rgba
       metadata: "all metadata"
-      write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: []
-  - file_type: exr
+  - file_type: dpx
     name: ALPHA
     proxy_publish_template:
     proxy_render_template:
-    publish_template: nuke_shot_render_alpha_pub_exr
-    render_template: nuke_shot_render_alpha_exr
+    publish_template: nuke_shot_render_alpha_pub
+    render_template: nuke_shot_render_alpha
     settings:
       datatype: 16 bit half
       channels: rgba
@@ -144,7 +141,7 @@ settings.tk-nuke-writenode.shot:
     tank_type: Rendered Image
     tile_color: [ 106, 181, 0 ]
     promote_write_knobs: [ ]
-  - file_type: exr
+  - file_type: dpx
     name: PRECOMP
     proxy_publish_template:
     proxy_render_template:
@@ -154,7 +151,6 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: rgba
       metadata: "all metadata"
-      write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
