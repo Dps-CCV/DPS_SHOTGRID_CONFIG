@@ -103,10 +103,10 @@ class ContextChange(get_hook_baseclass()):
 
                     clip = seq
 
-                    os.environ["FormExt"] = str(clip["project.Project.sg_format"])
-                    index = __file__.find("core\\")
-                    config = __file__[:index]
-                    os.environ['CONFIG_FOLDER'] = config
+                    # os.environ["FormExt"] = str(clip["project.Project.sg_format"])
+                    # index = __file__.find("core\\")
+                    # config = __file__[:index]
+                    # os.environ['CONFIG_FOLDER'] = config
 
                     ###Fill clip and lmt settings if we have those values. If we don't we set empty variables because OCIO configs don't work if there are no env variables created
                     if clip["sg_source_clip"]:
@@ -122,9 +122,6 @@ class ContextChange(get_hook_baseclass()):
 
 
                 elif current_context.entity["type"] == 'Asset':
-                    seq = current_context.sgtk.shotgun.find_one("Asset", [["id", "is", current_context.entity["id"]]],
-                                                                ["project.Project.sg_format"])
-                    os.environ["FormExt"] = str(seq["project.Project.sg_format"])
                     os.environ["ASSET"] = current_context.entity["name"]
                     self.logger.info("Environment variable ASSET changed to %s", str(current_context.entity["name"]))
 

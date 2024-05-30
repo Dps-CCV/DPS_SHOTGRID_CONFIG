@@ -20,12 +20,12 @@ settings.tk-nuke-writenode.asset:
   template_script_work: nuke_asset_work
   show_convert_actions: True
   write_nodes:
-    - file_type: ${FormExt}
+    - file_type: exr
       name: Exr 16bits
       proxy_publish_template:
       proxy_render_template:
-      publish_template: nuke_asset_render_pub_exr
-      render_template: nuke_asset_render_exr
+      publish_template: nuke_asset_render_pub
+      render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
         channels: rgba
@@ -118,8 +118,8 @@ settings.tk-nuke-writenode.shot:
     name: Exr 16bits
     proxy_publish_template:
     proxy_render_template:
-    publish_template: nuke_shot_render_pub_exr
-    render_template: nuke_shot_render_exr
+    publish_template: nuke_shot_render_pub
+    render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
       channels: rgba
@@ -133,8 +133,8 @@ settings.tk-nuke-writenode.shot:
     name: ALPHA
     proxy_publish_template:
     proxy_render_template:
-    publish_template: nuke_shot_render_alpha_pub_exr
-    render_template: nuke_shot_render_alpha_exr
+    publish_template: nuke_shot_render_alpha_pub
+    render_template: nuke_shot_render_alpha
     settings:
       datatype: 16 bit half
       channels: rgba

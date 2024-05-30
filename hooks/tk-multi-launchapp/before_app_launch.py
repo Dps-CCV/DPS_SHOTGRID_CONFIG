@@ -76,20 +76,19 @@ class BeforeAppLaunch(tank.Hook):
         )
         os.environ["OCIO"] = ocio_path
 
-        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["sg_espacio___color"])
+        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code", "sg_espacio___color", "sg_format", "sg_formato___ratio"])
 
         os.environ["PROJECTCOLORSPACE"] = str(getColor["sg_espacio___color"])
 
-        getMask = tank.platform.current_engine().shotgun.find_one("Project", [
-            ["name", "is", str(current_context.project["name"])]], ["sg_formato___ratio"])
+        os.environ["FormExt"] = str(getColor["sg_format"])
 
-        os.environ["PROJECTMASK"] = str(getMask["sg_formato___ratio"])
+
+        os.environ["PROJECTMASK"] = str(getColor["sg_formato___ratio"])
 
         os.environ["RV_SUPPORT_PATH"] = os.path.join(project_path, "CONFIG", "COLOR", "RV")
 
-        getCode = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code"])
 
-        os.environ["PROJECT_CODE"] = str(getCode["code"])
+        os.environ["PROJECT_CODE"] = str(getColor["code"])
 
         os.environ['RV_USE_CUTS_IN_SCREENING_ROOM'] = "1"
 
