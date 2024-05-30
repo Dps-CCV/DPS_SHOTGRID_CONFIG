@@ -42,6 +42,7 @@ settings.tk-multi-publish2.3dsmaxplus.asset_step: &settings_tk-multi-publish2_3d
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: max_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to ShotGrid
     hook: "{self}/publish_file.py"
@@ -60,6 +61,7 @@ settings.tk-multi-publish2.3dsmaxplus.asset_step: &settings_tk-multi-publish2_3d
     hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session_geometry.py"
     settings:
         Publish Template: asset_alembic_cache
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -68,6 +70,7 @@ settings.tk-multi-publish2.3dsmaxplus.shot_step: &settings_tk-multi-publish2_3ds
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: max_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to ShotGrid
     hook: "{self}/publish_file.py"
@@ -82,6 +85,7 @@ settings.tk-multi-publish2.3dsmaxplus.shot_step: &settings_tk-multi-publish2_3ds
     hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session.py"
     settings:
         Publish Template: max_shot_publish
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -103,6 +107,7 @@ settings.tk-multi-publish2.houdini.asset_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/houdini/collector.py"
   collector_settings:
       Work Template: houdini_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/houdini/publish_file.py"
@@ -118,6 +123,7 @@ settings.tk-multi-publish2.houdini.asset_step:
     settings:
         Publish Template: houdini_asset_publish
         Dailies Template: maya_asset_low_dailies_publish
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -126,6 +132,7 @@ settings.tk-multi-publish2.houdini.shot_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/houdini/collector.py"
   collector_settings:
       Work Template: houdini_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/houdini/publish_file.py"
@@ -141,6 +148,7 @@ settings.tk-multi-publish2.houdini.shot_step:
     settings:
         Publish Template: houdini_shot_publish
         Dailies Template: maya_shot_low_dailies_publish
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -162,6 +170,7 @@ settings.tk-multi-publish2.mari.asset_step:
   - name: Upload for review
     hook: "{self}/upload_version.py"
     settings: {}
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -174,6 +183,7 @@ settings.tk-multi-publish2.maya.asset_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/maya/collector.py"
   collector_settings:
       Work Template: maya_asset_work
+      Background Processing: True
   pre_publish: "{self}/pre_publish.py:{config}/tk-multi-publish2/maya/pre_publish.py"
   publish_plugins:
 #  - name: Publish File to Shotgun
@@ -229,6 +239,7 @@ settings.tk-multi-publish2.maya.asset_step:
     settings:
         Publish Template: maya_asset_camera_publish
         Cameras: ["*camMain*"]
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -237,6 +248,7 @@ settings.tk-multi-publish2.maya.shot_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/maya/collector.py"
   collector_settings:
       Work Template: maya_shot_work
+      Background Processing: True
   pre_publish: "{self}/pre_publish.py:{config}/tk-multi-publish2/maya/pre_publish.py"
   publish_plugins:
 #  - name: Publish File to Shotgun
@@ -289,6 +301,7 @@ settings.tk-multi-publish2.maya.shot_step:
         Publish Template: maya_shot_render_publish
         Dailies Template: maya_shot_dailies_publish
         Link Local File: True
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -301,6 +314,7 @@ settings.tk-multi-publish2.nuke.asset_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/nuke/collector.py"
   collector_settings:
       Work Template: nuke_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{config}/tk-multi-publish2/nuke/publish_file.py"
@@ -326,6 +340,7 @@ settings.tk-multi-publish2.nuke.asset_step:
   - name: Submit for Review
     hook: "{config}/tk-multi-publish2/nuke/submit_for_review.py"
     settings: {}
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -334,6 +349,7 @@ settings.tk-multi-publish2.nuke.shot_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/nuke/collector.py"
   collector_settings:
       Work Template: nuke_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{config}/tk-multi-publish2/nuke/publish_file.py"
@@ -363,7 +379,7 @@ settings.tk-multi-publish2.nuke.shot_step:
 #    hook: "{engine}/tk-multi-publish2/basic/nuke_update_flame_clip.py"
 #    settings:
 #        Flame Clip Template: flame_shot_clip
-#  post_phase: "{config}/tk-multi-publish2/nuke/post_phase.py"
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -375,6 +391,7 @@ settings.tk-multi-publish2.nukestudio:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: hiero_project_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -389,6 +406,7 @@ settings.tk-multi-publish2.nukestudio:
     hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/nukestudio_publish_project.py"
     settings:
         Publish Template: hiero_project_publish
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -401,6 +419,7 @@ settings.tk-multi-publish2.photoshop.asset_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: photoshop_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -418,6 +437,7 @@ settings.tk-multi-publish2.photoshop.asset_step:
   - name: Upload for review
     hook: "{engine}/tk-multi-publish2/basic/upload_version.py"
     settings: {}
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -426,6 +446,7 @@ settings.tk-multi-publish2.photoshop.shot_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: photoshop_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -443,6 +464,7 @@ settings.tk-multi-publish2.photoshop.shot_step:
   - name: Upload for review
     hook: "{engine}/tk-multi-publish2/basic/upload_version.py"
     settings: {}
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -455,6 +477,7 @@ settings.tk-multi-publish2.aftereffects.asset_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: aftereffects_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -486,6 +509,7 @@ settings.tk-multi-publish2.aftereffects.asset_step:
     hook: "{self}/upload_version.py:{engine}/tk-multi-publish2/basic/upload_version.py"
     settings:
         Movie Output Module: Lossless with Alpha
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -494,6 +518,7 @@ settings.tk-multi-publish2.aftereffects.shot_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: aftereffects_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -522,6 +547,7 @@ settings.tk-multi-publish2.aftereffects.shot_step:
     hook: "{self}/upload_version.py:{engine}/tk-multi-publish2/basic/upload_version.py"
     settings:
         Movie Output Module: Lossless with Alpha
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
 
@@ -534,6 +560,7 @@ settings.tk-multi-publish2.motion_builder.asset_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: mobu_asset_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to Shotgun
     hook: "{self}/publish_file.py"
@@ -556,6 +583,7 @@ settings.tk-multi-publish2.motion_builder.shot_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: mobu_shot_work
+      Background Processing: True
   publish_plugins:
   - name: Publish to ShotGrid
     hook: "{self}/publish_file.py"
@@ -583,6 +611,7 @@ settings.tk-multi-publish2.alias.asset_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: alias_asset_work
+      Background Processing: True
   publish_plugins:
    - name: Publish to ShotGrid
      hook: "{self}/publish_file.py"
@@ -624,6 +653,7 @@ settings.tk-multi-publish2.vred.asset_step:
   collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py"
   collector_settings:
       Work Template: vred_asset_work
+      Background Processing: True
   publish_plugins:
    - name: Publish to ShotGrid
      hook: "{self}/publish_file.py"
@@ -650,5 +680,6 @@ settings.tk-multi-publish2.vred.asset_step:
    - name: Upload for review
      hook: "{self}/upload_version.py:{engine}/tk-multi-publish2/basic/upload_version.py"
      settings: {}
+  post_phase: "{self}/post_phase.py:{config}/tk-multi-publish2/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"

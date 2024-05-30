@@ -223,3 +223,13 @@ apps.tk-multi-bugreporter.location:
   name: tk-multi-bugreporter
   type: path
   path: '{CONFIG_FOLDER}/bundles/tk-multi-bugreporter'
+
+apps.tk-multi-bg-publish.location:
+  type: app_store
+  name: tk-multi-bg-publish
+  version: v0.1.0
+
+apps.tk-multi-scenebuilder.location:
+  type: app_store
+  name: tk-multi-bg-publish
+  version: v0.1.1
