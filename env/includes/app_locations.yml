@@ -120,7 +120,7 @@ apps.tk-shotgun-launchvredreview.location:
 #  type: path
 #  path: '{CONFIG_FOLDER}/bundles/tk-hiero-export'
 
-apps.k-hiero-export.location:
+apps.tk-hiero-export.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-hiero-export.location
