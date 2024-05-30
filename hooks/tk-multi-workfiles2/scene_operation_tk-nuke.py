@@ -114,14 +114,14 @@ class SceneOperation(HookClass):
                 # nuke.scriptSave()
                 print("desactivado guardado del scipt. hooks-workfiles2-scene-operation linea 115")
 
-            ####DPS Write Shortcuts
-            # # CUSTOM SHORTCUTS
-            write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-            write_node_item.setShortcut("")
-
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+            # ####DPS Write Shortcuts
+            # # # CUSTOM SHORTCUTS
+            # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+            # write_node_item.setShortcut("")
+            #
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
             # e = sgtk.platform.current_engine()
             # e.apps["tk-multi-breakdown2"].show_dialog()
             e = sgtk.platform.current_engine()
@@ -144,14 +144,14 @@ class SceneOperation(HookClass):
             # save the current script:
             nuke.scriptSave()
 
-            ####DPS Write Shortcuts
-            # # CUSTOM SHORTCUTS
-            write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-            write_node_item.setShortcut("")
-
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+            # ####DPS Write Shortcuts
+            # # # CUSTOM SHORTCUTS
+            # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+            # write_node_item.setShortcut("")
+            #
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
         elif operation == "save_as":
             old_path = nuke.root()["name"].value()
             try:
@@ -167,14 +167,14 @@ class SceneOperation(HookClass):
                 # something went wrong so reset to old path:
                 nuke.root()["name"].setValue(old_path)
                 raise TankError("Failed to save scene %s", e)
-            ####DPS Write Shortcuts
-            # # CUSTOM SHORTCUTS
-            write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-            write_node_item.setShortcut("")
-
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+            # ####DPS Write Shortcuts
+            # # # CUSTOM SHORTCUTS
+            # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+            # write_node_item.setShortcut("")
+            #
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
 
         elif operation == "reset":
             """
@@ -201,14 +201,14 @@ class SceneOperation(HookClass):
             # now clear the script:
             nuke.scriptClear()
 
-            ####DPS Write Shortcuts
-            # # CUSTOM SHORTCUTS
-            write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-            write_node_item.setShortcut("")
-
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-            nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+            # ####DPS Write Shortcuts
+            # # # CUSTOM SHORTCUTS
+            # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+            # write_node_item.setShortcut("")
+            #
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
+            # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
 
             return True
 
