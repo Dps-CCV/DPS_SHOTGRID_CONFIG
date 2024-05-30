@@ -123,7 +123,7 @@ apps.tk-shotgun-launchvredreview.location:
 apps.tk-hiero-export.location:
   type: github_release
   organization: Dps-CCV
-  repository: tk-hiero-export.location
+  repository: tk-hiero-export
   version: v0.8.0
   private: true
 
