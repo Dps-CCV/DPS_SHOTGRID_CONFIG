@@ -25,8 +25,7 @@ includes:
 - ./tk-multi-workfiles2.yml
 - ./tk-nuke-quickreview.yml
 - ./tk-multi-bugreporter.yml
-include: "$CONFIG_FOLDER/env/includes/settings/$FormExt/tk-nuke-writenode.yml"
-
+- "$CONFIG_FOLDER/env/includes/settings/$FormExt/tk-nuke-writenode.yml"
 
 ################################################################################
 # Hiero
