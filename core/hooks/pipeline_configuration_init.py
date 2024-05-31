@@ -24,14 +24,9 @@ class PipelineConfigurationInit(Hook):
 
         The default implementation does nothing.
         """
-        pc_path = tank.pipelineconfig_utils.get_path_to_current_core()
-        pc_meta = tank.pipelineconfig_utils.get_metadata(pc_path)
-        pc_name = pc_meta['pc_name']
         index = __file__.find("core\\")
         config = __file__[:index]
         os.environ['CONFIG_FOLDER'] = config
-        # os.environ["CONFIG_FOLDER"] = pc_path + "\\config"
         os.environ["FormExt"] = 'exr'
-        self.logger.info("LOLOLOLIALKALAKLAKALAKALAKALAKALAK")
-        self.logger.info(os.environ["CONFIG_FOLDER"])
+
         pass
