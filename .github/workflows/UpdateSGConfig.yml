@@ -38,6 +38,6 @@ jobs:
 
       - name: execute py script # run sj-gobierno.py to get the latest data
         env: 
-          NEWCODE: ${SHORT_SHA}
+          NEWCODE: ${{SHORT_SHA}}
           UPDATECONFIGKEY: ${{ secrets.UPDATECONFIGKEY }}
         run: python .github/workflows/updateConfig.py
