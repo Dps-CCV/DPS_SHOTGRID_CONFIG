@@ -23,8 +23,12 @@ class PickEnvironment(Hook):
         and project, and switches to these based on entity type.
         """
         project = context.project
-        proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format'])
-        os.environ["FormExt"] = proj['sg_format']
+        try:
+            proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format'])
+            if proj != None:
+                os.environ["FormExt"] = proj['sg_format']
+        except:
+            pass
         if context.source_entity:
             if context.source_entity["type"] == "Version":
                 return "version"
