@@ -57,11 +57,6 @@ class BeforeAppLaunch(tank.Hook):
         multi_launchapp = self.parent
         current_context = multi_launchapp.context
 
-        index = __file__.find("hooks\\")
-        config = __file__[:index]
-        os.environ['CONFIG_FOLDER'] = config
-
-
         ## Definir variables generales para su posible uso posterior dentro de las aplicaciones
         os.environ["PROJECT"] = str(current_context.project["name"])
         os.environ["ARTIST"] = current_context.user["name"]
@@ -80,7 +75,7 @@ class BeforeAppLaunch(tank.Hook):
 
         os.environ["PROJECTCOLORSPACE"] = str(getColor["sg_espacio___color"])
 
-        os.environ["FormExt"] = str(getColor["sg_format"])
+        # os.environ["FormExt"] = str(getColor["sg_format"])
 
 
         os.environ["PROJECTMASK"] = str(getColor["sg_formato___ratio"])
@@ -125,36 +120,36 @@ class BeforeAppLaunch(tank.Hook):
             # )
             # os.environ["MAYA_APP_DIR"] = maya_environ_path
 
-            shelves_environ_path = "L:\MAYA_SCRIPTS\SHELVES"
-            os.environ["MAYA_SHELF_PATH"] = shelves_environ_path
-
-            ###YETI IMPORTS
-            os.environ['peregrinel_LICENSE'] = '5053@servidor-licencias-api'
-            yeti_path = "L:\\MAYA_PLUGINS\\YETI"
-            yeti_bin_path = "L:\\MAYA_PLUGINS\\YETI\\bin"
-            yeti_plugins_path = "L:\\MAYA_PLUGINS\\YETI\\plug-ins"
-            if "MAYA_MODULE_PATH" in os.environ.keys():
-                os.environ["MAYA_MODULE_PATH"] += os.pathsep + yeti_path
-            else:
-                os.environ["MAYA_MODULE_PATH"] = yeti_path + os.pathsep
-            sys.path.append(yeti_bin_path)
-            self.logger.info(sys.path)
-
-            if "MTOA_EXTENSIONS_PATH" in os.environ.keys():
-                tank.util.append_path_to_env_var("MTOA_EXTENSIONS_PATH", yeti_plugins_path)
-            else:
-                os.environ["MTOA_EXTENSIONS_PATH"] = yeti_plugins_path
-            # os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + os.pathsep + yeti_bin_path
-            tank.util.append_path_to_env_var("ARNOLD_PLUGIN_PATH", yeti_bin_path)
-
-            scripts_environ_path = "L:\MAYA_SCRIPTS"
-            os.environ["MAYA_SCRIPT_PATH"] = scripts_environ_path
-            if os.environ.get("PYTHONPATH") is not None:
-                os.environ["PYTHONPATH"] += ";" + scripts_environ_path
-                os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
-            else:
-                os.environ["PYTHONPATH"] = scripts_environ_path
-                os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
+            # shelves_environ_path = "L:\MAYA_SCRIPTS\SHELVES"
+            # os.environ["MAYA_SHELF_PATH"] = shelves_environ_path
+            #
+            # ###YETI IMPORTS
+            # # os.environ['peregrinel_LICENSE'] = '5053@servidor-licencias-api'
+            # yeti_path = "L:\\MAYA_PLUGINS\\YETI"
+            # yeti_bin_path = "L:\\MAYA_PLUGINS\\YETI\\bin"
+            # yeti_plugins_path = "L:\\MAYA_PLUGINS\\YETI\\plug-ins"
+            # if "MAYA_MODULE_PATH" in os.environ.keys():
+            #     os.environ["MAYA_MODULE_PATH"] += os.pathsep + yeti_path
+            # else:
+            #     os.environ["MAYA_MODULE_PATH"] = yeti_path + os.pathsep
+            # sys.path.append(yeti_bin_path)
+            # self.logger.info(sys.path)
+            #
+            # if "MTOA_EXTENSIONS_PATH" in os.environ.keys():
+            #     tank.util.append_path_to_env_var("MTOA_EXTENSIONS_PATH", yeti_plugins_path)
+            # else:
+            #     os.environ["MTOA_EXTENSIONS_PATH"] = yeti_plugins_path
+            # # os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + os.pathsep + yeti_bin_path
+            # tank.util.append_path_to_env_var("ARNOLD_PLUGIN_PATH", yeti_bin_path)
+            #
+            # scripts_environ_path = "L:\MAYA_SCRIPTS"
+            # os.environ["MAYA_SCRIPT_PATH"] = scripts_environ_path
+            # if os.environ.get("PYTHONPATH") is not None:
+            #     os.environ["PYTHONPATH"] += ";" + scripts_environ_path
+            #     os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
+            # else:
+            #     os.environ["PYTHONPATH"] = scripts_environ_path
+            #     os.environ["PYTHONPATH"] += ";" + scripts_environ_path + "/PYTHON"
 
             # desconectado test
             render_environ_path = os.path.abspath(os.path.join(
@@ -176,7 +171,7 @@ class BeforeAppLaunch(tank.Hook):
 
 
         elif engine_name == "tk-nuke":
-            tank.util.append_path_to_env_var("NUKE_PATH", 'L:\\NUKE_CONFIG')
+            # tank.util.append_path_to_env_var("NUKE_PATH", 'L:\\NUKE_CONFIG')
             ##Variables de Nuke
             nuke_environ_path = os.path.join(
                 project_path, "CONFIG/NUKE"

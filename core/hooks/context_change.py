@@ -103,10 +103,6 @@ class ContextChange(get_hook_baseclass()):
 
                     clip = seq
 
-                    # os.environ["FormExt"] = str(clip["project.Project.sg_format"])
-                    # index = __file__.find("core\\")
-                    # config = __file__[:index]
-                    # os.environ['CONFIG_FOLDER'] = config
 
                     ###Fill clip and lmt settings if we have those values. If we don't we set empty variables because OCIO configs don't work if there are no env variables created
                     if clip["sg_source_clip"]:
@@ -139,11 +135,7 @@ class ContextChange(get_hook_baseclass()):
                     # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
                     # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
 
-                # elif current_engine._Engine__engine_instance_name == 'tk-maya':
-                #     import nuke
-                #     reloadConfig = nuke.root().knob('reloadConfig')
-                #     reloadConfig.execute()
-                #     self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+
 
                 elif current_engine._Engine__engine_instance_name == 'tk-houdini':
                     import hou

@@ -21,6 +21,9 @@ class PickEnvironment(Hook):
         The default implementation assumes there are three environments, called shot, asset
         and project, and switches to these based on entity type.
         """
+        project = context.project
+        proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format'])
+        os.environ["FormExt"] = proj['sg_format']
         if context.source_entity:
             if context.source_entity["type"] == "Version":
                 return "version"

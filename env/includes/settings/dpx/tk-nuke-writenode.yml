@@ -11,7 +11,7 @@
 ################################################################################
 
 includes:
-- ../app_locations.yml
+- $CONFIG_FOLDER/env/includes/app_locations.yml
 
 ################################################################################
 
@@ -21,16 +21,14 @@ settings.tk-nuke-writenode.asset:
   show_convert_actions: True
   write_nodes:
     - file_type: dpx
-      name: dpx 16bits
+      name: Dpx 16bits
       proxy_publish_template:
       proxy_render_template:
       publish_template: nuke_asset_render_pub
       render_template: nuke_asset_render
       settings:
-        datatype: 16 bit half
+        datatype: 16 bit
         channels: rgba
-        metadata: "all metadata"
-        compression: Zip (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
       promote_write_knobs: [ ]
@@ -41,10 +39,8 @@ settings.tk-nuke-writenode.asset:
       publish_template: nuke_asset_precomp_pub
       render_template: nuke_asset_precomp
       settings:
-        datatype: 16 bit half
+        datatype: 16 bit
         channels: rgba
-        metadata: "all metadata"
-        compression: Zip (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
       promote_write_knobs: []
@@ -58,7 +54,7 @@ settings.tk-nuke-writenode.asset:
         datatype: 32 bit float
         channels: all
         write_ACES_compliant_EXR: false
-        colorspace: "ACEScg"
+        colorspace: "ACES - ACEScg"
         metadata: "all metadata"
         compression: Zip (1 scanline)
       tank_type: Rendered Image
@@ -76,7 +72,7 @@ settings.tk-nuke-writenode.asset:
         metadata: "all metadata"
         write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
-        colorspace: "ACEScg"
+        colorspace: "ACES - ACEScg"
       tank_type: Rendered Image
       tile_color: [ 93, 53, 178 ]
       promote_write_knobs: [ ]
@@ -100,7 +96,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_mattepaint
       settings:
         channels: rgba
-        colorspace: "ACEScct"
+        colorspace: "Output - sRGB"
         datatype: 16 bit
       tank_type: Rendered Image
       tile_color: [ 128, 37, 78 ]
@@ -113,16 +109,14 @@ settings.tk-nuke-writenode.shot:
   show_convert_actions: True
   write_nodes:
   - file_type: dpx
-    name: dpx 16bits
+    name: Dpx 16bits
     proxy_publish_template:
     proxy_render_template:
     publish_template: nuke_shot_render_pub
     render_template: nuke_shot_render
     settings:
-      datatype: 16 bit half
+      datatype: 16 bit
       channels: rgba
-      metadata: "all metadata"
-      compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: []
@@ -131,13 +125,11 @@ settings.tk-nuke-writenode.shot:
     proxy_publish_template:
     proxy_render_template:
     publish_template: nuke_shot_render_alpha_pub
-    render_template: nuke_shot_render_alpha
+    render_template: nuke_shot_render_alpha_
     settings:
-      datatype: 16 bit half
+      datatype: 16 bit
       channels: rgba
       colorspace: "Utility - Raw"
-      metadata: "all metadata"
-      compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [ 106, 181, 0 ]
     promote_write_knobs: [ ]
@@ -148,10 +140,8 @@ settings.tk-nuke-writenode.shot:
     publish_template: nuke_precomp_pub
     render_template: nuke_precomp
     settings:
-      datatype: 16 bit half
+      datatype: 16 bit
       channels: rgba
-      metadata: "all metadata"
-      compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: []
@@ -165,7 +155,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 32 bit float
       channels: all
       write_ACES_compliant_EXR: false
-      colorspace: "ACEScg"
+      colorspace: "ACES - ACEScg"
       metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image
@@ -183,7 +173,7 @@ settings.tk-nuke-writenode.shot:
       metadata: "all metadata"
       write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
-      colorspace: "ACEScg"
+      colorspace: "ACES - ACEScg"
     tank_type: Rendered Image
     tile_color: [93, 53, 178]
     promote_write_knobs: []
@@ -207,7 +197,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_mattepaint
     settings:
       channels: rgba
-      colorspace: "ACEScct"
+      colorspace: "Output - sRGB"
       datatype: 16 bit
     tank_type: Rendered Image
     tile_color: [ 128, 37, 78 ]
