@@ -1,5 +1,5 @@
 def main():
-  import shotgun-api3
+  import shotgun_api3
   import os
   sg = shotgun_api3.Shotgun("https://dareplanet.shotgunbstudio.com",
                           script_name="GithubUpdateConfig",
