@@ -13,6 +13,8 @@ This hook gets executed before and after the context changes in Toolkit.
 """
 
 from tank import get_hook_baseclass
+import os
+import sgtk
 
 
 
@@ -53,8 +55,7 @@ class ContextChange(get_hook_baseclass()):
         pass
 
     def post_context_change(self, previous_context, current_context):
-        import os
-        import sgtk
+
         """
         Executed after the context has changed.
 
@@ -93,11 +94,11 @@ class ContextChange(get_hook_baseclass()):
 
                     seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["project.Project.sg_format", "sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
                     os.environ["SEQ"] = str(seq["sg_sequence"]["name"])
-                    # os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
-                    # methods = ''
-                    # for i in seq["sg_method"]:
-                    #     methods += ' ' + i['name'] + ','
-                    # os.environ["METHODS"] = methods
+                    os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
+                    methods = ''
+                    for i in seq["sg_method"]:
+                        methods += ' ' + i['name'] + ','
+                    os.environ["METHODS"] = methods
                     self.logger.info("Environment variable SEQ changed to %s", str(seq["sg_sequence"]["name"]))
 
 
