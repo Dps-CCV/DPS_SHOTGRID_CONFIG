@@ -29,4 +29,6 @@ class PipelineConfigurationInit(Hook):
         pc_name = pc_meta['pc_name']
         os.environ["CONFIG_FOLDER"] = pc_path + "\\config"
         os.environ["FormExt"] = 'exr'
+        self.logger.info("LOLOLOLIALKALAKLAKALAKALAKALAKALAK")
+        self.logger.info(os.environ["CONFIG_FOLDER"])
         pass
