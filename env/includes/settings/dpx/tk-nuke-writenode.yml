@@ -109,7 +109,7 @@ settings.tk-nuke-writenode.shot:
   show_convert_actions: True
   write_nodes:
   - file_type: dpx
-    name: Dpx 16bits
+    name: Render 16bits
     proxy_publish_template:
     proxy_render_template:
     publish_template: nuke_shot_render_pub
