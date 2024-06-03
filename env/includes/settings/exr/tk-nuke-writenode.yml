@@ -21,7 +21,7 @@ settings.tk-nuke-writenode.asset:
   show_convert_actions: True
   write_nodes:
     - file_type: exr
-      name: Exr 16bits
+      name: Render 16bits
       proxy_publish_template:
       proxy_render_template:
       publish_template: nuke_asset_render_pub
