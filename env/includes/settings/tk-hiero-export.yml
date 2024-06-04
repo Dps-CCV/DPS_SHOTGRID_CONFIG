@@ -17,7 +17,7 @@ includes:
 
 settings.tk-hiero-export:
   nuke_script_toolkit_write_nodes:
-  - {channel: Exr 16bits, name: 'Exr 16bits'}
+  - {channel: Exr 16bits, name: 'Render 16bits'}
   - {channel: ALPHA, name: 'ALPHA'}
   - {channel: IMAGE_PLANE, name: 'IMAGE_PLANE'}
   - {channel: IMAGE_PLANE_LOW, name: 'IMAGE_PLANE_LOW'}
