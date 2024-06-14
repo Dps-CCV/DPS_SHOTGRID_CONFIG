@@ -115,18 +115,18 @@ apps.tk-shotgun-launchvredreview.location:
 #  name: tk-hiero-export
 #  version: v0.8.0
 
-# hiero export
-apps.tk-hiero-export.location:
-  name: tk-hiero-export
-  type: path
-  path: '{CONFIG_FOLDER}/bundles/tk-hiero-export'
-
+## hiero export
 #apps.tk-hiero-export.location:
-#  type: github_release
-#  organization: Dps-CCV
-#  repository: tk-hiero-export
-#  version: v0.8.0
-#  private: true
+#  name: tk-hiero-export
+#  type: path
+#  path: '{CONFIG_FOLDER}/bundles/tk-hiero-export'
+
+apps.tk-hiero-export.location:
+  type: github_release
+  organization: Dps-CCV
+  repository: tk-hiero-export
+  version: v0.8.0b
+  private: true
 
 apps.tk-hiero-openinshotgun.location:
   type: app_store
