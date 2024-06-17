@@ -125,7 +125,7 @@ apps.tk-hiero-export.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-hiero-export
-  version: v0.8.0e
+  version: v0.8.0f
   private: true
 
 apps.tk-hiero-openinshotgun.location:
