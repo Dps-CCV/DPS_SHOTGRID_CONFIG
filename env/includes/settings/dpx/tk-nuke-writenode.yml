@@ -125,7 +125,7 @@ settings.tk-nuke-writenode.shot:
     proxy_publish_template:
     proxy_render_template:
     publish_template: nuke_shot_render_alpha_pub
-    render_template: nuke_shot_render_alpha_
+    render_template: nuke_shot_render_alpha
     settings:
       datatype: 16 bit
       channels: rgba
