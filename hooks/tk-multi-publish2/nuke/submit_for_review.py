@@ -181,8 +181,6 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         # in the tk-nuke-writenode app, then the write node app falls back on the
         # full-res template. Or if they rendered in full res and then switched to
         # proxy mode later. In this case, this is likely user error, so we catch it.
-        print(item.properties.get("sg_publish_data"))
-        print(item.properties.get("path"))
         root_node = nuke.root()
         proxy_mode_on = root_node["proxy"].value()
         if proxy_mode_on:
