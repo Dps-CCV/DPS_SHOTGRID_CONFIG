@@ -505,7 +505,7 @@ paths:
     nuke_shot_render:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_pub:
