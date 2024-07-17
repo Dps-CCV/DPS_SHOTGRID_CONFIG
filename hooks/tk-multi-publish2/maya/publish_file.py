@@ -406,7 +406,10 @@ class BasicFilePublishPlugin(HookBaseClass):
             )
 
         # handle copying of work to publish if templates are in play
-        self._copy_to_publish(settings, item)
+        if 'Camera' in publish_type:
+            self._copy_work_to_publish(settings, item)
+        else:
+            self._copy_to_publish(settings, item)
 
         # arguments for publish registration
         self.logger.info("Registering publish...")
