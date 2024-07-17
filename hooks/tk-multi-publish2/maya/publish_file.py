@@ -360,12 +360,12 @@ class BasicFilePublishPlugin(HookBaseClass):
                         }
                     },
                 )
-        if item.properties["type_spec"] == "file.alembic":
-            self.logger.info("A Publish will be created in Shotgun and linked to:")
-            self.logger.info("  %s" % (publish_path,))
-        else:
-            self.logger.info("A Publish will be created in Shotgun and linked to:")
-            self.logger.info("  %s" % (path,))
+        # if item.properties["type_spec"] == "file.alembic":
+        #     self.logger.info("A Publish will be created in Shotgun and linked to:")
+        #     self.logger.info("  %s" % (publish_path,))
+        # else:
+        #     self.logger.info("A Publish will be created in Shotgun and linked to:")
+        #     self.logger.info("  %s" % (path,))
 
         return True
 
@@ -507,16 +507,16 @@ class BasicFilePublishPlugin(HookBaseClass):
         :return: A template representing the publish path of the item or
             None if no template could be identified.
         """
-        if item.properties["type_spec"] == "file.alembic":
-
-            try:
-                publisher = self.parent
-                template_name = settings["Alembic Publish Template"].value
-                alembic_publish_template = publisher.get_template_by_name(template_name)
-                item.properties["publish_template"] = alembic_publish_template
-            except:
-                print("No Alembic Publish Template found")
-                pass
+        # if item.properties["type_spec"] == "file.alembic":
+        #
+        #     try:
+        #         publisher = self.parent
+        #         template_name = settings["Alembic Publish Template"].value
+        #         alembic_publish_template = publisher.get_template_by_name(template_name)
+        #         item.properties["publish_template"] = alembic_publish_template
+        #     except:
+        #         print("No Alembic Publish Template found")
+        #         pass
 
         publish_template = item.get_property("publish_template")
         if publish_template:
@@ -609,8 +609,8 @@ class BasicFilePublishPlugin(HookBaseClass):
         if path is None:
             raise AttributeError("'PublishData' object has no attribute 'path'")
 
-        if item.properties["type_spec"] == "file.alembic":
-            path = cmds.file(query=True, sn=True)
+        # if item.properties["type_spec"] == "file.alembic":
+        #     path = cmds.file(query=True, sn=True)
 
 
             if path is not None:
@@ -960,11 +960,11 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         for work_file in work_files:
             path = work_file
-            if item.properties["type_spec"] == "file.alembic":
-                work_file = cmds.file(query=True, sn=True)
-
-                if work_file is not None:
-                    work_file = six.ensure_str(work_file)
+            # if item.properties["type_spec"] == "file.alembic":
+            #     work_file = cmds.file(query=True, sn=True)
+            #
+            #     if work_file is not None:
+            #         work_file = six.ensure_str(work_file)
 
             if not work_template.validate(work_file):
                 self.logger.warning(
