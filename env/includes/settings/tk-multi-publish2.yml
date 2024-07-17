@@ -235,7 +235,7 @@ settings.tk-multi-publish2.maya.asset_step:
         Dailies Template: maya_asset_dailies_publish
         Link Local File: True
   - name: Publish Camera
-    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
+    hook: "{config}/tk-multi-publish2/maya/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
     settings:
         Publish Template: maya_asset_camera_publish
         Cameras: ["*camMain*"]
@@ -271,7 +271,7 @@ settings.tk-multi-publish2.maya.shot_step:
         Dailies Template: maya_shot_low_dailies_publish
 
   - name: Publish Camera
-    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
+    hook: "{config}/tk-multi-publish2/maya/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
     settings:
         Publish Template: maya_shot_camera_publish
         Cameras: ["*camMain*"]
