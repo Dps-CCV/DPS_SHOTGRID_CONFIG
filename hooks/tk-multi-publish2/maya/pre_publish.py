@@ -42,5 +42,4 @@ class PrePublishHook(HookBaseClass):
         scripts2 = cmds.ls(type='script')
         if app.context.step['name'] == "MODEL" or app.context.step['name'] == "MODEL_A":
             sanityChecks_MDL.createUI()
-        else:
-            return True
+        return True
