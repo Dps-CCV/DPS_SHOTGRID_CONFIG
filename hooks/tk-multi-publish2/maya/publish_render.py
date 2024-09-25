@@ -191,8 +191,11 @@ class RenderPublishPlugin(HookBaseClass):
             )
             return {"accepted": False}
 
-        return super(RenderPublishPlugin, self).accept(settings, item)
-
+        if item.context.step['name'] in ['LGT']:
+            return {"accepted": True, "checked": True}
+        else:
+            return {"accepted": True, "checked": False}
+        
     def validate(self, settings, item):
         # self.logger.debug("PlayblastPublishPlugin.validate")
 
@@ -238,7 +241,7 @@ class RenderPublishPlugin(HookBaseClass):
 
         # TBR: revise if any parent class code is reusable
         # return super(PlayblastPublishPlugin, self).validate(settings, item)
-        return True
+        return super(RenderPublishPlugin, self).accept(settings, item)
 
     def publish(self, settings, item):
         """

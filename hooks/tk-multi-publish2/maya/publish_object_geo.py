@@ -160,7 +160,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # natively.
         item.context_change_allowed = False
 
-        return {"accepted": accepted, "checked": True}
+        return {"accepted": accepted, "checked": False}
 
     def validate(self, settings, item):
         """
@@ -279,6 +279,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
             "-uvWrite",
             "-writeUVSets",
             "-writeColorSets",
+            "-worldSpace",
             "-dataformat",
             "ogawa",
             "-root",
@@ -398,6 +399,4 @@ def _get_save_as_action():
         "action_button": {
             "label": "Save As...",
             "tooltip": "Save the current session",
-            "callback": callback,
-        }
-    }
+            "callback": c

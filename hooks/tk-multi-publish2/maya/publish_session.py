@@ -282,7 +282,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         self.logger.info(
             "Maya '%s' plugin accepted the current Maya session." % (self.name,)
         )
-        return {"accepted": True, "checked": True}
+        return {"accepted": True, "checked": False}
 
     def validate(self, settings, item):
         """
@@ -795,7 +795,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         if not os.path.isdir(os.path.dirname(publish_file)):
             os.makedirs(os.path.dirname(publish_file))
 
-        if item.context.step['name'] == 'RIG_A' or item.context.step['name'] == 'RIG':
+        if item.context.step['name'] in ['RIG', 'TXT', 'SHA']:
             cmds.file(publish_file, exportAll=True, preserveReferences=False, force=True, type="mayaAscii")
         else:
             cmds.file(publish_file, exportAll=True, preserveReferences=True, force=True, type="mayaAscii")

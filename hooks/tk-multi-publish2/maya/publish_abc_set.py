@@ -160,7 +160,10 @@ class MayaSessionGeometryPublishPlugin(HookBaseClass):
         # natively.
         item.context_change_allowed = False
 
-        return {"accepted": accepted, "checked": True}
+        if item.context.step['name'] in ['TRK', 'TXT', 'SHA', 'LAY', 'ANM']:
+            return {"accepted": accepted, "checked": True}
+        else:
+            return {"accepted": accepted, "checked": False}
 
     def validate(self, settings, item):
         """
@@ -274,6 +277,7 @@ class MayaSessionGeometryPublishPlugin(HookBaseClass):
             "-writeFaceSets",
             # write uv's (only the current uv set gets written)
             "-uvWrite",
+            "-worldSpace",
             # only export selection
             "-sl",
         ]
@@ -360,6 +364,4 @@ def _get_save_as_action():
         "action_button": {
             "label": "Save As...",
             "tooltip": "Save the current session",
-            "callback": callback,
-        }
-    }
+            "callback": c

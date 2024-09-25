@@ -242,7 +242,7 @@ class MayaCameraPublishPlugin(HookBaseClass):
 
         # all good!
         item.context_change_allowed = False
-        return {"accepted": accepted, "checked": True}
+        return {"accepted": accepted, "checked": False}
 
     def validate(self, settings, item):
         """
