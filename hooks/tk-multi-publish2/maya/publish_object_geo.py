@@ -289,9 +289,11 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         ]
 
         # find the animated frame range to use:
-        if _geo_has_animation(cmds.ls(selection=True)[0]) == True:
+        parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
+        if _geo_has_animation(parentNode) == True:
             start_frame, end_frame = _find_scene_animation_range()
             alembic_args.insert(0, "-frameRange %d %d" % (950, end_frame))
+
 
         alembic_args.append(cmds.ls(selection=True)[0])
 
