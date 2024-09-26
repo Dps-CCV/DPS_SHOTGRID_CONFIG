@@ -159,10 +159,16 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # is a temporary measure until the publisher handles context switching
         # natively.
         item.context_change_allowed = False
-
+        cur_selection = cmds.ls(selection=True)
+        cmds.select(item.properties["object"])
+        parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
+        if _geo_has_animation(parentNode) == True and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
         
         if publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'MODEL', 'TEXTURE_A', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
-            return {"accepted": accepted, "checked": True}
+            if _geo_has_animation(parentNode) == False and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
+                return {"accepted": accepted, "checked": False}
+            else:
+                return {"accepted": accepted, "checked": True}
         else:
             return {"accepted": accepted, "checked": False}
 
