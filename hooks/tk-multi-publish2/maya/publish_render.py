@@ -191,7 +191,7 @@ class RenderPublishPlugin(HookBaseClass):
             )
             return {"accepted": False}
 
-        if item.context.step['name'] in ['LGT']:
+        if publisher.context.step['name'] in ['LGT']:
             return {"accepted": True, "checked": True}
         else:
             return {"accepted": True, "checked": False}

@@ -160,8 +160,8 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # natively.
         item.context_change_allowed = False
 
-        print(item.context.step)
-        if item.context.step['name'] in ['TRK', 'TXT', 'SHA', 'LAY', 'ANM']:
+        
+        if publisher.context.step['name'] in ['TRK', 'TXT', 'SHA', 'LAY', 'ANM']:
             return {"accepted": accepted, "checked": True}
         else:
             return {"accepted": accepted, "checked": False}

@@ -282,7 +282,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         self.logger.info(
             "Maya '%s' plugin accepted the current Maya session." % (self.name,)
         )
-        return {"accepted": True, "checked": False}
+        return {"accepted": True, "checked": True}
 
     def validate(self, settings, item):
         """
