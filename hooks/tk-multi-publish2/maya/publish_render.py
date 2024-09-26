@@ -191,7 +191,7 @@ class RenderPublishPlugin(HookBaseClass):
             )
             return {"accepted": False}
 
-        if publisher.context.step['name'] in ['LIGHT', 'LIGHT_A']:
+        if publisher.context.step['name'] in ['LIGHT', 'LIGHT_A', 'TEXTURE_A']:
             return {"accepted": True, "checked": True}
         else:
             return {"accepted": True, "checked": False}
