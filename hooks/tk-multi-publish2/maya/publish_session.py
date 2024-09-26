@@ -795,7 +795,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         if not os.path.isdir(os.path.dirname(publish_file)):
             os.makedirs(os.path.dirname(publish_file))
 
-        if item.context.step['name'] in ['RIG', 'TXT', 'SHA']:
+        if item.context.step['name'] in ['RIG', 'TEXTURE', 'SHADING', 'RIG_A', 'TEXTURE_A', 'SHADING_A']:
             cmds.file(publish_file, exportAll=True, preserveReferences=False, force=True, type="mayaAscii")
         else:
             cmds.file(publish_file, exportAll=True, preserveReferences=True, force=True, type="mayaAscii")

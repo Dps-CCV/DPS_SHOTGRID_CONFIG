@@ -160,7 +160,7 @@ class MayaParticlesGeometryPublishPlugin(HookBaseClass):
         # natively.
         item.context_change_allowed = False
 
-        if publisher.context.step['name'] in ['FX']:
+        if publisher.context.step['name'] in ['FX', 'FX_A']:
             return {"accepted": accepted, "checked": True}
         else:
             return {"accepted": accepted, "checked": False}
