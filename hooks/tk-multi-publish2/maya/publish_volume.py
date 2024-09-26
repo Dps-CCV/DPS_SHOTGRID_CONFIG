@@ -160,7 +160,10 @@ class MayaParticlesGeometryPublishPlugin(HookBaseClass):
         # natively.
         item.context_change_allowed = False
 
-        return {"accepted": accepted, "checked": False}
+        if item.context.step['name'] in ['FX']:
+            return {"accepted": accepted, "checked": True}
+        else:
+            return {"accepted": accepted, "checked": False}
 
     def validate(self, settings, item):
         """
