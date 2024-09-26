@@ -364,4 +364,6 @@ def _get_save_as_action():
         "action_button": {
             "label": "Save As...",
             "tooltip": "Save the current session",
-            "callback": c
+            "callback": callback,
+        }
+    }
