@@ -277,7 +277,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         publish_path.replace("\\", "/")
 
         try:
-            self.parent.log_debug("Executing command: %s" % abc_export_cmd)
+            self.parent.log_debug("Executing usd")
             df_USD_geoExport.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie')
 
         except Exception as e:
