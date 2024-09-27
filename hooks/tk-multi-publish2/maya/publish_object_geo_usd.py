@@ -276,6 +276,9 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
 
         publish_path.replace("\\", "/")
 
+        self.logger.info("USD inicio")
+        self.logger.info(publish_path)
+        self.logger.info(item.properties["object"])
         try:
             self.parent.log_debug("Executing usd")
             df_USD_geoExport.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie')
