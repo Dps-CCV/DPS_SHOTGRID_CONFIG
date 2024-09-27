@@ -162,11 +162,8 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         cur_selection = cmds.ls(selection=True)
         cmds.select(item.properties["object"])
         parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
-        if _geo_has_animation(parentNode) == True and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
-        
-
         cmds.select(cur_selection)
-        
+
         if publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'MODEL', 'TEXTURE_A', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
             if _geo_has_animation(parentNode) == False and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
                 return {"accepted": accepted, "checked": False}
