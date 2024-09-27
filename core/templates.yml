@@ -375,6 +375,8 @@ paths:
     # The location of published objects
     maya_shot_object_publish:
         definition: '@shot_root/PUBLISH/GEO/{Step}/MAYA/{Shot}_{Step}_{name}_{maya.object_name}_v{version}.abc'
+    maya_shot_object_usd_publish:
+        definition: '@shot_root/PUBLISH/GEO/{Step}/MAYA/{Shot}_{Step}_{name}_{maya.object_name}_v{version}.usd'
     maya_shot_vdb_publish:
         definition: '@shot_root/PUBLISH/GEO/{Step}/MAYA/{Shot}_{Step}_{name}_{maya.object_name}_v{version}.vdb'
     maya_shot_ass_publish:
@@ -663,6 +665,8 @@ paths:
     # The location of published objects
     maya_asset_object_publish:
         definition: '@asset_root/PUBLISH/GEO/{Step}/MAYA/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.abc'
+    maya_asset_object_usd_publish:
+        definition: '@asset_root/PUBLISH/GEO/{Step}/MAYA/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.usd'
     maya_asset_vdb_publish:
         definition: '@asset_root/PUBLISH/GEO/{Step}/MAYA/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.vdb'
     maya_asset_ass_publish:

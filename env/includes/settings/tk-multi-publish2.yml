@@ -204,10 +204,10 @@ settings.tk-multi-publish2.maya.asset_step:
     settings:
         Publish Template: maya_asset_publish
         Dailies Template: maya_asset_low_dailies_publish
-#  - name: Publish Session Geometry
-#    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session_geometry.py"
-#    settings:
-#        Publish Template: asset_alembic_cache
+ - name: Publish OBJECT GEO USD
+   hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
+   settings:
+       Publish Template: maya_asset_object_usd_publish
   - name: Publish OBJECT GEO to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo.py"
     settings:
@@ -279,6 +279,10 @@ settings.tk-multi-publish2.maya.shot_step:
 #    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session_geometry.py"
 #    settings:
 #        Publish Template: shot_alembic_cache
+  - name: Publish OBJECT GEO USD
+    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
+    settings:
+      Publish Template: maya_shot_object_usd_publish
   - name: Publish OBJECT GEO to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo.py"
     settings:

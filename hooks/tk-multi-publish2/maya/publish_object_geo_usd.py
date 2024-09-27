@@ -18,7 +18,12 @@ from tank_vendor import six
 HookBaseClass = sgtk.get_hook_baseclass()
 
 
-class MayaObjectGeometryPublishPlugin(HookBaseClass):
+import sys
+sys.path.insert(1, os.environ['MAYA_SCRIPT_PATH'])
+import df_USD_geoExport
+
+
+class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
     """
     Plugin for publishing an open maya session.
 
@@ -66,7 +71,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         part of its environment configuration.
         """
         # inherit the settings from the base publish plugin
-        base_settings = super(MayaObjectGeometryPublishPlugin, self).settings or {}
+        base_settings = super(MayaObjectGeometryUSDPublishPlugin, self).settings or {}
 
         # settings specific to this class
         maya_object_publish_settings = {
@@ -159,19 +164,9 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         # is a temporary measure until the publisher handles context switching
         # natively.
         item.context_change_allowed = False
-        cur_selection = cmds.ls(selection=True)
-        cmds.select(item.properties["object"])
-        parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
-        if _geo_has_animation(parentNode) == True and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
-        
 
-        cmds.select(cur_selection)
-        
         if publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'MODEL', 'TEXTURE_A', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
-            if _geo_has_animation(parentNode) == False and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
-                return {"accepted": accepted, "checked": False}
-            else:
-                return {"accepted": accepted, "checked": True}
+            return {"accepted": accepted, "checked": True}
         else:
             return {"accepted": accepted, "checked": False}
 
@@ -252,7 +247,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
 
 
         # run the base class validation
-        return super(MayaObjectGeometryPublishPlugin, self).validate(settings, item)
+        return super(MayaObjectGeometryUSDPublishPlugin, self).validate(settings, item)
 
     def publish(self, settings, item):
         """
@@ -279,52 +274,18 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         publish_folder = os.path.dirname(publish_path)
         self.parent.ensure_folder_exists(publish_folder)
 
-        # set the alembic args that make the most sense when working with Mari.
-        # These flags will ensure the export of an Alembic file that contains
-        # all visible geometry from the current scene together with UV's and
-        # face sets for use in Mari.
-        alembic_args = [
-            # # only renderable objects (visible and not templated)
-            # "-renderableOnly",
-            # write shading group set assignments (Maya 2015+)
-            "-writeFaceSets",
-            # write uv's (only the current uv set gets written)
-            "-uvWrite",
-            "-writeUVSets",
-            "-writeColorSets",
-            "-worldSpace",
-            "-dataformat",
-            "ogawa",
-            "-root",
-        ]
+        publish_path.replace("\\", "/")
 
-        # find the animated frame range to use:
-        parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
-        if _geo_has_animation(parentNode) == True:
-            start_frame, end_frame = _find_scene_animation_range()
-            alembic_args.insert(0, "-frameRange %d %d" % (950, end_frame))
-
-
-        alembic_args.append(cmds.ls(selection=True)[0])
-
-        # Set the output path:
-        # Note: The AbcExport command expects forward slashes!
-        alembic_args.append("-file %s" % publish_path.replace("\\", "/"))
-
-        # build the export command.  Note, use AbcExport -help in Maya for
-        # more detailed Alembic export help
-        abc_export_cmd = 'AbcExport -j "%s"' % " ".join(alembic_args)
-
-        # ...and execute it:
         try:
             self.parent.log_debug("Executing command: %s" % abc_export_cmd)
-            mel.eval(abc_export_cmd)
+            df_USD_geoExport.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie')
+
         except Exception as e:
-            self.logger.error("Failed to export Geometry: %s" % e)
+            self.logger.error("Failed to export USD: %s" % e)
             return
 
         # Now that the path has been generated, hand it off to the
-        super(MayaObjectGeometryPublishPlugin, self).publish(settings, item)
+        super(MayaObjectGeometryUSDPublishPlugin, self).publish(settings, item)
 
 
         # restore selection
