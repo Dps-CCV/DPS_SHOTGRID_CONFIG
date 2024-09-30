@@ -19,7 +19,11 @@ HookBaseClass = sgtk.get_hook_baseclass()
 
 
 import sys
-sys.path.insert(1, os.environ['MAYA_SCRIPT_PATH'])
+sys.path.insert(1, "L:\\MAYA_SCRIPTS\\PYTHON\\DF")
+sys.path.insert(1, "L:\\MAYA_SCRIPTS\\MEL\\DF")
+
+os.environ['MAYA_SCRIPTS'] += ";" + "L:\\MAYA_SCRIPTS\\PYTHON\\DF" + ";" + "L:\\MAYA_SCRIPTS\\MEL\\DF"
+
 import df_USD_geoExport
 
 
@@ -151,6 +155,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         # we've validated the publish template. add it to the item properties
         # for use in subsequent methods
         item.properties["publish_template"] = publish_template
+        item.properties["publish_type"] = "USD"
 
         # check that the AbcExport command is available!
         if not mel.eval('exists "AbcExport"'):

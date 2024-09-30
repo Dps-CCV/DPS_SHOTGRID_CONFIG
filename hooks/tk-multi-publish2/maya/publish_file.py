@@ -211,6 +211,7 @@ class BasicFilePublishPlugin(HookBaseClass):
                     ["Image", "jpeg", "jpg", "png"],
                     ["Movie", "mov", "mp4"],
                     ["PDF", "pdf"],
+                    ["USD", "usd"],
                 ],
                 "description": (
                     "List of file types to include. Each entry in the list "
