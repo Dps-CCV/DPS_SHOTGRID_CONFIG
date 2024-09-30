@@ -18,11 +18,6 @@ from tank_vendor import six
 HookBaseClass = sgtk.get_hook_baseclass()
 
 
-import sys
-sys.path.insert(1, "L:\\MAYA_SCRIPTS\\PYTHON\\DF")
-sys.path.insert(1, "L:\\MAYA_SCRIPTS\\MEL\\DF")
-
-os.environ['MAYA_SCRIPTS'] += ";" + "L:\\MAYA_SCRIPTS\\PYTHON\\DF" + ";" + "L:\\MAYA_SCRIPTS\\MEL\\DF"
 
 import df_USD_geoExport
 
