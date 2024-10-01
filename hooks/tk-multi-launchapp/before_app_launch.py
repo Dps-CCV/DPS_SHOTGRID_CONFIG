@@ -169,8 +169,8 @@ class BeforeAppLaunch(tank.Hook):
 
             os.environ["BIFROST_LIB_CONFIG_FILES"] = 'L:\\MAYA_ASSETS\\BiphostGraphs\\DarePlanetConfigurations.json'
 
-            sys.path.insert(1, "L:\\MAYA_SCRIPTS\\PYTHON\\DF")
-            sys.path.insert(1, "L:\\MAYA_SCRIPTS\\MEL\\DF")
+            sys.path.append("L:\\MAYA_SCRIPTS\\PYTHON\\DF")
+            sys.path.append("L:\\MAYA_SCRIPTS\\MEL\\DF")
 
             os.environ['MAYA_SCRIPT_PATH'] += ";" + "L:\\MAYA_SCRIPTS\\PYTHON\\DF" + ";" + "L:\\MAYA_SCRIPTS\\MEL\\DF"
 
