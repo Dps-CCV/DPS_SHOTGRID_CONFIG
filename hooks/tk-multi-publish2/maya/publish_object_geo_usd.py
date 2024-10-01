@@ -20,7 +20,7 @@ HookBaseClass = sgtk.get_hook_baseclass()
 import sys
 sys.path.append("L:\\MAYA_SCRIPTS\\PYTHON\\DF")
 sys.path.append("L:\\MAYA_SCRIPTS\\MEL\\DF")
-import df_USD_geoExport
+import df_USD_geoExport_DPS
 
 
 class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
@@ -282,7 +282,11 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         self.logger.info(item.properties["object"])
         try:
             self.parent.log_debug("Executing usd")
-            df_USD_geoExport.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie')
+            if publisher.context.step['name'] not in  ["MODEL", "MODEL_A", "TEXTURE", "TEXTURE_A", "SHADING", "SHADING_A", "FOTOGRAMETRY_A", "CLAY_A", "SCAN_A"]
+                options = ";exportDisplayColor=1;exportColorSets=0;mergeTransformAndShape=1;exportComponentTags=0;defaultUSDFormat=usdc;jobContext=[Arnold];materialsScopeName=mtl"
+            else:
+                options = ";readAnimData=1;exportDisplayColor=1;exportColorSets=0;mergeTransformAndShape=1;exportComponentTags=0;defaultUSDFormat=usdc;jobContext=[Arnold];materialsScopeName=mtl"
+            df_USD_geoExport_DPS.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie', options)
 
         except Exception as e:
             self.logger.error("Failed to export USD: %s" % e)
