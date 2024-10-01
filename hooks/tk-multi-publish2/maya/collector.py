@@ -474,9 +474,9 @@ class MayaSessionCollector(HookBaseClass):
         namespaceSearch = ":geo"
 
         for object_geo in cmds.ls(assemblies=True):
-            for node in cmds.listRelatives(object_geo, ad=True):
-
-                if node == search or namespaceSearch in node:
+            for node in cmds.listRelatives(object_geo, ad=True, fullPath=True):
+                nombre = node.split("|")[-1]
+                if search == nombre or namespaceSearch in nombre:
                     if self.parent.context.step["name"] == "MODEL":
                         nodeExport = node
                         nodeName = cmds.listRelatives(node, p=True)[0]
