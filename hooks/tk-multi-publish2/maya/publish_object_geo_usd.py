@@ -220,6 +220,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         # collector and remove any non-alphanumeric characters
 
         work_fields["maya.object_name"] = item.properties.get("object_name")
+        self.logger.info(publish_template)
         item.properties["publish_name"] = os.path.basename(str(item.properties.get("path")))[:-9]
 
 
@@ -286,7 +287,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
                 options = ";exportDisplayColor=1;exportColorSets=0;mergeTransformAndShape=1;exportComponentTags=0;defaultUSDFormat=usdc;jobContext=[Arnold];materialsScopeName=mtl"
             else:
                 options = ";readAnimData=1;exportDisplayColor=1;exportColorSets=0;mergeTransformAndShape=1;exportComponentTags=0;defaultUSDFormat=usdc;jobContext=[Arnold];materialsScopeName=mtl"
-            df_USD_geoExport_DPS.main(publish_path.replace("\\", "/"), 'basemesh', 'proxie', options)
+            df_USD_geoExport_DPS.main(publish_path.replace("\\", "/"), 'basemesh', 'proxy', options)
 
         except Exception as e:
             self.logger.error("Failed to export USD: %s" % e)
