@@ -74,7 +74,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         base_settings = super(MayaObjectGeometryUSDPublishPlugin, self).settings or {}
 
         # settings specific to this class
-        maya_object_publish_settings = {
+        maya_object_usd_publish_settings = {
             "Publish Template": {
                 "type": "template",
                 "default": None,
@@ -85,7 +85,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         }
 
         # update the base settings
-        base_settings.update(maya_object_publish_settings)
+        base_settings.update(maya_object_usd_publish_settings)
 
         return base_settings
 
@@ -129,6 +129,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         accepted = True
         publisher = self.parent
         template_name = settings["Publish Template"].value
+        self.logger.info(template_name)
 
         # ensure a work file template is available on the parent item
         work_template = item.parent.properties.get("work_template")
