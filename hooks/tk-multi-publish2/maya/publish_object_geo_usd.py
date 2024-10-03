@@ -171,7 +171,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
             return {"accepted": accepted, "checked": True}
         else:
             return {"accepted": accepted, "checked": False}
-
+            
     def validate(self, settings, item):
         """
         Validates the given item to check that it is ok to publish. Returns a
@@ -185,8 +185,10 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         """
 
         path = _session_path()
+        publisher = self.parent
 
         # ---- ensure the session has been saved
+        publish_template = publisher.get_template_by_name(settings['Publish Template'].value)
 
         if not path:
             # the session still requires saving. provide a save button.
@@ -210,8 +212,8 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
 
         # get the configured work file template
         work_template = item.parent.properties.get("work_template")
-        publish_template = item.properties.get("publish_template")
 
+        #publish_template = item.properties.get("publish_template")
         # get the current scene path and extract fields from it using the work
         # template:
         work_fields = work_template.get_fields(path)
@@ -221,7 +223,6 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         # collector and remove any non-alphanumeric characters
 
         work_fields["maya.object_name"] = item.properties.get("object_name")
-        self.logger.info(publish_template)
         item.properties["publish_name"] = os.path.basename(str(item.properties.get("path")))[:-9]
 
 
@@ -250,8 +251,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
 
 
         # run the base class validation
-        return super(MayaObjectGeometryUSDPublishPlugin, self).validate(settings, item)
-
+        return super(MayaObjectGeometryUSDPublishPlugin, self).validate(settings, item)    
     def publish(self, settings, item):
         """
         Executes the publish logic for the given item and settings.
@@ -269,6 +269,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         cur_selection = cmds.ls(selection=True)
 
         cmds.select(item.properties["object"])
+        self.logger.info(item.properties["object"])
 
         # get the path to create and publish
         publish_path = item.properties["path"]
@@ -278,10 +279,10 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         self.parent.ensure_folder_exists(publish_folder)
 
         publish_path.replace("\\", "/")
+        item.properties["path"] = item.properties["path"].replace(".usd", "_geo.usd")
+        item.properties["publish_path"] = item.properties["path"]
+        item.properties["publish_name"] = os.path.basename(item.properties["path"])[:-4]
 
-        self.logger.info("USD inicio")
-        self.logger.info(publish_path)
-        self.logger.info(item.properties["object"])
         try:
             self.parent.log_debug("Executing usd")
             if publisher.context.step['name'] not in  ["MODEL", "MODEL_A", "TEXTURE", "TEXTURE_A", "SHADING", "SHADING_A", "FOTOGRAMETRY_A", "CLAY_A", "SCAN_A"]:
@@ -297,6 +298,24 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         # Now that the path has been generated, hand it off to the
         super(MayaObjectGeometryUSDPublishPlugin, self).publish(settings, item)
 
+        # get the path to create and publish
+        item.properties["path"] = item.properties["path"].replace("_geo.usd", ".usda")
+        item.properties["publish_path"] = item.properties["path"]
+        item.properties["publish_name"] = os.path.basename(item.properties["path"])[:-4]
+
+
+        # Now that the path has been generated, hand it off to the
+        super(MayaObjectGeometryUSDPublishPlugin, self).publish(settings, item)
+
+        # get the path to create and publish
+        item.properties["path"] = item.properties["path"].replace(".usda", "_payload.usda")
+        item.properties["publish_path"] = item.properties["path"]
+        item.properties["publish_name"] = os.path.basename(item.properties["path"])[:-4]
+
+
+        # Now that the path has been generated, hand it off to the
+        super(MayaObjectGeometryUSDPublishPlugin, self).publish(settings, item)
+
 
         # restore selection
         cmds.select(cur_selection)
@@ -304,6 +323,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         status = {"sg_status_list": "rev"}
         self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
         # self.parent.sgtk.shotgun.update("Shot", item.context.entity['id'], status)
+
 
 
 def _find_scene_animation_range():
