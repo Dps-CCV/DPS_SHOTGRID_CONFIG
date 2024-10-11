@@ -516,6 +516,9 @@ paths:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_precomp_h264:
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.mp4'
+    
 #    nuke_tech_precomp:
 #        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_v{version}/{Shot}_{nuke.output}_v{version}.{SEQ}.exr'
     nuke_imageplane:

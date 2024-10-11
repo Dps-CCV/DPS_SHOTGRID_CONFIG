@@ -28,7 +28,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         _jpeg_quality: 1
-        _jpeg_sub_sampling: 4:2:2
+        _jpeg_sub_sampling: 4:4:4
         channels: rgb
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
@@ -41,7 +41,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_precomp
       settings:
         _jpeg_quality: 1
-        _jpeg_sub_sampling: 4:2:2
+        _jpeg_sub_sampling: 4:4:4
         channels: rgb
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
@@ -56,7 +56,7 @@ settings.tk-nuke-writenode.asset:
         datatype: 32 bit float
         channels: all
         write_ACES_compliant_EXR: false
-        colorspace: "ACES - ACEScg"
+        colorspace: "linear"
         metadata: "all metadata"
         compression: Zip (1 scanline)
       tank_type: Rendered Image
@@ -74,7 +74,7 @@ settings.tk-nuke-writenode.asset:
         metadata: "all metadata"
         write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
-        colorspace: "ACES - ACEScg"
+        colorspace: "linear"
       tank_type: Rendered Image
       tile_color: [ 93, 53, 178 ]
       promote_write_knobs: [ ]
@@ -86,7 +86,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_imageplane_low
       settings:
         channels: rgba
-        colorspace: "Output - Rec.709"
+        colorspace: "sRGB"
       tank_type: Rendered Image
       tile_color: [ 148, 7, 178 ]
       promote_write_knobs: [ ]
@@ -98,7 +98,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_mattepaint
       settings:
         channels: rgba
-        colorspace: "Output - sRGB"
+        colorspace: "sRGB"
         datatype: 16 bit
       tank_type: Rendered Image
       tile_color: [ 128, 37, 78 ]
@@ -118,7 +118,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       _jpeg_quality: 1
-      _jpeg_sub_sampling: 4:2:2
+      _jpeg_sub_sampling: 4:4:4
       channels: rgb
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
@@ -144,7 +144,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_precomp
     settings:
       _jpeg_quality: 1
-      _jpeg_sub_sampling: 4:2:2
+      _jpeg_sub_sampling: 4:4:4
       channels: rgb
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
