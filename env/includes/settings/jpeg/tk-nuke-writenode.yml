@@ -132,7 +132,7 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 16 bit
       channels: rgba
-      colorspace: "Utility - Raw"
+      colorspace: "linear"
     tank_type: Rendered Image
     tile_color: [ 106, 181, 0 ]
     promote_write_knobs: [ ]
@@ -159,7 +159,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 32 bit float
       channels: all
       write_ACES_compliant_EXR: false
-      colorspace: "ACES - ACEScg"
+      colorspace: "linear"
       metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image
@@ -177,7 +177,7 @@ settings.tk-nuke-writenode.shot:
       metadata: "all metadata"
       write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
-      colorspace: "ACES - ACEScg"
+      colorspace: "linear"
     tank_type: Rendered Image
     tile_color: [93, 53, 178]
     promote_write_knobs: []
@@ -189,7 +189,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_imageplane_low
     settings:
       channels: rgba
-      colorspace: "Output - Rec.709"
+      colorspace: "sRGB"
     tank_type: Rendered Image
     tile_color: [ 148, 7, 178 ]
     promote_write_knobs: [ ]
@@ -201,7 +201,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_mattepaint
     settings:
       channels: rgba
-      colorspace: "Output - sRGB"
+      colorspace: "sRGB"
       datatype: 16 bit
     tank_type: Rendered Image
     tile_color: [ 128, 37, 78 ]
