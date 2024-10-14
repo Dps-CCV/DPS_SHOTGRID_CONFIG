@@ -88,8 +88,8 @@ class RenderMedia(HookBaseClass):
         ctx = self.__app.context
 
         if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
-            width = "1080"
-            height = "1920"
+            width = 1080
+            height = 1920
 
         # create group where everything happens
         group = nuke.nodes.Group()
