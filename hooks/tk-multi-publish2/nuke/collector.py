@@ -325,7 +325,7 @@ class NukeSessionCollector(HookBaseClass):
             # the sequence path, template knowledge provided by the
             # tk-nuke-writenode app. The base collector makes some "zero config"
             # assupmtions about the path that we don't need to make here.
-            if node.knob('tk_profile_list').value() in ["Render 16bits", "IMAGE_PLANE", "IMAGE_PLANE_LOW"]:
+            if node.knob('tk_profile_list').value() in ["Render 16bits", "Render JPG", "IMAGE_PLANE", "IMAGE_PLANE_LOW"]:
                 item_type = "%s.sequence" % (item_info["item_type"],)
             else:
                 item_type = "%s.precompSequence" % (item_info["item_type"],)
