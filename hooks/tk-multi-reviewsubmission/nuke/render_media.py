@@ -41,7 +41,6 @@ class RenderMedia(HookBaseClass):
         self._font = os.path.join(
             self.__app.disk_location, "resources", "liberationsans_regular.ttf"
         )
-
         # If the slate_logo supplied was an empty string, the result of getting
         # the setting will be the config folder which is invalid so catch that
         # and make our logo path an empty string which Nuke won't have issues with.
@@ -88,9 +87,9 @@ class RenderMedia(HookBaseClass):
         output_node = None
         ctx = self.__app.context
 
-        if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
-            width = "1080"
-            height = "1920"
+        # if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
+        #     width = "1080"
+        #     height = "1920"
 
         # create group where everything happens
         group = nuke.nodes.Group()
