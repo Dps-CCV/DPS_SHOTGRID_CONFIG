@@ -174,6 +174,9 @@ class RenderMedia(HookBaseClass):
             output_node.setInput(0, scale)
 
             ###Set Write colorspace output to render ACES - Output - Rec 709
+            if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
+                output_node.knob('colorspace').setValue('sRGB')
+            except:
             output_node.knob('colorspace').setValue('Output - Rec.709')
             output_node.knob('create_directories').setValue(True)
 
