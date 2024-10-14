@@ -149,6 +149,20 @@ settings.tk-nuke-writenode.shot:
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: []
+  - file_type: mov
+    name: PRECOMP_MP4
+    proxy_publish_template:
+    proxy_render_template:
+    publish_template: nuke_precomp_h264_pub
+    render_template: nuke_precomp_h264
+    settings:
+      mov64_codec: h264
+      mov_h264_codec_profile: "High 4:2:0 8-bit"
+      mov64_quality: High
+      channels: rgb
+    tank_type: Rendered Image
+    tile_color: [0, 209, 107]
+    promote_write_knobs: []
   - file_type: exr
     name: TECH_PRECOMP
     proxy_publish_template:
