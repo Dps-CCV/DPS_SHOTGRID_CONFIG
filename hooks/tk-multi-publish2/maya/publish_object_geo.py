@@ -262,6 +262,7 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         """
 
         publisher = self.parent
+        item.properties["publish_type"] = "Alembic Cache"
 
         # keep track of everything currently selected. we will restore at the
         # end of the publish method
