@@ -483,7 +483,8 @@ class MayaSessionCollector(HookBaseClass):
                     else:
                         nodeExport = cmds.listRelatives(node, p=True)[0]
                         try:
-                            nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[1]
+                            ###nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[1]
+                            nodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
                         except:
                             nodeName = str(cmds.listRelatives(node, p=True)[0])
                         displaynodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
