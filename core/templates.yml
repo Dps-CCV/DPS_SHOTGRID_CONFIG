@@ -35,6 +35,15 @@ keys:
     Episode:
         type: str
         shotgun_entity_type: Episode
+        shotgun_field_name: code
+    sg_episode:
+        type: str
+        shotgun_entity_type: Shot
+        shotgun_field_name: sg_sequence.Sequence.episode.Episode.code
+    sg_sequence:
+        type: str
+        shotgun_entity_type: Shot
+        shotgun_field_name: sg_sequence.Sequence.code
     FormExt:
         type: str
         shotgun_entity_type: Project
@@ -227,7 +236,7 @@ paths:
     #
     # These don't require the standard formatting (with definition and root_name) because they
     # will be set within each template that uses the alias.
-    shot_root: VFX/{Project}_{Episode}/{Project}_{Episode}_{Sequence}/{Project}_{Episode}_{Sequence}_{Shot}
+    shot_root: VFX/{Project}_{sg_episode}/{Project}_{sg_episode}_{sg_sequence}/{Project}_{sg_episode}_{sg_sequence}_{Shot}
 
     asset_root: VFX/ASSETS/{sg_asset_type}/{Asset}
 
@@ -496,62 +505,62 @@ paths:
 #        definition: '@shot_root/PUBLISH'
     # The location of WIP script files
     nuke_shot_work:
-        definition: '@shot_root/STEPS/{Step}/NUKE/SCENES/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{task_name}_v{version}.nk'
+        definition: '@shot_root/STEPS/{Step}/NUKE/SCENES/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}.nk'
     # The location of backups of WIP files
     nuke_shot_snapshot:
-        definition: '@shot_root/STEPS/{Step}/NUKE/SNAPSHOTS/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{task_name}_v{version}.{timestamp}.nk'
+        definition: '@shot_root/STEPS/{Step}/NUKE/SNAPSHOTS/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}.{timestamp}.nk'
     # The location of published nuke script files
     nuke_shot_publish:
-        definition: '@shot_root/PUBLISH/SCENES/{Step}/NUKE/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{task_name}_v{version}.nk'
+        definition: '@shot_root/PUBLISH/SCENES/{Step}/NUKE/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}.nk'
     # write node outputs
     nuke_shot_render:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/{Episode}_{Sequence}_{Shot}_comp_v{version}/{Episode}_{Sequence}_{Shot}_comp_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/{Episode}_{Sequence}_{Shot}_comp_v{version}/{Episode}_{Sequence}_{Shot}_comp_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp:
-        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_h264:
-        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{nuke.output}_{task_name}_h264_v{version}.mp4'
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{nuke.output}_{task_name}_h264_v{version}.mp4'
     nuke_precomp_h264_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{nuke.output}_{task_name}_h264_v{version}.mp4'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{nuke.output}_{task_name}_h264_v{version}.mp4'
     
 #    nuke_tech_precomp:
 #        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_v{version}/{Shot}_{nuke.output}_v{version}.{SEQ}.exr'
     nuke_imageplane:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
     nuke_imageplane_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
     nuke_imageplane_low:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
     nuke_imageplane_low_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
     nuke_mattepaint:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_mattepaint_pub:
         definition: '@shot_root/PUBLISH/IMAGE_PLANE/BMP/{Step}/NUKE_BMP_{task_name}_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_shot_render_dpx:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_v{version}.{SEQ}.dpx'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_v{version}.{SEQ}.dpx'
     nuke_shot_render_pub_dpx:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_v{version}/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_v{version}.{SEQ}.dpx'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_v{version}.{SEQ}.dpx'
     nuke_shot_camera_work:
-        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/CAM/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_camera_publish:
-        definition: '@shot_root/PUBLISH/CAM/{Step}/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
+        definition: '@shot_root/PUBLISH/CAM/{Step}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_geo_work:
-        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/MEDIA/GEO/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
     nuke_shot_geo_publish:
-        definition: '@shot_root/PUBLISH/GEO/{Step}/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
+        definition: '@shot_root/PUBLISH/GEO/{Step}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
     # review output
     shot_quicktime_quick:
-        definition: '@shot_root/DAILIES/LOW/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{task_name}_v{version}_{iteration}.mov'
+        definition: '@shot_root/DAILIES/LOW/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}_{iteration}.mov'
     nuke_shot_render_movie:
-        definition: '@shot_root/DAILIES/HIGH/{Project}_{Episode}_{Sequence}_{Shot}_{Step}_{task_name}_v{version}.mov'
+        definition: '@shot_root/DAILIES/HIGH/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}.mov'
 
     #
     # Hiero
