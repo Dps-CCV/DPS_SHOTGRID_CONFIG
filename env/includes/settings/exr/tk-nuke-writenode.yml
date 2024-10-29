@@ -30,8 +30,8 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: rgba
         metadata: "all metadata"
-        write_ACES_compliant_EXR: false
-        compression: Zip (1 scanline)
+        write_ACES_compliant_EXR: true
+        compression: none
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
       promote_write_knobs: [ ]
@@ -124,8 +124,8 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: rgba
       metadata: "all metadata"
-      write_ACES_compliant_EXR: false
-      compression: Zip (1 scanline)
+      write_ACES_compliant_EXR: true
+      compression: none
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: []
