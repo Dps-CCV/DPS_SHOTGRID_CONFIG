@@ -558,9 +558,9 @@ paths:
         definition: '@shot_root/PUBLISH/GEO/{Step}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{name}_v{version}.{extension}'
     # review output
     shot_quicktime_quick:
-        definition: '@shot_root/DAILIES/LOW/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}_{iteration}.mov'
+        definition: '@shot_root/DAILIES/LOW/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_comp_v{version}_{iteration}.mov'
     nuke_shot_render_movie:
-        definition: '@shot_root/DAILIES/HIGH/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{Step}_{task_name}_v{version}.mov'
+        definition: '@shot_root/DAILIES/HIGH/{Project}_{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}.mov'
 
     #
     # Hiero
