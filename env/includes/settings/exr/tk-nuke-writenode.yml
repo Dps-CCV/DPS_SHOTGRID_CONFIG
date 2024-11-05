@@ -28,7 +28,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: all
         autocrop: true
         compression: none
       tank_type: Rendered Image
@@ -42,7 +42,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_precomp
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: all
         autocrop: true
         compression: none
       tank_type: Rendered Image
@@ -120,7 +120,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
-      channels: rgba
+      channels: all
       autocrop: true
       compression: none
     tank_type: Rendered Image
@@ -149,7 +149,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_precomp
     settings:
       datatype: 16 bit half
-      channels: rgba
+      channels: all
       autocrop: true
       compression: none
     tank_type: Rendered Image
