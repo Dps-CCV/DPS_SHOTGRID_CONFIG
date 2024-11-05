@@ -29,8 +29,7 @@ settings.tk-nuke-writenode.asset:
       settings:
         datatype: 16 bit half
         channels: rgba
-        metadata: "all metadata"
-        write_ACES_compliant_EXR: true
+        autocrop: true
         compression: none
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
@@ -44,9 +43,8 @@ settings.tk-nuke-writenode.asset:
       settings:
         datatype: 16 bit half
         channels: rgba
-        metadata: "all metadata"
-        write_ACES_compliant_EXR: false
-        compression: Zip (1 scanline)
+        autocrop: true
+        compression: none
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
       promote_write_knobs: []
@@ -123,8 +121,7 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 16 bit half
       channels: rgba
-      metadata: "all metadata"
-      write_ACES_compliant_EXR: true
+      autocrop: true
       compression: none
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
@@ -153,9 +150,8 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 16 bit half
       channels: rgba
-      metadata: "all metadata"
-      write_ACES_compliant_EXR: false
-      compression: Zip (1 scanline)
+      autocrop: true
+      compression: none
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: []
