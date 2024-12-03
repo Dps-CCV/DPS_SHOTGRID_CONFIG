@@ -792,13 +792,17 @@ class MayaSessionPublishPlugin(HookBaseClass):
             return
 
         publish_file = publish_template.apply_fields(work_fields)
+        if "ma" in work_fields["extension"]:
+            typeFile = "mayaAscii"
+        else:
+            typeFile = "mayaBinary"
         if not os.path.isdir(os.path.dirname(publish_file)):
             os.makedirs(os.path.dirname(publish_file))
 
         if item.context.step['name'] in ['RIG', 'TEXTURE', 'SHADING', 'RIG_A', 'TEXTURE_A', 'SHADING_A']:
-            cmds.file(publish_file, exportAll=True, preserveReferences=False, force=True, type="mayaAscii")
+            cmds.file(publish_file, exportAll=True, preserveReferences=False, force=True, type=typeFile)
         else:
-            cmds.file(publish_file, exportAll=True, preserveReferences=True, force=True, type="mayaAscii")
+            cmds.file(publish_file, exportAll=True, preserveReferences=True, force=True, type=typeFile)
 
 
 
