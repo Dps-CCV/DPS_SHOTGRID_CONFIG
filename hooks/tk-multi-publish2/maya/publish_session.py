@@ -792,7 +792,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
             return
 
         publish_file = publish_template.apply_fields(work_fields)
-        if "ma" in work_fields["extension"]:
+        if work_fields["extension"] == "ma":
             typeFile = "mayaAscii"
         else:
             typeFile = "mayaBinary"
