@@ -113,14 +113,20 @@ settings.tk-nuke.asset:
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   favourite_directories:
+    - display_name: "Asset Root"
+      template_directory: "asset_root"
+      icon: ""
     - display_name: "Asset Work Area"
       template_directory: "asset_work_area_nuke"
       icon: ""
     - display_name: "Asset Publish Area"
       template_directory: "asset_publish_area"
       icon: ""
-    - display_name: "Asset Root"
-      template_directory: "asset_root"
+    - display_name: "PRECOMPS"
+      template_directory: "asset_precomp_area_nuke"
+      icon: ""
+    - display_name: "RENDERS"
+      template_directory: "asset_render_area"
       icon: ""
   location: "@engines.tk-nuke.location"
 
@@ -285,14 +291,20 @@ settings.tk-nuke.shot_step:
   - {app_instance: tk-multi-workfiles2, name: File Save..., hotkey: Shift+Ctrl+s}
   - {app_instance: tk-multi-publish2, name: Publish..., hotkey: Shift+Ctrl+p}
   favourite_directories:
+    - display_name: "Shot Root"
+      template_directory: "shot_root"
+      icon: ""
     - display_name: "Shot Work Area"
       template_directory: "shot_work_area_nuke"
       icon: ""
     - display_name: "Shot Publish Area"
       template_directory: "shot_publish_area"
       icon: ""
-    - display_name: "Shot Root"
-      template_directory: "shot_root"
+    - display_name: "PRECOMPS"
+      template_directory: "shot_precomp_area_nuke"
+      icon: ""
+    - display_name: "RENDERS"
+      template_directory: "shot_render_area"
       icon: ""
   location: "@engines.tk-nuke.location"
 
