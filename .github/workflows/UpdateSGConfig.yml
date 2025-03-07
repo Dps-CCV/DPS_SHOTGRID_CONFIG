@@ -6,7 +6,7 @@ name: Update SG Config on push
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: [ "master", "22Dogs" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,6 +35,10 @@ jobs:
 
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+      - name: Add branch name to env
+        run: echo "BRANCH=$GITHUB_REF_NAME" >> "$GITHUB_ENV"
+
 
       - name: execute py script # run sj-gobierno.py to get the latest data
         env: 
