@@ -500,6 +500,10 @@ paths:
     # define the location of a work area
     shot_work_area_nuke:
         definition: '@shot_root/STEPS/{Step}/NUKE'
+    shot_render_area_nuke:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES'
+    shot_precomp_area_nuke:
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP'
     # define the location of a publish area
 #    shot_publish_area_nuke:
 #        definition: '@shot_root/PUBLISH'
@@ -806,6 +810,10 @@ paths:
     # define the location of a work area
     asset_work_area_nuke:
         definition: '@asset_root/STEPS/{Step}/NUKE'
+    asset_render_area_nuke:
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES'
+    asset_precomp_area_nuke:
+        definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP'
     # define the location of a publish area
 #    asset_publish_area_nuke:
 #        definition: '@asset_root/PUBLISH'
