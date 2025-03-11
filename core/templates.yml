@@ -39,10 +39,6 @@ keys:
         type: str
         shotgun_entity_type: Project
         shotgun_field_name: sg_format
-    CompressionExt:
-        type: str
-        shotgun_entity_type: Project
-        shotgun_field_name: sg_compression
 
     Sequence:
         type: str
