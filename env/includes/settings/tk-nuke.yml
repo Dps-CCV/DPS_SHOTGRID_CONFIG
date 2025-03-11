@@ -25,7 +25,7 @@ includes:
 - ./tk-multi-workfiles2.yml
 - ./tk-nuke-quickreview.yml
 - ./tk-multi-bugreporter.yml
-- $FormExt/tk-nuke-writenode.yml
+- $CompressionExt/tk-nuke-writenode.yml
 
 
 ################################################################################
