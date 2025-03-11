@@ -28,5 +28,6 @@ class PipelineConfigurationInit(Hook):
         config = __file__[:index]
         os.environ['CONFIG_FOLDER'] = config
         os.environ["FormExt"] = 'exr'
+        os.environ["CompressionExt"] = 'zip1'
 
         pass
