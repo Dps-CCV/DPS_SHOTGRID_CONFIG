@@ -102,6 +102,8 @@ class RenderMedia(HookBaseClass):
             read["on_error"].setValue("black")
             read["first"].setValue(first_frame)
             read["last"].setValue(last_frame)
+            read.knob('reload').execute()
+
 
             ## Disable localization to ensure that frames are rendered without problems
             read["localizationPolicy"].setValue('off')
@@ -201,7 +203,7 @@ class RenderMedia(HookBaseClass):
             # Make sure the output folder exists
             output_folder = os.path.dirname(output_path)
             self.__app.ensure_folder_exists(output_folder)
-
+            read.knob('reload').execute()
             nuke.executeMultiple(
                     [output_node], ([first_frame - 1, last_frame, 1],), [nuke.views()[0]]
                 )
