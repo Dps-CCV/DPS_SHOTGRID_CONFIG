@@ -14,6 +14,7 @@ import sys
 import nuke
 import shutil
 from datetime import date
+import time
 
 from tank_vendor import six
 
@@ -203,6 +204,7 @@ class RenderMedia(HookBaseClass):
             # Make sure the output folder exists
             output_folder = os.path.dirname(output_path)
             self.__app.ensure_folder_exists(output_folder)
+            time.sleep(5)
             read.knob('reload').execute()
             nuke.executeMultiple(
                     [output_node], ([first_frame - 1, last_frame, 1],), [nuke.views()[0]]
