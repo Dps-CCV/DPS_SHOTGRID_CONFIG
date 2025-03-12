@@ -117,13 +117,17 @@ class AppDialog(QtGui.QWidget):
         """
         # Create the new Ticket entity, pulling the project from the current
         # context, and the title, ticket body, and cc list from the UI.
+        cc = self._cc_widget.get_value()
+        cc.append({'type': 'Group', 'id': 47, 'code': 'Pipeline'})
         result = self._app.shotgun.create(
             "Ticket",
             dict(
                 project=self._app.context.project,
                 title=self.ui.ticket_title.text(),
                 description=self.ui.ticket_body.toPlainText(),
+                addressings_to=[{'type': 'HumanUser', 'id': 2926}],
                 addressings_cc=self._cc_widget.get_value(),
+                sg_ticket_type='Bug',
             )
         )
 
