@@ -851,7 +851,7 @@ class BasicFilePublishPlugin(HookBaseClass):
                     copyCommand = 'robocopy '
                 else:
                     copyCommand = 'cp '
-                copystring = copyCommand + workFileDir + ' ' + publishFileDir + copyFileName + '/COPYALL'
+                copystring = copyCommand + workFileDir + ' ' + publishFileDir + ' ' + copyFileName + ' /COPYALL'
                 os.popen(copystring)
 
                 # os.rename(workFileNorm, publishFileNorm)
