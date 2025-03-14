@@ -844,11 +844,14 @@ class BasicFilePublishPlugin(HookBaseClass):
                 ensure_folder_exists(publish_folder)
                 workFileNorm = os.path.normpath(work_file)
                 publishFileNorm = os.path.normpath(publish_file)
+                workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
+                publishFileDir = os.path.normpath(publish_folder)
+                copyFileName = os.path.basename(publishFileNorm)
                 if platform.system() == 'Windows':
                     copyCommand = 'robocopy '
                 else:
                     copyCommand = 'cp '
-                copystring = copyCommand + workFileNorm + ' ' + publishFileNorm + '/COPYALL'
+                copystring = copyCommand + workFileDir + ' ' + publishFileDir + copyFileName + '/COPYALL'
                 os.popen(copystring)
 
                 # os.rename(workFileNorm, publishFileNorm)
