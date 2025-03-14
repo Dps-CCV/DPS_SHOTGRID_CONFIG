@@ -845,10 +845,10 @@ class BasicFilePublishPlugin(HookBaseClass):
                 workFileNorm = os.path.normpath(work_file)
                 publishFileNorm = os.path.normpath(publish_file)
                 if platform.system() == 'Windows':
-                    copyCommand = 'copy '
+                    copyCommand = 'robocopy '
                 else:
                     copyCommand = 'cp '
-                copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
+                copystring = copyCommand + workFileNorm + ' ' + publishFileNorm + '/COPYALL'
                 os.popen(copystring)
 
                 # os.rename(workFileNorm, publishFileNorm)
