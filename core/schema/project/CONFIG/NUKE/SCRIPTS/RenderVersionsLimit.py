@@ -9,14 +9,11 @@ def DeleteOldVersions():
     filename = nuke.thisNode()['file'].evaluate()
     local = nuke.toNode("preferences").knob("localCachePath").evaluate()
     proj = os.environ['PROJECT']
-    print(proj)
     index = filename.lower().find(proj.lower())
     unidad = os.environ['MOUNT']
     serverFile = unidad + filename[index:]
-    print(serverFile)
     normalizedpath = os.path.normpath(serverFile)
     pathsep = normalizedpath.split(os.sep)
-    print(pathsep)
     imagesFolder = os.path.join(*pathsep[:-2])
     renderFolder = os.path.join(*pathsep[-2:-1])
     olderVersionsList = []

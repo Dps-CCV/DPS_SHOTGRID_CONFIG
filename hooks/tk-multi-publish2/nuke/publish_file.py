@@ -17,6 +17,7 @@ import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
 import platform
 import nuke
+import subprocess
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
@@ -848,13 +849,26 @@ class BasicFilePublishPlugin(HookBaseClass):
                 publishFileDir = os.path.normpath(publish_folder)
                 copyFileName = os.path.basename(publishFileNorm)
 
-                if platform.system() == 'Windows':
-                    copyCommand = 'robocopy '
-                else:
-                    copyCommand = 'cp '
-                copystring = copyCommand + workFileDir + ' ' + publishFileDir + ' ' + copyFileName + ' /COPYALL'
-                print(copystring)
-                os.popen(copystring)
+                # if platform.system() == 'Windows':
+                #     copyCommand = 'robocopy '
+                # else:
+                #     copyCommand = 'cp '
+                # copystring = copyCommand + workFileDir + ' ' + publishFileDir + ' ' + copyFileName + ' /COPYALL'
+                # print(copystring)
+                # os.popen(copystring)
+
+                options = '/COPY:DATXSO'
+
+                robocopy_command = f'robocopy "{workFileDir}" "{publishFileDir}" "{copyFileName}" {options}'
+                print(robocopy_command)
+
+                # subprocess.call(robocopy_command)
+                try:
+                    result = subprocess.run(robocopy_command, shell=True, check=True, stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE)
+                    print("Robocopy Output:\n", result.stdout.decode())
+                except subprocess.CalledProcessError as e:
+                    print("Error running robocopy:\n", e.stderr.decode())
 
                 # os.rename(workFileNorm, publishFileNorm)
 

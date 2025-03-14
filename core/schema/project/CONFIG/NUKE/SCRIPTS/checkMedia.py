@@ -9,7 +9,6 @@ def checkMediaUI():
     #     shot = str(os.environ['ASSET'])
     shot = str(os.environ['PROJECT_PATH']).replace("\\", "/")
     shot = shot.replace('//dps.tv/dps', 'P:')
-    print(shot)
     unidad = os.environ['MOUNT']
     if 'V' in unidad:
         mac_path = shot.replace(unidad, '/Volumes/PROYECTOS-1').replace('\\', '/')
