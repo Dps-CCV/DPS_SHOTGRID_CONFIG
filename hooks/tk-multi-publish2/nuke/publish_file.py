@@ -17,6 +17,7 @@ import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
 import platform
 import nuke
+import subprocess
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
