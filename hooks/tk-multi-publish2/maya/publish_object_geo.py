@@ -378,7 +378,7 @@ def _geo_has_animation(node):
             if breakFlag == True:
                 break
     except:
-        continue
+        pass
     return breakFlag
 
 
