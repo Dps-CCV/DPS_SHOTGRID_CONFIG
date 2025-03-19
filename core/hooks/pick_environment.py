@@ -27,6 +27,10 @@ class PickEnvironment(Hook):
             proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format'])
             if proj != None:
                 os.environ["FormExt"] = proj['sg_format']
+                if proj['sg_format'] == 'exr':
+                    os.environ["CompressionExt"] = proj['sg_compression']
+                else:
+                    os.environ["CompressionExt"] = proj['sg_format']
         except:
             pass
         if context.source_entity:
