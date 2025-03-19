@@ -47,7 +47,7 @@ settings.tk-nuke-writenode.asset:
         compression: none
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
-      promote_write_knobs: ["compresssion"]
+      promote_write_knobs: []
     - file_type: exr
       name: TECH_PRECOMP
       proxy_publish_template:
