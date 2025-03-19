@@ -445,9 +445,6 @@ class BasicFilePublishPlugin(HookBaseClass):
             },
         )
         status = {"sg_status_list": "rev"}
-        print (item)
-        print(item.context)
-        print(item.context.task)
         self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
         # self.parent.sgtk.shotgun.update("Shot", item.context.entity['id'], status)
 

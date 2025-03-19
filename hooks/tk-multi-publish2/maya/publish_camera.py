@@ -326,7 +326,6 @@ class MayaCameraPublishPlugin(HookBaseClass):
         print (item.properties["path"])
         publish_filters = [["task", "is", item.context.task]]
         find = publisher.shotgun.find("PublishedFile", publish_filters, ["path"])
-        print(find)
         #item.properties["path"] = path
         item.properties["publish_path"] = item.properties["path"]
         item.properties["publish_root"] = item.properties["path"]
