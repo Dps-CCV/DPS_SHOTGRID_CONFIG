@@ -1,11 +1,11 @@
 # Copyright (c) 2013 Shotgun Software Inc.
-# 
+#
 # CONFIDENTIAL AND PROPRIETARY
-# 
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit 
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
 # Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your 
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights 
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 # Metadata defining the behaviour and requirements for this app
@@ -16,13 +16,13 @@ configuration:
     # tank write nodes paths
     write_nodes:
         type: list
-        description: "A list of dictionaries in which you define the Shotgun Write nodes that
-                     are supported in this configuration. Each dictionary entry needs to have
-                     the following keys: 'name' - a descriptive name for this node. 'file_type' -
-                     the file type to use for the renders (exr, cin, dpx etc). This will be
-                     passed to the Nuke write node when rendering. 'settings' - configuration
-                     settings for the given file type, as a dictionary. This too will be
-                     passed to the write node when rendering. Next, you need two entries
+        description: "A list of dictionaries in which you define the Flow Production Tracking
+                     Write nodes that are supported in this configuration. Each dictionary entry
+                     needs to have the following keys: 'name' - a descriptive name for this node.
+                     'file_type' - the file type to use for the renders (exr, cin, dpx etc).
+                     This will be passed to the Nuke write node when rendering. 'settings' -
+                     configuration settings for the given file type, as a dictionary. This too
+                     will be passed to the write node when rendering. Next, you need two entries
                      named 'render_template' and 'publish_template'
                      - these control the locations where data is written to at various stages
                      of the workflow. These templates need to include the 'version' field
@@ -30,11 +30,11 @@ configuration:
                      (which reflect the image resolution of the render) and 'output' (which
                      differenciates different write nodes). If you are doing stereo
                      rendering and want to use Nuke's %V flag, include an 'eye' field.
-                     This will be replaced by %V in the paths when the Shotgun Write node
-                     computes them.  Finally, you need the templates 'proxy_render_template' 
-                     and 'proxy_publish_template' these have the same requirements as the regular 
+                     This will be replaced by %V in the paths when the Flow Production Tracking
+                     Write node computes them.  Finally, you need the templates 'proxy_render_template'
+                     and 'proxy_publish_template' these have the same requirements as the regular
                      render and pubish templates but are used when rendering in proxy mode.  If
-                     these are missing (set to null) then the regular templates will be used 
+                     these are missing (set to null) then the regular templates will be used
                      instead."
         allows_empty: True
         values:
@@ -50,22 +50,22 @@ configuration:
                     type: tank_type
                 render_template:
                     type: template
-                    fields: context, version, SEQ, [channel], [output], [name], [width], [height], [eye], [YYYY], [MM], [DD], *
+                    fields: context, version, [SEQ], [channel], [output], [name], [width], [height], [eye], [YYYY], [MM], [DD], *
                 publish_template:
                     type: template
-                    fields: context, version, SEQ, [channel], [output], [name], [width], [height], [eye], [TankType], *
+                    fields: context, version, [SEQ], [channel], [output], [name], [width], [height], [eye], [TankType], *
                 proxy_render_template:
                     type: template
-                    fields: context, version, SEQ, [channel], [output], [name], [width], [height], [eye], *                    
+                    fields: context, version, [SEQ], [channel], [output], [name], [width], [height], [eye], *
                     allows_empty: True
                     default_value: null
                 proxy_publish_template:
                     type: template
-                    fields: context, version, SEQ, [channel], [output], [name], [width], [height], [eye], [TankType], *
+                    fields: context, version, [SEQ], [channel], [output], [name], [width], [height], [eye], [TankType], *
                     allows_empty: True
                     default_value: null
                 tile_color:
-                    type: list     
+                    type: list
                     values:
                         type: int
                     description:    "Specify a list of 3 values in the range 0-255 that represent the RGB values to be
@@ -86,8 +86,9 @@ configuration:
     # of the value applied to this setting, as at present the convert back method doesn't support promoted knobs.
     show_convert_actions:
         type: bool
-        description: "Setting this to True will add actions for converting to and from Shotgun write nodes.
-                      The actions will be displayed as options in the Shotgun -> Context menu"
+        description: "Setting this to True will add actions for converting to and from Flow Production Tracking
+                      write nodes. The actions will be displayed as options in the
+                      Flow Production Tracking -> Context menu"
         default_value: False
 
     template_script_work:
@@ -99,13 +100,13 @@ configuration:
 # the Shotgun fields that this app needs in order to operate correctly
 requires_shotgun_fields:
 
-# More verbose description of this item 
+# More verbose description of this item
 display_name: "Write Node"
-description: "Support for the Shotgun Write Node in Nuke."
+description: "Support for the Flow Production Tracking Write Node in Nuke."
 
 # Required minimum versions for this item to run
 requires_shotgun_version:
-requires_core_version: "v0.14.37"
+requires_core_version: "v0.19.8"
 requires_engine_version: "v0.2.3"
 
 # the engines that this app can operate in:
@@ -113,4 +114,3 @@ supported_engines: [tk-nuke]
 
 # the frameworks required to run this app
 frameworks:
-    

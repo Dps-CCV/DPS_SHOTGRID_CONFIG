@@ -1,4 +1,5 @@
-# Copyright (c) 2013 Shotgun Software Inc.
+#!/bin/bash
+# Copyright (c) 2017 Shotgun Software Inc.
 #
 # CONFIDENTIAL AND PROPRIETARY
 #
@@ -8,4 +9,5 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-from . import tk_nuke_writenode
+find .. -name "*.pyc" -delete
+/tmp/tk-core/tests/run_tests.sh --test-root . $*
