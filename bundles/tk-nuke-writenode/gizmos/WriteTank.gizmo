@@ -220,7 +220,7 @@ Gizmo {
  }
  addUserKnob {
     41 compression
-    T Write1.exr.compression
+    T Write1.compression
  }
  addUserKnob {
     41 raw
