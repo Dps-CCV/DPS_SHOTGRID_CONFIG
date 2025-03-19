@@ -370,7 +370,7 @@ def _geo_has_animation(node):
                         breakFlag = True
                         break
             else:
-                break
+                continue
 
         elif cmds.nodeType(i) == "mesh":
             attribute = i + ".inMesh"
