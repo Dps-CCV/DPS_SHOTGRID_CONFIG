@@ -48,7 +48,7 @@ def checkSets():
                     groupNode.knob('tile_color').setValue(1563800064)
                 elif groupNode.knob('tk_profile_list').value() == 'IMAGE_PLANE_LOW':
                     groupNode.knob('tile_color').setValue(2483467007)
-                elif groupNode.knob('tk_profile_list').value() == 'Exr 16bits':
+                elif groupNode.knob('tk_profile_list').value() == 'Render 16bits':
                     groupNode.knob('tile_color').setValue(2911437567)
                 elif groupNode.knob('tk_profile_list').value() == 'MATTE_PAINT':
                     groupNode.knob('tile_color').setValue(645572863)
