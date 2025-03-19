@@ -292,7 +292,7 @@ class MayaActions(HookBaseClass):
 
 
         # Now create the reference object in Maya.
-        cmds.file(
+        reference_node = cmds.file(
             path,
             reference=True,
             loadReferenceDepth="all",
@@ -301,8 +301,14 @@ class MayaActions(HookBaseClass):
             groupReference=True,
             groupName=asset_name
         )
-        cmds.select(asset_name)
-        cmds.move(0,0,0, ".scalePivot", ".rotatePivot", absolute=True)
+        # top_level_nodes = cmds.referenceQuery(reference_node, nodes=True, dagPath=True)
+        # if top_level_nodes:
+        #     top_node = top_level_nodes[0]
+        #     parent_node = cmds.listRelatives(top_node, parent=True)
+        #     cmds.select(parent_node)
+        #     cmds.move(0, 0, 0, ".scalePivot", ".rotatePivot", absolute=True)
+        #cmds.select(asset_name)
+        #cmds.move(0,0,0, ".scalePivot", ".rotatePivot", absolute=True)
 
 
 

@@ -506,6 +506,7 @@ class MayaSessionCollector(HookBaseClass):
                     # selection set this item represents!
                     geo_object_item.properties["object_name"] = nodeName
                     geo_object_item.properties["object"] = nodeExport
+                    print("nodeExport")
 
     def _collect_particles_geo(self, settings, parent_item):
         """
