@@ -219,6 +219,10 @@ Gizmo {
     T Write1.colorspace
  }
  addUserKnob {
+    41 compression
+    T Write1.exr.compression
+ }
+ addUserKnob {
     41 raw
     l "raw data"
     T Write1.raw
