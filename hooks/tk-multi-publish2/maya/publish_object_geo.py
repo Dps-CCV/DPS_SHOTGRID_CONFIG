@@ -359,26 +359,28 @@ def _geo_has_animation(node):
     nodos = cmds.listRelatives(node, ad=True, f=True)
     nodos.insert(0, node)
     breakFlag = False
-    try:
-        for i in nodos:
-            if cmds.nodeType(i) == "transform":
-                animAttributes = cmds.listAnimatable(i)
+
+    for i in nodos:
+        if cmds.nodeType(i) == "transform":
+            animAttributes = cmds.listAnimatable(i)
+            if animAttributes != None:
                 for attribute in animAttributes:
                     numKeyframes = cmds.keyframe(attribute, query=True, keyframeCount=True)
                     if numKeyframes > 0:
                         breakFlag = True
                         break
-
-            elif cmds.nodeType(i) == "mesh":
-                attribute = i + ".inMesh"
-                connections = cmds.listConnections(attribute, d=0)
-                if connections != None:
-                    breakFlag = True
-                    break
-            if breakFlag == True:
+            else:
                 break
-    except:
-        pass
+
+        elif cmds.nodeType(i) == "mesh":
+            attribute = i + ".inMesh"
+            connections = cmds.listConnections(attribute, d=0)
+            if connections != None:
+                breakFlag = True
+                break
+        if breakFlag == True:
+            break
+
     return breakFlag
 
 
