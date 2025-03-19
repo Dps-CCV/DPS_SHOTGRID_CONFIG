@@ -11,47 +11,17 @@ def checkSetsWT():
 
                 if topnode:
                     ###Comprobaciones de espacio de color
-                    if topnode.knob('colorspace').getValue() == 0:
-                        colorspace = topnode.knob('colorspace').value()[9:-1]
-                    else:
-                        colorspace = topnode.knob('colorspace').value()
-
-                    ###Settings del nodo Write
-                    if n.knob('colorspace').getValue() == 0:
-                        writecolor = n.knob('colorspace').value()[9:-1]
-                    else:
-                        writecolor = n.knob('colorspace').value()
+                    colorspace = topnode.knob('colorspace').value()
+                    writecolor = n.knob('colorspace').value()
 
                     ###Acciones
                     oldColor = n.knob('tile_color').value()
                     if writecolor != colorspace:
-                        if n.knob('tk_profile_list').value() == 'IMAGE_PLANE_LOW':
-                            n.knob('tile_color').setValue(2483467007)
-                        elif n.knob('tk_profile_list').value() == 'IMAGE_PLANE':
-                            n.knob('tile_color').setValue(1563800064)
-                        elif n.knob('tk_profile_list').value() == 'ALPHA':
-                            n.knob('tile_color').setValue(1790247167)
-                        elif n.knob('tk_profile_list').value() == 'TECH_PRECOMP':
-                            n.knob('tile_color').setValue(146854399)
-                        elif n.knob('tk_profile_list').value() == 'MATTE_PAINT':
-                            n.knob('tile_color').setValue(645572863)
-                        else:
+                        if n.knob('tk_profile_list').value() not in ['IMAGE_PLANE_LOW', 'IMAGE_PLANE','ALPHA', 'TECH_PRECOMP', 'MATTE_PAINT']:
                             n.knob('tile_color').setValue(4278190335)
                     else:
                         if n.knob('tk_profile_list').value() == 'PRECOMP':
                             n.knob('tile_color').setValue(13724671)
-                        elif n.knob('tk_profile_list').value() == 'TECH_PRECOMP':
-                            n.knob('tile_color').setValue(146854399)
-                        elif n.knob('tk_profile_list').value() == 'ALPHA':
-                            n.knob('tile_color').setValue(1790247167)
-                        elif n.knob('tk_profile_list').value() == 'IMAGE_PLANE':
-                            n.knob('tile_color').setValue(1563800064)
-                        elif n.knob('tk_profile_list').value() == 'IMAGE_PLANE_LOW':
-                            n.knob('tile_color').setValue(2483467007)
-                        elif n.knob('tk_profile_list').value() == 'MATTE_PAINT':
-                            n.knob('tile_color').setValue(645572863)
-                        elif n.knob('tk_profile_list').value() == 'Exr 16bits':
-                            n.knob('tile_color').setValue(2911437567)
                         else:
                             n.knob('tile_color').setValue(2911437567)
             except:

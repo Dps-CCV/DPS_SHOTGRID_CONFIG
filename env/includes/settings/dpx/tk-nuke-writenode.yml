@@ -54,7 +54,7 @@ settings.tk-nuke-writenode.asset:
         datatype: 32 bit float
         channels: all
         write_ACES_compliant_EXR: false
-        colorspace: "ACES - ACEScg"
+        colorspace: "ACEScg"
         metadata: "all metadata"
         compression: Zip (1 scanline)
       tank_type: Rendered Image
@@ -72,7 +72,7 @@ settings.tk-nuke-writenode.asset:
         metadata: "all metadata"
         write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
-        colorspace: "ACES - ACEScg"
+        colorspace: "ACEScg"
       tank_type: Rendered Image
       tile_color: [ 93, 53, 178 ]
       promote_write_knobs: [ ]
@@ -155,7 +155,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 32 bit float
       channels: all
       write_ACES_compliant_EXR: false
-      colorspace: "ACES - ACEScg"
+      colorspace: "ACEScg"
       metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image
@@ -173,7 +173,7 @@ settings.tk-nuke-writenode.shot:
       metadata: "all metadata"
       write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
-      colorspace: "ACES - ACEScg"
+      colorspace: "ACEScg"
     tank_type: Rendered Image
     tile_color: [93, 53, 178]
     promote_write_knobs: []

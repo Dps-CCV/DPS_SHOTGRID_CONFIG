@@ -24,7 +24,7 @@ class PickEnvironment(Hook):
         """
         project = context.project
         try:
-            proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format'])
+            proj = self.parent.shotgun.find_one("Project", [['id', 'is', project['id']]], ['sg_format', 'sg_compression'])
             if proj != None:
                 os.environ["FormExt"] = proj['sg_format']
                 if proj['sg_format'] == 'exr':

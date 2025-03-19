@@ -71,9 +71,15 @@ class BeforeAppLaunch(tank.Hook):
         )
         os.environ["OCIO"] = ocio_path
 
-        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code", "sg_espacio___color", "sg_format", "sg_formato___ratio"])
+        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code", "sg_espacio___color", "sg_format", "sg_compression", "sg_formato___ratio"])
 
         os.environ["PROJECTCOLORSPACE"] = str(getColor["sg_espacio___color"])
+
+        os.environ["FormExt"] = getColor['sg_format']
+        if getColor['sg_format'] == 'exr':
+            os.environ["CompressionExt"] = getColor['sg_compression']
+        else:
+            os.environ["CompressionExt"] = getColor['sg_format']
 
         # os.environ["FormExt"] = str(getColor["sg_format"])
 

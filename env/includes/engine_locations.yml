@@ -62,12 +62,16 @@ engines.tk-motionbuilder.location:
 #  type: app_store
 #  name: tk-nuke
 #  version: v0.15.1
-
 engines.tk-nuke.location:
-  type: github_release
-  organization: Dps-CCV
-  repository: tk-nuke
-  version: v0.15.1c
+  name: tk-nuke
+  type: path
+  path: '{CONFIG_FOLDER}/bundles/tk-nuke'
+
+#engines.tk-nuke.location:
+#  type: github_release
+#  organization: Dps-CCV
+#  repository: tk-nuke
+#  version: v0.15.1c
 
 engines.tk-photoshopcc.location:
   type: app_store

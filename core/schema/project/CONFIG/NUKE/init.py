@@ -18,6 +18,7 @@ nuke.pluginAddPath('./SCRIPTS/rvnuke')
 import copy_rendered_files
 import RenderVersionsLimit
 import RenderChecks_WriteTank
+import FormatFix
 
 nuke.knobDefault('Root.colorManagement', 'OCIO')
 nuke.knobDefault("Viewer.viewerProcess", 'Rec.709 (ACES)')

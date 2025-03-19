@@ -195,15 +195,15 @@ apps.tk-nuke-quickreview.location:
 #  version: v1.7.0
 
 ## writenode
-#apps.tk-nuke-writenode.location:
-#  name: tk-nuke-writenode
-#  type: path
-#  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
 apps.tk-nuke-writenode.location:
-  type: github_release
-  organization: Dps-CCV
-  repository: tk-nuke-writenode
-  version: v1.7.1d
+  name: tk-nuke-writenode
+  type: path
+  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
+#apps.tk-nuke-writenode.location:
+#  type: github_release
+#  organization: Dps-CCV
+#  repository: tk-nuke-writenode
+#  version: v1.7.1e
 
 
 apps.tk-flame-export.location:
