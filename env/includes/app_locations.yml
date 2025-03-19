@@ -198,7 +198,7 @@ apps.tk-nuke-quickreview.location:
 #apps.tk-nuke-writenode.location:
 #  name: tk-nuke-writenode
 #  type: path
-#  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
+##  path: '{CONFIG_FOLDER}/bundles/tk-nuke-writenode'
 apps.tk-nuke-writenode.location:
   type: github_release
   organization: Dps-CCV
