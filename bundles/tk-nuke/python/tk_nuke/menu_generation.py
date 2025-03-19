@@ -611,11 +611,11 @@ class NukeMenuGenerator(BaseMenuGenerator):
                         write_node_item.setShortcut("")
 
                         nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "Render 16bits [Flow Production Tracking]").setShortcut('w')
+                            "Render 16bits").setShortcut('w')
                         nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "PRECOMP [Flow Production Tracking]").setShortcut('Alt+w')
+                            "PRECOMP").setShortcut('Alt+w')
                         nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "TECH_PRECOMP [Flow Production Tracking]").setShortcut('Alt+j')
+                            "TECH_PRECOMP").setShortcut('Alt+j')
                     except:
                         self.engine.logger.debug("No se ha podido registrar los atajos de nuke write")
             elif cmd.type == "context_menu":
