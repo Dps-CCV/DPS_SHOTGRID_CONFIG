@@ -204,7 +204,7 @@ apps.tk-nuke-writenode.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-nuke-writenode
-  version: v1.7.1g
+  version: v1.7.1h
 
 
 apps.tk-flame-export.location:
