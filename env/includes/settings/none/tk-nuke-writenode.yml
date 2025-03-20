@@ -122,6 +122,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: all
       autocrop: true
+      compression: none
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: ["compression"]
