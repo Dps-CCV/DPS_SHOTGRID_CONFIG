@@ -28,12 +28,12 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: all
+        channels: rgb
         autocrop: true
-        compression: none
+        compression: ZIP (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
-      promote_write_knobs: [ ]
+      promote_write_knobs: ["compression"]
     - file_type: exr
       name: PRECOMP
       proxy_publish_template:
@@ -44,7 +44,7 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: all
         autocrop: true
-        compression: none
+        compression: ZIP (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
       promote_write_knobs: ["compression"]
@@ -120,9 +120,9 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
-      channels: all
+      channels: rgb
       autocrop: true
-      compression: none
+      compression: ZIP (1 scanline)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: ["compression"]
@@ -151,7 +151,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: all
       autocrop: true
-      compression: none
+      compression: ZIP (1 scanline)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: ["compression"]

@@ -28,9 +28,8 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: rgb
+        channels: all
         autocrop: true
-        write_ACES_compliant_EXR: false
         compression: PIZ Wavelet (32 scanlines)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
@@ -43,9 +42,8 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_precomp
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: all
         autocrop: true
-        write_ACES_compliant_EXR: false
         compression: PIZ Wavelet (32 scanlines)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
@@ -75,6 +73,7 @@ settings.tk-nuke-writenode.asset:
       settings:
         datatype: 16 bit half
         channels: rgba
+        metadata: "all metadata"
         write_ACES_compliant_EXR: false
         compression: Zip (1 scanline)
         colorspace: "ACEScg"
@@ -121,9 +120,8 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
-      channels: rgb
+      channels: all
       autocrop: true
-      write_ACES_compliant_EXR: false
       compression: PIZ Wavelet (32 scanlines)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
@@ -136,9 +134,9 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render_alpha
     settings:
       datatype: 16 bit half
-      channels: alpha
-      autocrop: true
+      channels: rgba
       colorspace: "Utility - Raw"
+      metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [ 106, 181, 0 ]
@@ -151,10 +149,8 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_precomp
     settings:
       datatype: 16 bit half
-      channels: rgba
+      channels: all
       autocrop: true
-      metadata: "all metadata"
-      write_ACES_compliant_EXR: false
       compression: PIZ Wavelet (32 scanlines)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
@@ -171,7 +167,7 @@ settings.tk-nuke-writenode.shot:
       write_ACES_compliant_EXR: false
       colorspace: "ACEScg"
       metadata: "all metadata"
-      compression: PIZ Wavelet (32 scanlines)
+      compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [ 8, 192, 209 ]
     promote_write_knobs: ["compression"]
@@ -184,6 +180,7 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 16 bit half
       channels: rgba
+      metadata: "all metadata"
       write_ACES_compliant_EXR: false
       compression: Zip (1 scanline)
       colorspace: "ACEScg"
