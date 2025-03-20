@@ -424,7 +424,7 @@ Gizmo {
  Write {
   file  "\[regsub -all [python os.getenv('MOUNT')] [python __import__('nuke')._shotgun_write_node_handler.on_compute_path_gizmo_callback() if hasattr(__import__('nuke'), '_shotgun_write_node_handler') else nuke.thisParent().knob('cached_path').value()] \[string range [value preferences.localCachePath] 0 end-1 ]]"
   proxy "\[regsub -all [python os.getenv('MOUNT')] [python __import__('nuke')._shotgun_write_node_handler.on_compute_proxy_path_gizmo_callback() if hasattr(__import__('nuke'), '_shotgun_write_node_handler') else nuke.thisParent().knob('tk_cached_proxy_path').value()] \[string range [value preferences.localCachePath] 0 end-1 ]]"
-  beforeRender "import nuke\nimport RenderChecks\nimport FormatFix\nRenderChecks.RenderSets()\nFormatFix.fix()\nif hasattr(nuke, \"_shotgun_write_node_handler\"):\n    nuke._shotgun_write_node_handler.on_before_render_gizmo_callback()\ncopy_rendered_files.cacheAndCopy().createFolders()"
+  beforeRender "import nuke\nimport RenderChecks\nimport FormatFix\nRenderChecks.RenderSets()\nFormatFix.FormatFixing().fix()\nif hasattr(nuke, \"_shotgun_write_node_handler\"):\n    nuke._shotgun_write_node_handler.on_before_render_gizmo_callback()\ncopy_rendered_files.cacheAndCopy().createFolders()"
   afterFrameRender "copy_rendered_files.cacheAndCopy().copyFiles()"
   afterRender "import nuke\nRenderVersionsLimit.DeleteOldVersions()\nif hasattr(nuke, \"_shotgun_write_node_handler\"):\n    nuke._shotgun_write_node_handler.on_after_render_gizmo_callback()"
 
