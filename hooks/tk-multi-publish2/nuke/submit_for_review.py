@@ -203,9 +203,6 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         :param item: Item to process
         """
 
-        # get the publish "mode" stored inside of the root item properties
-        bg_processing = item.parent.properties.get("bg_processing", False)
-        in_bg_process = item.parent.properties.get("in_bg_process", False)
 
         render_path = item.properties.get("path")
 

@@ -365,9 +365,6 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         publisher = self.parent
 
-        # get the publish "mode" stored inside of the root item properties
-        bg_processing = item.parent.properties.get("bg_processing", False)
-        in_bg_process = item.parent.properties.get("in_bg_process", False)
 
         # ---- determine the information required to publish
 

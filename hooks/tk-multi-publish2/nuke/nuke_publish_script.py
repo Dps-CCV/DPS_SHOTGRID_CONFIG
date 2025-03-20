@@ -297,20 +297,13 @@ class NukeSessionPublishPlugin(HookBaseClass):
             instances.
         :param item: Item to process
         """
-        # get the publish "mode" stored inside of the root item properties
-        bg_processing = item.parent.properties.get("bg_processing", False)
-        in_bg_process = item.parent.properties.get("in_bg_process", False)
 
         # get the path in a normalized state. no trailing separator, separators
         # are appropriate for current os, no double separators, etc.
         path = sgtk.util.ShotgunPath.normalize(_session_path())
 
         # ensure the session is saved
-        if not bg_processing or (bg_processing and not in_bg_process):
-            _save_session(path)
-
-        # # ensure the session is saved
-        # _save_session(path)
+        _save_session(path)
 
         # update the item with the saved session path
         item.properties["path"] = path
@@ -320,9 +313,8 @@ class NukeSessionPublishPlugin(HookBaseClass):
             "publish_dependencies"
         ] = _nuke_find_additional_script_dependencies()
 
-        if not bg_processing or (bg_processing and in_bg_process):
-            # let the base class register the publish
-            super(NukeSessionPublishPlugin, self).publish(settings, item)
+        # let the base class register the publish
+        super(NukeSessionPublishPlugin, self).publish(settings, item)
 
     def finalize(self, settings, item):
         """
@@ -339,10 +331,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
 
         # bump the session file to the next version
-        if not bg_processing or (bg_processing and not in_bg_process):
-            self._save_to_next_version(item.properties["path"], item, _save_session)
-        # bump the session file to the next version
-        #self._save_to_next_version(item.properties["path"], item, _save_session)
+        self._save_to_next_version(item.properties["path"], item, _save_session)
 
 
 def _nuke_find_additional_script_dependencies():
