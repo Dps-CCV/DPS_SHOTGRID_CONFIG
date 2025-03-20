@@ -30,7 +30,6 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: rgb
         autocrop: true
-        write_ACES_compliant_EXR: false
         compression: PIZ Wavelet (32 scanlines)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
@@ -45,7 +44,6 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: rgba
         autocrop: true
-        write_ACES_compliant_EXR: false
         compression: PIZ Wavelet (32 scanlines)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
@@ -123,7 +121,6 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: rgb
       autocrop: true
-      write_ACES_compliant_EXR: false
       compression: PIZ Wavelet (32 scanlines)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
@@ -153,7 +150,6 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: rgba
       autocrop: true
-      write_ACES_compliant_EXR: false
       compression: PIZ Wavelet (32 scanlines)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]

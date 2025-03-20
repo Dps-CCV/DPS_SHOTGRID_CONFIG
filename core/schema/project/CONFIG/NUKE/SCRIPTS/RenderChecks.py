@@ -16,7 +16,7 @@ def checkSets():
             else:
                 colorspace = topnode.knob('colorspace').value()
 
-            ###Settings del nodo Write
+            ##Settings del nodo Write
             if n.knob('colorspace').getValue() == 0:
                 writecolor = n.knob('colorspace').value()[9:-1]
             else:
