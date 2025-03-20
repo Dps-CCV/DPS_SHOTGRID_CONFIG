@@ -25,17 +25,7 @@ def checkSets():
             ###Acciones
             oldColor = n.knob('tile_color').value()
             if writecolor != colorspace:
-                if groupNode.knob('tk_profile_list').value() == 'IMAGE_PLANE_LOW':
-                    groupNode.knob('tile_color').setValue(2483467007)
-                elif groupNode.knob('tk_profile_list').value() == 'IMAGE_PLANE':
-                    groupNode.knob('tile_color').setValue(1563800064)
-                elif groupNode.knob('tk_profile_list').value() == 'ALPHA':
-                    groupNode.knob('tile_color').setValue(1790247167)
-                elif groupNode.knob('tk_profile_list').value() == 'TECH_PRECOMP':
-                    groupNode.knob('tile_color').setValue(146854399)
-                elif groupNode.knob('tk_profile_list').value() == 'MATTE_PAINT':
-                    groupNode.knob('tile_color').setValue(645572863)
-                else:
+                if groupNode.knob('tk_profile_list').value() not in ['IMAGE_PLANE_LOW', 'IMAGE_PLANE', 'ALPHA', 'TECH_PRECOMP', 'MATTE_PAINT']:
                     groupNode.knob('tile_color').setValue(4278190335)
             else:
                 if groupNode.knob('tk_profile_list').value() == 'PRECOMP':

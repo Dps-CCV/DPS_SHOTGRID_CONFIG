@@ -22,8 +22,10 @@ def checkSetsWT():
                     else:
                         if n.knob('tk_profile_list').value() == 'PRECOMP':
                             n.knob('tile_color').setValue(13724671)
-                        else:
+                        elif n.knob('tk_profile_list').value() == 'Render 16bits':
                             n.knob('tile_color').setValue(2911437567)
+                        elif n.knob('tk_profile_list').value() == 'TECH_PRECOMP':
+                            n.knob('tile_color').setValue(146854399)
             except:
                 print("Could not catch the node to check color settings")
 

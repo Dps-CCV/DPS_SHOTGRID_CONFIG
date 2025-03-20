@@ -190,7 +190,6 @@ class BeforeAppLaunch(tank.Hook):
             )
             tank.util.append_path_to_env_var("NUKE_PATH", nuke_environ_path)
 
-
             os.environ['NUKE_INSTALL'] = str(app_path)
 
 
