@@ -28,10 +28,9 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: rgb
         autocrop: true
-        write_ACES_compliant_EXR: false
-        compression: Zip (1 scanline)
+        compression: ZIP (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 173, 137, 2 ]
       promote_write_knobs: ["compression"]
@@ -43,10 +42,9 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_precomp
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: all
         autocrop: true
-        write_ACES_compliant_EXR: false
-        compression: Zip (1 scanline)
+        compression: ZIP (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
       promote_write_knobs: ["compression"]
@@ -122,10 +120,9 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
-      channels: rgba
+      channels: rgb
       autocrop: true
-      write_ACES_compliant_EXR: false
-      compression: Zip (1 scanline)
+      compression: ZIP (1 scanline)
     tank_type: Rendered Image
     tile_color: [173, 137, 2]
     promote_write_knobs: ["compression"]
@@ -152,10 +149,9 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_precomp
     settings:
       datatype: 16 bit half
-      channels: rgba
+      channels: all
       autocrop: true
-      write_ACES_compliant_EXR: false
-      compression: Zip (1 scanline)
+      compression: ZIP (1 scanline)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: ["compression"]
