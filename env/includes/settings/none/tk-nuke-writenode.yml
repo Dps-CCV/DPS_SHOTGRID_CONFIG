@@ -164,9 +164,7 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 32 bit float
       channels: all
-      write_ACES_compliant_EXR: false
       colorspace: "ACEScg"
-      metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [ 8, 192, 209 ]
