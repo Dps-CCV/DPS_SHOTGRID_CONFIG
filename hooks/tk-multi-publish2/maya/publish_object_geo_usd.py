@@ -168,7 +168,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         item.context_change_allowed = False
 
         if publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'MODEL', 'TEXTURE_A', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
-            return {"accepted": accepted, "checked": True}
+            return {"accepted": accepted, "checked": False}
         else:
             return {"accepted": accepted, "checked": False}
             
