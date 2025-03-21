@@ -164,7 +164,9 @@ class MayaObjectGeometryPublishPlugin(HookBaseClass):
         parentNode = cmds.listRelatives(cmds.ls(selection=True)[0], parent=True, fullPath = True )
         cmds.select(cur_selection)
 
-        if publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'MODEL', 'TEXTURE_A', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
+        if publisher.context.step['name'] in ['MODEL', 'TEXTURE_A', 'CLAY_A', 'FOTOGRAMETRY_A', 'GROOM_A', 'MODEL_A', 'SCAN_A']:
+            return {"accepted": accepted, "checked": True}
+        elif publisher.context.step['name'] in ['TRACK_3D', 'LAYOUT', 'ANIMATION', 'CLOTH', 'CROWD', 'ANIMATION_A', 'CHARACTER_FX_A', 'CLOTH_A', 'LAYOUT_A', 'MODEL_A', 'SCAN_A']:
             if _geo_has_animation(parentNode) == False and publisher.context.step['name'] in ['ANIMATION', 'ANIMATION_A']:
                 return {"accepted": accepted, "checked": False}
             else:
@@ -357,29 +359,30 @@ def _find_scene_animation_range():
 
 def _geo_has_animation(node):
     nodos = cmds.listRelatives(node, ad=True, f=True)
-    nodos.insert(0, node)
     breakFlag = False
+    if nodos != None:
+        nodos.insert(0, node)
 
-    for i in nodos:
-        if cmds.nodeType(i) == "transform":
-            animAttributes = cmds.listAnimatable(i)
-            if animAttributes != None:
-                for attribute in animAttributes:
-                    numKeyframes = cmds.keyframe(attribute, query=True, keyframeCount=True)
-                    if numKeyframes > 0:
-                        breakFlag = True
-                        break
-            else:
-                continue
+        for i in nodos:
+            if cmds.nodeType(i) == "transform":
+                animAttributes = cmds.listAnimatable(i)
+                if animAttributes != None:
+                    for attribute in animAttributes:
+                        numKeyframes = cmds.keyframe(attribute, query=True, keyframeCount=True)
+                        if numKeyframes > 0:
+                            breakFlag = True
+                            break
+                else:
+                    continue
 
-        elif cmds.nodeType(i) == "mesh":
-            attribute = i + ".inMesh"
-            connections = cmds.listConnections(attribute, d=0)
-            if connections != None:
-                breakFlag = True
+            elif cmds.nodeType(i) == "mesh":
+                attribute = i + ".inMesh"
+                connections = cmds.listConnections(attribute, d=0)
+                if connections != None:
+                    breakFlag = True
+                    break
+            if breakFlag == True:
                 break
-        if breakFlag == True:
-            break
 
     return breakFlag
 
