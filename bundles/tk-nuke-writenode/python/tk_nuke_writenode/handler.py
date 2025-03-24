@@ -21,7 +21,6 @@ import nukescripts
 
 import sgtk
 from sgtk import TankError
-from tank_vendor import six
 
 
 # Special exception raised when the work file cannot be resolved.
@@ -388,7 +387,7 @@ class TankWriteNodeHandler(object):
             self.__on_user_create, nodeClass=TankWriteNodeHandler.SG_WRITE_NODE_CLASS
         )
 
-    def convert_sg_to_nuke_write_nodes(self):
+    def convert_sg_to_nuke_write_nodes(self, selnode=False):
         """
         Utility function to convert all Flow Production Tracking Write
         nodes to regular Nuke Write nodes.
@@ -403,11 +402,15 @@ class TankWriteNodeHandler(object):
         :param create_folders: When set to true, it will create the folders on disk for the render and proxy paths.
          Defaults to false.
         """
+        node = nuke.selectedNodes()
         # clear current selection:
         nukescripts.clear_selection_recursive()
 
-        # get write nodes:
-        sg_write_nodes = self.get_nodes()
+        if selnode == False:
+            # get write nodes:
+            sg_write_nodes = self.get_nodes()
+        else:
+            sg_write_nodes = node
         for sg_wn in sg_write_nodes:
             # set as selected:
             sg_wn.setSelected(True)
@@ -496,6 +499,10 @@ class TankWriteNodeHandler(object):
             knob.setValue(sg_wn["proxy_publish_template"].value())
             new_wn.addKnob(knob)
 
+            knob = nuke.String_Knob("_promoted_0")
+            knob.setValue(sg_wn["_promoted_0"].value())
+            new_wn.addKnob(knob)
+
             # delete original node:
             nuke.delete(sg_wn)
 
@@ -504,7 +511,12 @@ class TankWriteNodeHandler(object):
             new_wn.setXpos(node_pos[0])
             new_wn.setYpos(node_pos[1])
 
-    def convert_nuke_to_sg_write_nodes(self):
+            # add python for deadline use
+            new_wn.knob('beforeRender').setValue(
+                "import nuke\nserverpath = nuke.thisNode().knob('file').value()\ncachePath = nuke.toNode('preferences')['localCachePath'].value()[:-1]\nlocalpath = serverpath.replace('P:', cachePath)\nnuke.thisNode().knob('file').setValue(localpath)\ncopy_rendered_files.cacheAndCopy().createFolders()")
+            new_wn.knob('afterRender').setValue("import nuke\nRenderVersionsLimit.DeleteOldVersions()")
+
+    def convert_nuke_to_sg_write_nodes(sel, selnode=False):
         """
         Utility function to convert all Nuke Write nodes to Shotgun
         Write nodes (only converts Write nodes that were previously
@@ -518,13 +530,17 @@ class TankWriteNodeHandler(object):
         # Shotgun write nodes:
         app.convert_from_write_nodes()
         """
+        node = nuke.selectedNodes()
         # clear current selection:
         nukescripts.clear_selection_recursive()
 
-        # get write nodes:
-        write_nodes = nuke.allNodes(
-            group=nuke.root(), filter="Write", recurseGroups=True
-        )
+        if selnode == False:
+            # get write nodes:
+            write_nodes = nuke.allNodes(
+                group=nuke.root(), filter="Write", recurseGroups=True
+            )
+        else:
+            write_nodes = node
         for wn in write_nodes:
             # look for additional toolkit knobs:
             profile_knob = wn.knob("tk_profile_name")
@@ -536,6 +552,8 @@ class TankWriteNodeHandler(object):
             publish_template_knob = wn.knob("tk_publish_template")
             proxy_render_template_knob = wn.knob("tk_proxy_render_template")
             proxy_publish_template_knob = wn.knob("tk_proxy_publish_template")
+            if wn.knob("_promoted_0") != None:
+                _promoted_0_knob = wn.knob("_promoted_0")
 
             if (
                 not profile_knob
@@ -588,6 +606,15 @@ class TankWriteNodeHandler(object):
             # make sure file_type is set properly:
             int_wn = new_sg_wn.node(TankWriteNodeHandler.WRITE_NODE_NAME)
             int_wn["file_type"].setValue(wn["file_type"].value())
+            print(int_wn["file_type"].value())
+            if _promoted_0_knob != None:
+                _promoted_0 = _promoted_0_knob.value()
+                int_wn["compression"].setValue(_promoted_0)
+                #link_knob = nuke.Link_Knob("_promoted_0")
+                link_knob = new_sg_wn.knobs()["_promoted_0"]
+                link_knob.setLink(int_wn.name() + ".compression")
+                #new_sg_wn["_promoted_0"].setValue(_promoted_0)
+                print(_promoted_0)
 
             # copy across and knob values from the internal write node.
             for knob_name, knob in wn.knobs().items():
@@ -605,6 +632,7 @@ class TankWriteNodeHandler(object):
                     "tile_color",
                     "postage_stamp",
                     "label",
+                    "_promoted_0",
                 ]:
                     continue
 
@@ -2174,7 +2202,7 @@ class TankWriteNodeHandler(object):
 
         if script_path:
             # convert to os-style slashes:
-            script_path = script_path.replace("/", os.path.sep)
+            script_path = script_path.replace(os.path.sep, "/")
 
         return script_path
 
@@ -2199,7 +2227,7 @@ class TankWriteNodeHandler(object):
             last_known_path = knob.value()
             if last_known_path:
                 # correct slashes for compare:
-                last_known_path = last_known_path.replace("/", os.path.sep)
+                last_known_path = last_known_path.replace(os.path.sep, "/")
 
             if last_known_path != save_file_path:
                 # we're saving to a new file so reset the render path:
