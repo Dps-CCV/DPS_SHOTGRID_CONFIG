@@ -256,7 +256,7 @@ class RenderMedia(HookBaseClass):
 
         # apply any additional knob settings provided by the hook. Now that the knob has been
         # created, we can be sure specific file_type settings will be valid.
-        for knob_name, knob_value in six.iteritems(wn_settings):
+        for knob_name, knob_value in wn_settings.items():
             if knob_name != "file_type":
                 node.knob(knob_name).setValue(knob_value)
 

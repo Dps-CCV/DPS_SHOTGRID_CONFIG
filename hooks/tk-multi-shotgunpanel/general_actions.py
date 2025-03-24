@@ -45,12 +45,15 @@ class GeneralActions(HookBaseClass):
         app = self.parent
         app.log_debug(
             "Generate actions called for UI element %s. "
-            "Actions: %s. Shotgun Data: %s" % (ui_area, actions, sg_data)
+            "Actions: %s. PTR Data: %s" % (ui_area, actions, sg_data)
         )
 
         action_instances = []
 
-        if "assign_task" in actions:
+        if (
+            "assign_task" in actions
+            and self.parent.context.user not in sg_data["task_assignees"]
+        ):
             action_instances.append(
                 {
                     "name": "assign_task",
@@ -61,7 +64,7 @@ class GeneralActions(HookBaseClass):
                 }
             )
 
-        if "task_to_ip" in actions:
+        if "task_to_ip" in actions and sg_data.get("sg_status_list") != "ip":
             action_instances.append(
                 {
                     "name": "task_to_ip",
@@ -72,7 +75,7 @@ class GeneralActions(HookBaseClass):
                 }
             )
 
-        if "task_to_rev" in actions:
+        if "task_to_rev" in actions and sg_data.get("sg_status_list") != "rev":
             action_instances.append(
                 {
                     "name": "task_to_rev",
@@ -180,6 +183,28 @@ class GeneralActions(HookBaseClass):
                     }
                 )
 
+        if "note_to_ip" in actions:
+            action_instances.append(
+                {
+                    "name": "note_to_ip",
+                    "params": None,
+                    "group": "Update Note",
+                    "caption": "Set to In Progress",
+                    "description": "Set the note status to In Progress.",
+                }
+            )
+
+        if "note_to_closed" in actions:
+            action_instances.append(
+                {
+                    "name": "note_to_closed",
+                    "params": None,
+                    "group": "Update Note",
+                    "caption": "Set to Closed",
+                    "description": "Set the note status to Closed.",
+                }
+            )
+
         return action_instances
 
     def execute_action(self, name, params, sg_data):
@@ -190,29 +215,35 @@ class GeneralActions(HookBaseClass):
         :param name: Action name string representing one of the items returned by generate_actions.
         :param params: Params data, as specified by generate_actions.
         :param sg_data: Shotgun data dictionary
-        :returns: No return value expected.
+        :returns: Dictionary representing an Entity if action requires a context change in the panel,
+                  otherwise no return value expected.
         """
         app = self.parent
         app.log_debug(
             "Execute action called for action %s. "
-            "Parameters: %s. Shotgun Data: %s" % (name, params, sg_data)
+            "Parameters: %s. PTR Data: %s" % (name, params, sg_data)
         )
 
         if name == "assign_task":
             if app.context.user is None:
                 raise Exception(
-                    "Shotgun Toolkit does not know what Shotgun user you are. "
-                    "This can be due to the use of a script key for authentication "
-                    "rather than using a user name and password login. To assign a "
-                    "Task, you will need to log in using you Shotgun user account."
+                    "Flow Production Tracking Toolkit does not know what PTR user "
+                    "you are. This can be due to the use of a script key for "
+                    "authentication rather than using a user name and password login. "
+                    "To assign a Task, you will need to log in using you PTR user account."
                 )
 
             data = app.shotgun.find_one(
                 "Task", [["id", "is", sg_data["id"]]], ["task_assignees"]
             )
             assignees = data["task_assignees"] or []
-            assignees.append(app.context.user)
-            app.shotgun.update("Task", sg_data["id"], {"task_assignees": assignees})
+            try:
+                # Check if the user is already assigned
+                next(user for user in assignees if user["id"] == app.context.user["id"])
+            except StopIteration:
+                # User not assigned yet, make the request to update
+                assignees.append(app.context.user)
+                app.shotgun.update("Task", sg_data["id"], {"task_assignees": assignees})
 
         elif name == "add_to_playlist":
             app.shotgun.update(
@@ -240,6 +271,33 @@ class GeneralActions(HookBaseClass):
 
         elif name == "publish_clipboard":
             self._copy_to_clipboard(sg_data["path"]["local_path"])
+
+        elif name == "note_to_ip":
+            app.shotgun.update("Note", sg_data["id"], {"sg_status_list": "ip"})
+
+        elif name == "note_to_closed":
+            app.shotgun.update("Note", sg_data["id"], {"sg_status_list": "clsd"})
+
+        return dict()
+
+    def execute_entity_doubleclicked_action(self, sg_data):
+        """
+        This action is triggered when an entity is double-clicked.
+        Return True to indicate to the caller to continue with the
+        double-click action, or False to abort the action.
+
+        This base hook method simply returns True to continue with the
+        double-click action without any custom actions. Override this
+        method to perform any specific handling.
+
+        :param sg_data: Dictionary containing data for the entity that
+                        was double-clicked.
+        :return: True if the panel should navigate to the entity that was
+                 double-clicked, else False.
+        :rtype: bool
+        """
+
+        return True
 
     def _copy_to_clipboard(self, text):
         """
