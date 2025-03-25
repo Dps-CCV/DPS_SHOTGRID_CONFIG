@@ -204,7 +204,7 @@ class NukeWriteNode(tank.platform.Application):
         """
         self.__write_node_handler.reset_render_path(node)
 
-    def convert_to_write_nodes(self, show_warning=False):
+    def convert_to_write_nodes(self, show_warning=False, selnode=False):
         """
         Convert all Shotgun write nodes found in the current Script to regular
         Nuke Write nodes.  Additional toolkit information will be stored on
@@ -237,9 +237,9 @@ class NukeWriteNode(tank.platform.Application):
                 continue_with_convert = False
 
         if continue_with_convert:
-            self.__write_node_handler.convert_sg_to_nuke_write_nodes()
+            self.__write_node_handler.convert_sg_to_nuke_write_nodes(selnode)
 
-    def convert_from_write_nodes(self, show_warning=False):
+    def convert_from_write_nodes(self, show_warning=False, selnode=False):
         """
         Convert all regular Nuke Write nodes that have previously been converted
         from Flow Production Tracking Write nodes, back into Flow Production Tracking Write nodes.
@@ -270,7 +270,7 @@ class NukeWriteNode(tank.platform.Application):
                 continue_with_convert = False
 
         if continue_with_convert:
-            self.__write_node_handler.convert_nuke_to_sg_write_nodes()
+            self.__write_node_handler.convert_nuke_to_sg_write_nodes(selnode)
 
     def create_new_write_node(self, profile_name):
         """

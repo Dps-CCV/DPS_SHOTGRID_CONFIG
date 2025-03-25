@@ -8,6 +8,7 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
+from __future__ import print_function
 import sgtk
 import nuke
 import os
@@ -96,7 +97,7 @@ class NukeEngine(sgtk.platform.Engine):
         self._processed_environments = []
         self._previous_generators = []
 
-        super().__init__(*args, **kwargs)
+        super(NukeEngine, self).__init__(*args, **kwargs)
 
     #####################################################################################
     # Properties
@@ -893,7 +894,7 @@ class NukeEngine(sgtk.platform.Engine):
         # currently disabled.
         if nuke.env.get("NukeVersionMajor") == 7:
             return None
-        return super()._get_dialog_parent()
+        return super(NukeEngine, self)._get_dialog_parent()
 
     def _handle_studio_selection_change(self, event):
         """
@@ -1030,7 +1031,7 @@ class NukeEngine(sgtk.platform.Engine):
             )
             os.environ["SHOTGUN_SKIP_QTWEBENGINEWIDGETS_IMPORT"] = "1"
 
-        return super()._define_qt_base()
+        return super(NukeEngine, self)._define_qt_base()
 
     def __setup_favorite_dirs(self):
         """

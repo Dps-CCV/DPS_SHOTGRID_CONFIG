@@ -365,6 +365,7 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         publisher = self.parent
 
+
         # ---- determine the information required to publish
 
         # We allow the information to be pre-populated by the collector or a
@@ -867,8 +868,7 @@ class BasicFilePublishPlugin(HookBaseClass):
                 except subprocess.CalledProcessError as e:
                     print("Error running robocopy:\n", e.stderr.decode())
 
-
-            # os.rename(workFileNorm, publishFileNorm)
+                # os.rename(workFileNorm, publishFileNorm)
 
                 # Copy files to RENDER folder without version
                 # if "CMP\NUKE\IMAGES" in work_file and "CMP_v" in work_file and item.context.entity["type"] == "Shot":

@@ -347,7 +347,7 @@ def _nuke_find_additional_script_dependencies():
         # file knobs set to "" in Python will evaluate to None. This is
         # different than if you set file to an empty string in the UI, which
         # will evaluate to ""!
-        file_path = read_node.knob("file").value().replace(os.sep, "/")
+        file_path = read_node.knob("file").evaluate()
         if not file_path:
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)
@@ -358,7 +358,7 @@ def _nuke_find_additional_script_dependencies():
         # file knobs set to "" in Python will evaluate to None. This is
         # different than if you set file to an empty string in the UI, which
         # will evaluate to ""!
-        file_path = readgeo_node.knob("file").value().replace(os.sep, "/")
+        file_path = readgeo_node.knob("file").evaluate()
         if not file_path:
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)
@@ -369,7 +369,7 @@ def _nuke_find_additional_script_dependencies():
         # file knobs set to "" in Python will evaluate to None. This is
         # different than if you set file to an empty string in the UI, which
         # will evaluate to ""!
-        file_path = cam_node.knob("file").value().replace(os.sep, "/")
+        file_path = cam_node.knob("file").evaluate()
         if not file_path:
             continue
         file_path = sgtk.util.ShotgunPath.normalize(file_path)

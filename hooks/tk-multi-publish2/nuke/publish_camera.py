@@ -363,6 +363,7 @@ class NukeCameraPublishPlugin(HookBaseClass):
         publisher = self.parent
         engine = publisher.engine
 
+
         # ---- determine the information required to publish
 
         # We allow the information to be pre-populated by the collector or a

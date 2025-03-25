@@ -203,6 +203,7 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         :param item: Item to process
         """
 
+
         render_path = item.properties.get("path")
 
         sg_publish_data = item.properties.get("sg_publish_data")
