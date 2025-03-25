@@ -108,11 +108,11 @@ class SceneOperation(HookClass):
             # open the specified script
             nuke.scriptOpen(file_path)
 
-            # reset any write node render paths:
-            if self._reset_write_node_render_paths():
-                # something changed so make sure to save the script again:
-                # nuke.scriptSave()
-                print("desactivado guardado del scipt. hooks-workfiles2-scene-operation linea 115")
+            # # reset any write node render paths:
+            # if self._reset_write_node_render_paths():
+            #     # something changed so make sure to save the script again:
+            #     # nuke.scriptSave()
+            #     print("desactivado guardado del scipt. hooks-workfiles2-scene-operation linea 115")
 
             # ####DPS Write Shortcuts
             # # # CUSTOM SHORTCUTS
@@ -158,8 +158,8 @@ class SceneOperation(HookClass):
                 # rename script:
                 nuke.root()["name"].setValue(file_path)
 
-                # reset all write nodes:
-                self._reset_write_node_render_paths()
+                # # reset all write nodes:
+                # self._reset_write_node_render_paths()
 
                 # save script:
                 nuke.scriptSaveAs(file_path, -1)
