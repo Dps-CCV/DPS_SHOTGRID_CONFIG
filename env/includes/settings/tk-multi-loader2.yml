@@ -332,6 +332,18 @@ settings.tk-multi-loader2.nukestudio.project:
     Image: [clip_import]
     Movie: [clip_import]
     Rendered Image: [clip_import]
+    Nuke Script: [ script_import ]
+    Hiero Plate: [clip_import]
+    VREF Hiero: [clip_import]
+    PRECOMP: [clip_import]
+    TECH_PRECOMP: [clip_import]
+    BG_MATTEPAINT: [clip_import]
+    IMAGE_PLANE: [clip_import]
+    IMAGE_PLANE_LOW: [clip_import]
+    PARAFX Hiero: [clip_import]
+    RENDER_MAYA: [clip_import]
+    RENDER_NUKE: [clip_import]
+    ALPHA_RENDER: [clip_import]
   entities:
   - caption: Assets
     entity_type: Asset
@@ -368,6 +380,16 @@ settings.tk-multi-loader2.nukestudio:
     Photoshop Image: [read_node]
     Rendered Image: [read_node]
     Texture: [read_node]
+    Hiero Plate: [ clip_import ]
+    VREF Hiero: [ clip_import ]
+    PRECOMP: [ clip_import ]
+    TECH_PRECOMP: [ clip_import ]
+    BG_MATTEPAINT: [ clip_import ]
+    IMAGE_PLANE: [ clip_import ]
+    IMAGE_PLANE_LOW: [ clip_import ]
+    PARAFX Hiero: [ clip_import ]
+    RENDER_MAYA: [ clip_import ]
+    RENDER_NUKE: [ clip_import ]
   entities:
   - caption: Assets
     entity_type: Asset
