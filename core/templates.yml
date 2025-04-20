@@ -523,9 +523,9 @@ paths:
     nuke_shot_render_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}/{sg_episode}_{sg_sequence}_{Shot}_comp_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_roto_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_roto_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Project}_{sg_episode}_{sg_sequence}_{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_pub:
