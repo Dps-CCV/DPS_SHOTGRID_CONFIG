@@ -50,6 +50,7 @@ settings.tk-nuke.hiero.project:
       location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
+    tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
@@ -382,6 +383,7 @@ settings.tk-nuke.nukestudio.project:
       location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
+    tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
