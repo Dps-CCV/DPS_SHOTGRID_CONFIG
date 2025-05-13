@@ -504,7 +504,7 @@ settings.tk-multi-publish2.aftereffects.asset_step:
     settings:
         Publish Sequence Template: aftereffects_asset_render_pub_mono
         Publish Movie Template: aftereffects_asset_render_movie
-        Default Sequence Output Module: Shotgun_EXR
+        Default Sequence Output Module: Shotgun_TIFF
         Default Movie Output Module: Lossless with Alpha
   - name: Publish Renderings to Shotgun
     hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_rendering.py"
@@ -542,7 +542,7 @@ settings.tk-multi-publish2.aftereffects.shot_step:
     settings:
         Publish Sequence Template: aftereffects_shot_render_pub_mono
         Publish Movie Template: aftereffects_shot_render_movie
-        Default Sequence Output Module: Shotgun_EXR
+        Default Sequence Output Module: Shotgun_TIFF
         Default Movie Output Module: Lossless with Alpha
   - name: Publish Renderings to Shotgun
     hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_rendering.py"

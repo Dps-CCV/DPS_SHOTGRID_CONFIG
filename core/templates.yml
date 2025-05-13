@@ -635,7 +635,7 @@ paths:
     aftereffects_asset_publish:
         definition: '@asset_root/PUBLISH/SCENES/{Step}/AE/{Asset}_{Step}_v{version}.aep'
     aftereffects_asset_render_pub_mono:
-        definition: '@asset_root/PUBLISH/IMAGES/{Step}/AE_v{version}/{Asset}_{Step}_v{version}.{SEQ}.exr'
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/AE_v{version}/{Asset}_{Step}_v{version}.{SEQ}.tiff'
     # The following template uses {afx.mov.ext} this is a special key, that will be only there
     # in the beta to support different extensions on mac and windows, while using the same
     # output module (Lossless with Alpha)
