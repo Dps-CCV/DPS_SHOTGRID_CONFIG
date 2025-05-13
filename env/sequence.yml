@@ -41,6 +41,8 @@ engines:
   tk-maya: "@settings.tk-maya.sequence"
   tk-motionbuilder: "@settings.tk-motionbuilder.sequence"
   tk-nuke: "@settings.tk-nuke.sequence"
+  tk-hiero: "@settings.tk-nuke.hiero.sequence"
+  tk-nukestudio: "@settings.tk-nuke.nukestudio.sequence"
   tk-shell: "@settings.tk-shell.sequence"
   tk-shotgun: "@settings.tk-shotgun.sequence"
 
