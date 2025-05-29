@@ -197,12 +197,12 @@ class BeforeAppLaunch(tank.Hook):
         elif engine_name == "tk-hiero" or engine_name == "tk-nukestudio":
             hieroPlugin_environ_path = "L:\\HIERO_PLUGIN_PATH"
             tank.util.append_path_to_env_var("HIERO_PLUGIN_PATH", hieroPlugin_environ_path)
-            # nuke_environ_path = os.path.join(
-            #     project_path, "CONFIG/NUKE"
-            # )
-            # tank.util.append_path_to_env_var("NUKE_PATH", nuke_environ_path)
-            #
-            # os.environ['NUKE_INSTALL'] = str(app_path)
+            nuke_environ_path = os.path.join(
+                project_path, "CONFIG/NUKE"
+            )
+            tank.util.append_path_to_env_var("NUKE_PATH", nuke_environ_path)
+
+            os.environ['NUKE_INSTALL'] = str(app_path)
 
 
         # elif engine_name == "tk-houdini":
