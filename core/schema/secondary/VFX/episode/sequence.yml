@@ -9,10 +9,18 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 # the type of dynamic content
-type: "shotgun_step"
+type: "shotgun_entity"
 
 # the shotgun field to use for the folder name
-name: "short_name"
+#name: "{project}_{episode}_{code}"
+name: "{code}"
 
-# recurse down from parent folder
-create_with_parent: false
+# the shotgun entity type to connect to
+entity_type: "Sequence"
+
+# shotgun filters to apply when getting the list of items
+# this should be a list of dicts, each dict containing
+# three fields: path, relation and values
+# (this is std shotgun API syntax)
+# any values starting with $ are resolved into path objects
+filters: [ { "path": "episode", "relation": "is", "values": [ "$episode" ] } ]

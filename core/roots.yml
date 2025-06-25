@@ -9,4 +9,11 @@ primary:
   shotgun_storage_id: 268
   windows_path: P:\
 
+secondary:
+  default: true
+  linux_path: null
+  mac_path: /Volumes/PROYECTOS
+  shotgun_storage_id: 3
+  windows_path: Z:\
+
 # End of file.
