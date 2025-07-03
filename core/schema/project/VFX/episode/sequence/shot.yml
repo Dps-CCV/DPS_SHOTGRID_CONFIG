@@ -13,7 +13,7 @@ type: "shotgun_entity"
 
 # the shotgun field to use for the folder name
 #name: "{project}_{sg_sequence.Sequence.episode}_{sg_sequence.Sequence.code}_{code}"
-name: "{code}"
+name: "{project.Project.code}_{sg_sequence.Sequence.episode.Episode.code}_{sg_sequence.Sequence.code}_{code}"
 
 # the shotgun entity type to connect to
 entity_type: "Shot"
