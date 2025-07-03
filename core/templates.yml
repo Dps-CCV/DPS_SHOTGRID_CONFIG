@@ -514,18 +514,24 @@ paths:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_pub_proxy:
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_proxy:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_alpha_pub_proxy:
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_precomp:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_proxy:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_precomp_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_precomp_pub_proxy:
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_precomp_h264:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Shot}_{nuke.output}_{task_name}_h264_v{version}.mp4'
     nuke_precomp_h264_pub:
@@ -817,12 +823,16 @@ paths:
         definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_precomp_pub:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_precomp_pub_proxy:
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_render:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_render_proxy:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_render_pub:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_render_pub_proxy:
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_imageplane:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_imageplane_pub:
