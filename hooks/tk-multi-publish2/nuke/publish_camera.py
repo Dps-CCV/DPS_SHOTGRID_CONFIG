@@ -398,6 +398,10 @@ class NukeCameraPublishPlugin(HookBaseClass):
         # handle copying of work to publish if templates are in play
         self._copy_work_to_publish(settings, item)
 
+        for i in nuke.allNodes("Camera2"):
+            if i['file'].value() == item.properties.path:
+                i.knob('file').setValue(str(publish_path).replace("\\", "/"))
+
         # arguments for publish registration
         self.logger.info("Registering publish...")
         publish_data = {
@@ -843,13 +847,16 @@ class NukeCameraPublishPlugin(HookBaseClass):
                 ensure_folder_exists(publish_folder)
                 workFileNorm = os.path.normpath(work_file)
                 publishFileNorm = os.path.normpath(publish_file)
-                if platform.system() == 'Windows':
-                    copyCommand = 'copy '
-                else:
-                    copyCommand = 'cp '
-                copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
-                os.popen(copystring)
-                # copy_file(work_file, publish_file)
+
+                # if platform.system() == 'Windows':
+                #     copyCommand = 'copy '
+                # else:
+                #     copyCommand = 'cp '
+                # copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
+                # os.popen(copystring)
+
+                os.rename(workFileNorm, publishFileNorm)
+
 
             except Exception:
                 raise Exception(

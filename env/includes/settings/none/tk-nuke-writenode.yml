@@ -23,7 +23,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: Render 16bits
       proxy_publish_template:
-      proxy_render_template:
+      proxy_render_template: nuke_asset_render_proxy
       publish_template: nuke_asset_render_pub
       render_template: nuke_asset_render
       settings:
@@ -37,7 +37,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: PRECOMP
       proxy_publish_template:
-      proxy_render_template:
+      proxy_render_template: nuke_asset_precomp_proxy
       publish_template: nuke_asset_precomp_pub
       render_template: nuke_asset_precomp
       settings:
@@ -51,7 +51,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: TECH_PRECOMP
       proxy_publish_template:
-      proxy_render_template:
+      proxy_render_template: nuke_asset_precomp_proxy
       publish_template: nuke_asset_precomp_pub
       render_template: nuke_asset_precomp
       settings:
@@ -64,28 +64,12 @@ settings.tk-nuke-writenode.asset:
       tank_type: Rendered Image
       tile_color: [ 8, 192, 209 ]
       promote_write_knobs: ["compression"]
-    - file_type: exr
+    - file_type: png
       name: IMAGE_PLANE
       proxy_publish_template:
       proxy_render_template:
       publish_template: nuke_asset_imageplane_pub
       render_template: nuke_asset_imageplane
-      settings:
-        datatype: 16 bit half
-        channels: rgba
-        metadata: "all metadata"
-        write_ACES_compliant_EXR: false
-        compression: Zip (1 scanline)
-        colorspace: "ACEScg"
-      tank_type: Rendered Image
-      tile_color: [ 93, 53, 178 ]
-      promote_write_knobs: ["compression"]
-    - file_type: png
-      name: IMAGE_PLANE_LOW
-      proxy_publish_template:
-      proxy_render_template:
-      publish_template: nuke_asset_imageplane_low_pub
-      render_template: nuke_asset_imageplane_low
       settings:
         channels: rgba
         colorspace: "Output - Rec.709"
@@ -100,7 +84,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_mattepaint
       settings:
         channels: rgba
-        colorspace: "Output - sRGB"
+        colorspace: "ACEScct"
         datatype: 16 bit
       tank_type: Rendered Image
       tile_color: [ 128, 37, 78 ]
@@ -115,7 +99,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: Render 16bits
     proxy_publish_template:
-    proxy_render_template:
+    proxy_render_template: nuke_shot_render_proxy
     publish_template: nuke_shot_render_pub
     render_template: nuke_shot_render
     settings:
@@ -129,7 +113,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: ALPHA
     proxy_publish_template:
-    proxy_render_template:
+    proxy_render_template: nuke_shot_render_alpha_proxy
     publish_template: nuke_shot_render_alpha_pub
     render_template: nuke_shot_render_alpha
     settings:
@@ -144,7 +128,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: PRECOMP
     proxy_publish_template:
-    proxy_render_template:
+    proxy_render_template: nuke_precomp_proxy
     publish_template: nuke_precomp_pub
     render_template: nuke_precomp
     settings:
@@ -158,7 +142,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: TECH_PRECOMP
     proxy_publish_template:
-    proxy_render_template:
+    proxy_render_template: nuke_precomp_proxy
     publish_template: nuke_precomp_pub
     render_template: nuke_precomp
     settings:
@@ -169,28 +153,12 @@ settings.tk-nuke-writenode.shot:
     tank_type: Rendered Image
     tile_color: [ 8, 192, 209 ]
     promote_write_knobs: ["compression"]
-  - file_type: exr
+  - file_type: png
     name: IMAGE_PLANE
     proxy_publish_template:
     proxy_render_template:
     publish_template: nuke_imageplane_pub
     render_template: nuke_imageplane
-    settings:
-      datatype: 16 bit half
-      channels: rgba
-      metadata: "all metadata"
-      write_ACES_compliant_EXR: false
-      compression: Zip (1 scanline)
-      colorspace: "ACEScg"
-    tank_type: Rendered Image
-    tile_color: [93, 53, 178]
-    promote_write_knobs: ["compression"]
-  - file_type: png
-    name: IMAGE_PLANE_LOW
-    proxy_publish_template:
-    proxy_render_template:
-    publish_template: nuke_imageplane_low_pub
-    render_template: nuke_imageplane_low
     settings:
       channels: rgba
       colorspace: "Output - Rec.709"
@@ -205,7 +173,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_mattepaint
     settings:
       channels: rgba
-      colorspace: "Output - sRGB"
+      colorspace: "ACEScct"
       datatype: 16 bit
     tank_type: Rendered Image
     tile_color: [ 128, 37, 78 ]

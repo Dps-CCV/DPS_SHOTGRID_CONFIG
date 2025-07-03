@@ -12,6 +12,8 @@ import os
 import nuke
 import sgtk
 from sgtk.util.filesystem import ensure_folder_exists
+import WrapItUp
+import shutil
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
@@ -329,7 +331,20 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
         # do the base class finalization
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
-
+        scriptPath = os.path.normpath(nuke.root().name())
+        base = os.path.basename(nuke.root().name()).split(".")[0]
+        if 'SHOT_FOLDER' in os.environ.keys():
+            ShotFolder = os.path.join(*os.environ['SHOT_FOLDER'].split(os.sep)[3:])
+            archivePath = os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', ShotFolder, base)
+        elif 'ASSET_FOLDER' in os.environ.keys():
+            AssetFolder = os.path.join(*os.environ['ASSET_FOLDER'].split(os.sep)[3:])
+            archivePath = os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', AssetFolder, base)
+        if os.path.exists(archivePath):
+            shutil.rmtree(archivePath)
+        os.mkdir(archivePath)
+        WrapItUp.WrapItUp(
+            nk=scriptPath,
+            out=archivePath, parentdircount=10, startnow=True, fonts=False, licinteractive=True)
         # bump the session file to the next version
         self._save_to_next_version(item.properties["path"], item, _save_session)
 

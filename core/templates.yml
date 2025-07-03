@@ -363,7 +363,7 @@ paths:
         definition: '@shot_root/PUBLISH/PLAYBLAST/{Shot}_{Step}_{name}_PLAYBLAST_v{version}.{extension}'
     # The location of published maya renders
     maya_shot_render_publish:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Shot}_{Step}_{name}_{maya.layer_name}_v{version}.{frame_num}.{extension}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Shot}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
     # The location of published maya renders dailies
     maya_shot_dailies_publish:
         definition: '@shot_root/DAILIES/HIGH/{Shot}_{Step}_{name}_{maya.layer_name}_v{version}.{extension}'
@@ -510,14 +510,20 @@ paths:
     # write node outputs
     nuke_shot_render:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_proxy:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_shot_render_alpha_proxy:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_ALPHA_{nuke.output}_{task_name}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp:
         definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_precomp_proxy:
+        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_precomp_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Shot}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_precomp_h264:
@@ -528,13 +534,9 @@ paths:
 #    nuke_tech_precomp:
 #        definition: '@shot_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_v{version}/{Shot}_{nuke.output}_v{version}.{SEQ}.exr'
     nuke_imageplane:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
     nuke_imageplane_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.exr'
-    nuke_imageplane_low:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_{task_name}_v{version}/{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
-    nuke_imageplane_low_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_{task_name}_v{version}/{Shot}_IPL_{task_name}_v{version}.{SEQ}.png'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
     nuke_mattepaint:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_mattepaint_pub:
@@ -682,7 +684,7 @@ paths:
         definition: '@asset_root/PUBLISH/GEO/{Step}/MAYA/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.ass'
     # The location of published maya renders
     maya_asset_render_publish:
-        definition: '@asset_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Asset}_{Step}_{name}_{maya.layer_name}_v{version}.{frame_num}.{extension}'
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Asset}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
     # The location of published maya renders dailies
     maya_asset_dailies_publish:
         definition: '@asset_root/DAILIES/HIGH/{Asset}_{Step}_{name}_{maya.layer_name}_v{version}.{extension}'
@@ -811,20 +813,20 @@ paths:
     # outputs from the Shotgun Write Node for assets
     nuke_asset_precomp:
         definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_precomp_proxy:
+        definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_precomp_pub:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_render:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
+    nuke_asset_render_proxy:
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_asset_render_pub:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_imageplane:
-        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.exr'
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_imageplane_pub:
-        definition: '@asset_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.exr'
-    nuke_asset_imageplane_low:
-        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IPL_v{version}/{Asset}_IPL_v{version}.{SEQ}.png'
-    nuke_asset_imageplane_low_pub:
-        definition: '@asset_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IPL_v{version}/{Asset}_IPL_v{version}.{SEQ}.png'
+        definition: '@asset_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_mattepaint:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Asset}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_asset_mattepaint_pub:

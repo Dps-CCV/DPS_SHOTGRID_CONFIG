@@ -20,7 +20,6 @@ settings.tk-hiero-export:
   - {channel: Render 16bits, name: 'Render 16bits'}
   - {channel: ALPHA, name: 'ALPHA'}
   - {channel: IMAGE_PLANE, name: 'IMAGE_PLANE'}
-  - {channel: IMAGE_PLANE_LOW, name: 'IMAGE_PLANE_LOW'}
   template_nuke_script_path: hiero_project_publish
   template_plate_path: hiero_plate_path
   template_render_path: hiero_render_path

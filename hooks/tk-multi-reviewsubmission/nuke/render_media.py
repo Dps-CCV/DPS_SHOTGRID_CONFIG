@@ -106,7 +106,8 @@ class RenderMedia(HookBaseClass):
             read['reload'].execute()
 
             ## Disable localization to ensure that frames are rendered without problems
-            read["localizationPolicy"].setValue('off')
+            read["localizationPolicy"].setValue('on')
+            read.forceUpdateLocalization()
             if color_space:
                 read["colorspace"].setValue(color_space)
             if "_IPL_" in read['file'].value():

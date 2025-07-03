@@ -843,32 +843,26 @@ class BasicFilePublishPlugin(HookBaseClass):
                 ensure_folder_exists(publish_folder)
                 workFileNorm = os.path.normpath(work_file)
                 publishFileNorm = os.path.normpath(publish_file)
-                workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
-                publishFileDir = os.path.normpath(publish_folder)
-                copyFileName = os.path.basename(publishFileNorm)
+                # workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
+                # publishFileDir = os.path.normpath(publish_folder)
+                # copyFileName = os.path.basename(publishFileNorm)
 
-                # if platform.system() == 'Windows':
-                #     copyCommand = 'robocopy '
-                # else:
-                #     copyCommand = 'cp '
-                # copystring = copyCommand + workFileDir + ' ' + publishFileDir + ' ' + copyFileName + ' /COPYALL'
-                # print(copystring)
-                # os.popen(copystring)
 
-                options = '/COPY:DATXSO'
+                # options = '/COPY:DATXSO'
+                #
+                # robocopy_command = f'robocopy "{workFileDir}" "{publishFileDir}" "{copyFileName}" {options}'
+                # print(robocopy_command)
+                #
+                #
+                # try:
+                #     result = subprocess.run(robocopy_command, shell=True, check=True, stdout=subprocess.PIPE,
+                #                             stderr=subprocess.PIPE)
+                #     print("Robocopy Output:\n", result.stdout.decode())
+                # except subprocess.CalledProcessError as e:
+                #     print("Error running robocopy:\n", e.stderr.decode())
 
-                robocopy_command = f'robocopy "{workFileDir}" "{publishFileDir}" "{copyFileName}" {options}'
-                print(robocopy_command)
+                os.rename(workFileNorm, publishFileNorm)
 
-                # subprocess.call(robocopy_command)
-                try:
-                    result = subprocess.run(robocopy_command, shell=True, check=True, stdout=subprocess.PIPE,
-                                            stderr=subprocess.PIPE)
-                    print("Robocopy Output:\n", result.stdout.decode())
-                except subprocess.CalledProcessError as e:
-                    print("Error running robocopy:\n", e.stderr.decode())
-
-                # os.rename(workFileNorm, publishFileNorm)
 
                 # Copy files to RENDER folder without version
                 # if "CMP\NUKE\IMAGES" in work_file and "CMP_v" in work_file and item.context.entity["type"] == "Shot":
