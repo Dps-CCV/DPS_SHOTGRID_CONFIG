@@ -536,7 +536,7 @@ paths:
     nuke_imageplane:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
     nuke_imageplane_pub:
-        definition: '@shot_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
     nuke_mattepaint:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_mattepaint_pub:
@@ -826,7 +826,7 @@ paths:
     nuke_asset_imageplane:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_imageplane_pub:
-        definition: '@asset_root/PUBLISH/IMAGE_PLANE/EXR/{Step}/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
+        definition: '@asset_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_mattepaint:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Asset}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_asset_mattepaint_pub:

@@ -23,7 +23,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: Render 16bits
       proxy_publish_template:
-      proxy_render_template: nuke_asset_render_proxy
+      proxy_render_template:
       publish_template: nuke_asset_render_pub
       render_template: nuke_asset_render
       settings:
@@ -37,7 +37,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: PRECOMP
       proxy_publish_template:
-      proxy_render_template: nuke_asset_precomp_proxy
+      proxy_render_template:
       publish_template: nuke_asset_precomp_pub
       render_template: nuke_asset_precomp
       settings:
@@ -51,7 +51,7 @@ settings.tk-nuke-writenode.asset:
     - file_type: exr
       name: TECH_PRECOMP
       proxy_publish_template:
-      proxy_render_template: nuke_asset_precomp_proxy
+      proxy_render_template:
       publish_template: nuke_asset_precomp_pub
       render_template: nuke_asset_precomp
       settings:
@@ -84,7 +84,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_mattepaint
       settings:
         channels: rgba
-        colorspace: "Output - sRGB"
+        colorspace: "ACEScct"
         datatype: 16 bit
       tank_type: Rendered Image
       tile_color: [ 128, 37, 78 ]
@@ -99,7 +99,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: Render 16bits
     proxy_publish_template:
-    proxy_render_template: nuke_shot_render_proxy
+    proxy_render_template:
     publish_template: nuke_shot_render_pub
     render_template: nuke_shot_render
     settings:
@@ -113,7 +113,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: ALPHA
     proxy_publish_template:
-    proxy_render_template: nuke_shot_render_alpha_proxy
+    proxy_render_template:
     publish_template: nuke_shot_render_alpha_pub
     render_template: nuke_shot_render_alpha
     settings:
@@ -128,7 +128,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: PRECOMP
     proxy_publish_template:
-    proxy_render_template: nuke_precomp_proxy
+    proxy_render_template:
     publish_template: nuke_precomp_pub
     render_template: nuke_precomp
     settings:
@@ -142,7 +142,7 @@ settings.tk-nuke-writenode.shot:
   - file_type: exr
     name: TECH_PRECOMP
     proxy_publish_template:
-    proxy_render_template: nuke_precomp_proxy
+    proxy_render_template:
     publish_template: nuke_precomp_pub
     render_template: nuke_precomp
     settings:

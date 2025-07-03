@@ -17,7 +17,7 @@ def checkSetsWT():
                     ###Acciones
                     oldColor = n.knob('tile_color').value()
                     if writecolor != colorspace:
-                        if n.knob('tk_profile_list').value() not in ['IMAGE_PLANE_LOW', 'IMAGE_PLANE','ALPHA', 'TECH_PRECOMP', 'MATTE_PAINT']:
+                        if n.knob('tk_profile_list').value() not in ['IMAGE_PLANE','ALPHA', 'TECH_PRECOMP', 'MATTE_PAINT']:
                             n.knob('tile_color').setValue(4278190335)
                     else:
                         if n.knob('tk_profile_list').value() == 'PRECOMP':
@@ -51,7 +51,7 @@ def RenderSetsWT():
 
                 ###Mensaje y acciones
 
-                if writecolor != colorspace and n.knob('tk_profile_list').value() is not 'IMAGE_PLANE' and n.knob('tk_profile_list').value() is not 'IMAGE_PLANE_LOW' and n.knob('tk_profile_list').value() is not 'ALPHA' and n.knob('tk_profile_list').value() is not 'TECH_PRECOMP' and n.knob('tk_profile_list').value() is not 'MATTE_PAINT':
+                if writecolor != colorspace and n.knob('tk_profile_list').value() is not 'IMAGE_PLANE' and n.knob('tk_profile_list').value() is not 'ALPHA' and n.knob('tk_profile_list').value() is not 'TECH_PRECOMP' and n.knob('tk_profile_list').value() is not 'MATTE_PAINT':
                     mensajecolor = "El espacio de color del render es distinto al del Read" + "\n" + "Read: " + colorspace + " " + "\n" + "Write: " + writecolor
                     nuke.message(mensajecolor)
                     SetsPanel = nuke.Panel("Resolver discrepancias en los settings del render?")
