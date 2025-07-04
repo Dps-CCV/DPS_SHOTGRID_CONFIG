@@ -120,6 +120,12 @@ class ContextChange(get_hook_baseclass()):
 
                 elif current_context.entity["type"] == 'Asset':
                     os.environ["ASSET"] = current_context.entity["name"]
+                    tk = current_engine.sgtk
+                    template = tk.templates["asset_root"]
+                    fields = current_context.as_template_fields(template)
+                    asset_path = template.apply_fields(fields)
+                    os.environ["ASSET_FOLDER"] = str(shot_path)
+                    self.logger.info("Environment variable ASSET_FOLDER changed to %s", str(asset_path))
                     self.logger.info("Environment variable ASSET changed to %s", str(current_context.entity["name"]))
 
                 if current_engine._Engine__engine_instance_name == 'tk-nuke':

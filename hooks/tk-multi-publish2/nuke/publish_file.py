@@ -814,102 +814,124 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         # ---- copy the work files to the publish location
 
-        for work_file in work_files:
-
-            if not work_template.validate(work_file):
-                self.logger.warning(
-                    "Work file '%s' did not match work template '%s'. "
-                    "Publishing in place." % (work_file, work_template)
-                )
-                return
-
-            work_fields = work_template.get_fields(work_file)
-
-            missing_keys = publish_template.missing_keys(work_fields)
-
-            if missing_keys:
-                self.logger.warning(
-                    "Work file '%s' missing keys required for the publish "
-                    "template: %s" % (work_file, missing_keys)
-                )
-                return
-
-            publish_file = publish_template.apply_fields(work_fields)
-
-            # copy the file
-            try:
-
-                publish_folder = os.path.dirname(publish_file)
-                ensure_folder_exists(publish_folder)
-                workFileNorm = os.path.normpath(work_file)
-                publishFileNorm = os.path.normpath(publish_file)
-                # workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
-                # publishFileDir = os.path.normpath(publish_folder)
-                # copyFileName = os.path.basename(publishFileNorm)
-
-
-                # options = '/COPY:DATXSO'
-                #
-                # robocopy_command = f'robocopy "{workFileDir}" "{publishFileDir}" "{copyFileName}" {options}'
-                # print(robocopy_command)
-                #
-                #
-                # try:
-                #     result = subprocess.run(robocopy_command, shell=True, check=True, stdout=subprocess.PIPE,
-                #                             stderr=subprocess.PIPE)
-                #     print("Robocopy Output:\n", result.stdout.decode())
-                # except subprocess.CalledProcessError as e:
-                #     print("Error running robocopy:\n", e.stderr.decode())
-
-                os.rename(workFileNorm, publishFileNorm)
-
-
-                # Copy files to RENDER folder without version
-                # if "CMP\NUKE\IMAGES" in work_file and "CMP_v" in work_file and item.context.entity["type"] == "Shot":
-                #     base = work_file[:work_file.find("STEPS")]
-                #     file = work_file.split("\\")[-1]
-                #     postFile = file[:file.find("CMP_v")] + "CMP" + file[file.find("CMP_v") + 8:]
-                #     if '_ALPHA_' in postFile:
-                #         preRender_file = os.path.join(base, 'RENDER\\ALPHA')
-                #     else:
-                #         preRender_file = os.path.join(base, 'RENDER\\RGB')
-                #     render_file = os.path.join(preRender_file, postFile)
-                #     workFileNorm = os.path.normpath(work_file)
-                #     renderFileNorm = os.path.normpath(render_file)
-                #     if platform.system() == 'Windows':
-                #         copyCommand = 'copy '
-                #     else:
-                #         copyCommand = 'cp '
-                #     copystring = copyCommand + workFileNorm + ' ' + renderFileNorm
-                #     os.popen(copystring)
-                #     #copy_file(work_file, render_file)
-                #
-                #     now = datetime.datetime.now()
-                #     entry = work_file + " " + str(now) + '\n'
-                #     logfile = os.path.dirname(render_file) + "\\ProyeccionCopyVersionLog.txt"
-                #     if os.path.isfile(logfile):
-                #         with open(logfile, 'a') as vlog:
-                #             vlog.write(entry)
-                #             vlog.close()
-                #     else:
-                #         vlog = open(logfile, "w+")
-                #         vlog.write(entry)
-                #         vlog.close()
-                #     self.logger.debug(
-                #         "Copied work file '%s' to render file '%s'."
-                #         % (work_file, render_file)
-                #     )
-
-            except Exception:
-                raise Exception(
-                    "Failed to move work file from '%s' to '%s'.\n%s"
-                    % (work_file, publish_file, traceback.format_exc())
-                )
-
-            self.logger.debug(
-                "Moved work file '%s' to publish file '%s'."
-                % (work_file, publish_file)
+        if not work_template.validate(work_files[0]):
+            self.logger.warning(
+                "Work file '%s' did not match work template '%s'. "
             )
+            return
+
+        work_fields = work_template.get_fields(work_files[0])
+
+        missing_keys = publish_template.missing_keys(work_fields)
+
+        if missing_keys:
+            self.logger.warning(
+                "Work file '%s' missing keys required for the publish "
+            )
+            return
+
+        publish_file = publish_template.apply_fields(work_fields)
+        publish_folder = os.path.normpath(os.path.dirname(publish_file))
+        workFileNorm = os.path.normpath(work_files[0])
+        workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
+        os.rename(workFileDir, publish_folder)
+
+        # for work_file in work_files:
+        #
+        #     if not work_template.validate(work_file):
+        #         self.logger.warning(
+        #             "Work file '%s' did not match work template '%s'. "
+        #             "Publishing in place." % (work_file, work_template)
+        #         )
+        #         return
+        #
+        #     work_fields = work_template.get_fields(work_file)
+        #
+        #     missing_keys = publish_template.missing_keys(work_fields)
+        #
+        #     if missing_keys:
+        #         self.logger.warning(
+        #             "Work file '%s' missing keys required for the publish "
+        #             "template: %s" % (work_file, missing_keys)
+        #         )
+        #         return
+        #
+        #     publish_file = publish_template.apply_fields(work_fields)
+        #
+        #     # copy the file
+        #     try:
+        #
+        #         publish_folder = os.path.normpath(os.path.dirname(publish_file))
+        #         ensure_folder_exists(publish_folder)
+        #         workFileNorm = os.path.normpath(work_file)
+        #         publishFileNorm = os.path.normpath(publish_file)
+        #         # workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
+        #         # publishFileDir = os.path.normpath(publish_folder)
+        #         # copyFileName = os.path.basename(publishFileNorm)
+        #
+        #
+        #         # options = '/COPY:DATXSO'
+        #         #
+        #         # robocopy_command = f'robocopy "{workFileDir}" "{publishFileDir}" "{copyFileName}" {options}'
+        #         # print(robocopy_command)
+        #         #
+        #         #
+        #         # try:
+        #         #     result = subprocess.run(robocopy_command, shell=True, check=True, stdout=subprocess.PIPE,
+        #         #                             stderr=subprocess.PIPE)
+        #         #     print("Robocopy Output:\n", result.stdout.decode())
+        #         # except subprocess.CalledProcessError as e:
+        #         #     print("Error running robocopy:\n", e.stderr.decode())
+        #
+        #         os.rename(workFileNorm, publishFileNorm)
+        #
+        #
+        #         # Copy files to RENDER folder without version
+        #         # if "CMP\NUKE\IMAGES" in work_file and "CMP_v" in work_file and item.context.entity["type"] == "Shot":
+        #         #     base = work_file[:work_file.find("STEPS")]
+        #         #     file = work_file.split("\\")[-1]
+        #         #     postFile = file[:file.find("CMP_v")] + "CMP" + file[file.find("CMP_v") + 8:]
+        #         #     if '_ALPHA_' in postFile:
+        #         #         preRender_file = os.path.join(base, 'RENDER\\ALPHA')
+        #         #     else:
+        #         #         preRender_file = os.path.join(base, 'RENDER\\RGB')
+        #         #     render_file = os.path.join(preRender_file, postFile)
+        #         #     workFileNorm = os.path.normpath(work_file)
+        #         #     renderFileNorm = os.path.normpath(render_file)
+        #         #     if platform.system() == 'Windows':
+        #         #         copyCommand = 'copy '
+        #         #     else:
+        #         #         copyCommand = 'cp '
+        #         #     copystring = copyCommand + workFileNorm + ' ' + renderFileNorm
+        #         #     os.popen(copystring)
+        #         #     #copy_file(work_file, render_file)
+        #         #
+        #         #     now = datetime.datetime.now()
+        #         #     entry = work_file + " " + str(now) + '\n'
+        #         #     logfile = os.path.dirname(render_file) + "\\ProyeccionCopyVersionLog.txt"
+        #         #     if os.path.isfile(logfile):
+        #         #         with open(logfile, 'a') as vlog:
+        #         #             vlog.write(entry)
+        #         #             vlog.close()
+        #         #     else:
+        #         #         vlog = open(logfile, "w+")
+        #         #         vlog.write(entry)
+        #         #         vlog.close()
+        #         #     self.logger.debug(
+        #         #         "Copied work file '%s' to render file '%s'."
+        #         #         % (work_file, render_file)
+        #         #     )
+        #
+        #     except Exception:
+        #         raise Exception(
+        #             "Failed to move work file from '%s' to '%s'.\n%s"
+        #             % (work_file, publish_file, traceback.format_exc())
+        #         )
+        #
+        #     self.logger.debug(
+        #         "Moved work file '%s' to publish file '%s'."
+        #         % (work_file, publish_file)
+        #     )
         self.logger.info(
             "Starting unregister and deletion of old publishes. For publish %s" % (publish_file)
         )

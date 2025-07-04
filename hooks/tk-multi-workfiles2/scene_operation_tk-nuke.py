@@ -122,11 +122,13 @@ class SceneOperation(HookClass):
             # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
             # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
             # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
-            # e = sgtk.platform.current_engine()
-            # e.apps["tk-multi-breakdown2"].show_dialog()
-            # e = sgtk.platform.current_engine()
-            # h = e.commands['Scene Breakdown...']['callback']
-            # h()
+
+            #Open scen Breakdown at the beggining
+            e = sgtk.platform.current_engine()
+            e.apps["tk-multi-breakdown2"].show_dialog()
+            e = sgtk.platform.current_engine()
+            h = e.commands['Scene Breakdown...']['callback']
+            h()
 
             ### Routine for asking artists if the wanna change the status of the task to in progress in case it is in rev or notas status
             sg = self.parent.shotgun
