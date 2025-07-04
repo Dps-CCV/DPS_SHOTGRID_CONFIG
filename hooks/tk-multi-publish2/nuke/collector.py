@@ -80,27 +80,30 @@ class NukeSessionCollector(HookBaseClass):
         publisher = self.parent
         engine = publisher.engine
 
-        if (hasattr(engine, "studio_enabled") and engine.studio_enabled) or (
-            hasattr(engine, "hiero_enabled") and engine.hiero_enabled
-        ):
+        if nuke.root().knob("proxy").value()==False:
+            if (hasattr(engine, "studio_enabled") and engine.studio_enabled) or (
+                hasattr(engine, "hiero_enabled") and engine.hiero_enabled
+            ):
 
-            # running nuke studio or hiero
-            self.collect_current_nukestudio_session(settings, parent_item)
+                # running nuke studio or hiero
+                self.collect_current_nukestudio_session(settings, parent_item)
 
-            # since we're in NS, any additional collected outputs will be
-            # parented under the root item
-            project_item = parent_item
+                # since we're in NS, any additional collected outputs will be
+                # parented under the root item
+                project_item = parent_item
+            else:
+                # running nuke. ensure additional collected outputs are parented
+                # under the session
+                project_item = self.collect_current_nuke_session(settings, parent_item)
+
+            # run node collection if not in hiero
+            if hasattr(engine, "hiero_enabled") and not engine.hiero_enabled:
+                self.collect_sg_writenodes(project_item)
+                self.collect_sg_writeGeoCam_nodes(project_item)
+                self.collect_sg_writeGeo_nodes(project_item)
+                self.collect_node_outputs(project_item)
         else:
-            # running nuke. ensure additional collected outputs are parented
-            # under the session
-            project_item = self.collect_current_nuke_session(settings, parent_item)
-
-        # run node collection if not in hiero
-        if hasattr(engine, "hiero_enabled") and not engine.hiero_enabled:
-            self.collect_sg_writenodes(project_item)
-            self.collect_sg_writeGeoCam_nodes(project_item)
-            self.collect_sg_writeGeo_nodes(project_item)
-            self.collect_node_outputs(project_item)
+            nuke.Message("Estás en modo proxy. Desactivalo para publicar")
 
     def collect_current_nuke_session(self, settings, parent_item):
         """
