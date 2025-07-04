@@ -343,7 +343,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
             archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', AssetFolder, base))
         if os.path.exists(archivePath):
             shutil.rmtree(archivePath)
-        os.mkdir(archivePath)
+        os.makedirs(archivePath)
         WrapItUp.WrapItUp(
             nk=scriptPath,
             out=archivePath, parentdircount=10, startnow=True, fonts=False, licinteractive=True)
