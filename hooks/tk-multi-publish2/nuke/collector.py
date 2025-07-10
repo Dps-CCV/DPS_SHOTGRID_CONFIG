@@ -103,7 +103,7 @@ class NukeSessionCollector(HookBaseClass):
                 self.collect_sg_writeGeo_nodes(project_item)
                 self.collect_node_outputs(project_item)
         else:
-            nuke.Message("Estás en modo proxy. Desactivalo para publicar")
+            nuke.message("Estás en modo proxy. Desactivalo para publicar")
 
     def collect_current_nuke_session(self, settings, parent_item):
         """

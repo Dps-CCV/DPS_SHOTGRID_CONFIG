@@ -476,49 +476,80 @@ class RenderPublishPlugin(HookBaseClass):
                 )
                 return
 
-        # ---- copy the work files to the publish location
-        for work_file in work_files:
+        # work_fields = work_template.get_fields(work_file)
+        work_fields = item.properties["work_fields"]
+        work_fields["frame_num"] = int(work_files[0].split(".")[-2])
+        missing_keys = publish_template.missing_keys(work_fields)
 
-            # if not work_template.validate(work_file):
-            #     self.logger.warning(
-            #         "Work file '%s' did not match work template '%s'. "
-            #         "Publishing in place." % (work_file, work_template)
-            #     )
-            #     return
-
-            # work_fields = work_template.get_fields(work_file)
-            work_fields = item.properties["work_fields"]
-            work_fields["frame_num"] = int(work_file.split(".")[-2])
-
-            missing_keys = publish_template.missing_keys(work_fields)
-
-            if missing_keys:
-                self.logger.warning(
-                    "Work file '%s' missing keys required for the publish "
-                    "template: %s" % (work_file, missing_keys)
-                )
-                continue
-
-            publish_file = publish_template.apply_fields(work_fields)
-
-            # copy the file
-            try:
-                self.logger.debug("Copying %s --> %s", work_file, publish_file)
-                publish_folder = os.path.dirname(publish_file)
-                ensure_folder_exists(publish_folder)
-                workFileNorm = os.path.normpath(work_file)
-                publishFileNorm = os.path.normpath(publish_file)
-                os.rename(workFileNorm, publishFileNorm)
-            except Exception:
-                raise Exception(
-                    "Failed to move work file from '%s' to '%s'.\n%s"
-                    % (work_file, publish_file, traceback.format_exc())
-                )
-
-            self.logger.debug(
-                "Moved work file '%s' to publish file '%s'."
-                % (work_file, publish_file)
+        if missing_keys:
+            self.logger.warning(
+                "Work file '%s' missing keys required for the publish "
+                "template: %s" % (work_file, missing_keys)
             )
+            continue
+
+        publish_file = publish_template.apply_fields(work_fields)
+
+        publish_folder = os.path.dirname(publish_file)
+        ensure_folder_exists(publish_folder)
+        # workFileNorm = os.path.normpath(work_file)
+        # publishFileNorm = os.path.normpath(publish_file)
+        try:
+            os.rename(os.path.normpath(os.path.dirname(work_files[0])), publish_folder)
+        except Exception:
+            raise Exception(
+                "Failed to move work file from '%s' to '%s'.\n%s"
+                % (work_file, publish_file, traceback.format_exc())
+            )
+
+        self.logger.debug(
+            "Moved work file '%s' to publish file '%s'."
+            % (work_file, publish_file)
+        )
+
+        # # ---- copy the work files to the publish location
+        # for work_file in work_files:
+        #
+        #     # if not work_template.validate(work_file):
+        #     #     self.logger.warning(
+        #     #         "Work file '%s' did not match work template '%s'. "
+        #     #         "Publishing in place." % (work_file, work_template)
+        #     #     )
+        #     #     return
+        #
+        #     # work_fields = work_template.get_fields(work_file)
+        #     work_fields = item.properties["work_fields"]
+        #     work_fields["frame_num"] = int(work_file.split(".")[-2])
+        #
+        #     missing_keys = publish_template.missing_keys(work_fields)
+        #
+        #     if missing_keys:
+        #         self.logger.warning(
+        #             "Work file '%s' missing keys required for the publish "
+        #             "template: %s" % (work_file, missing_keys)
+        #         )
+        #         continue
+        #
+        #     publish_file = publish_template.apply_fields(work_fields)
+        #
+        #     # copy the file
+        #     try:
+        #         self.logger.debug("Copying %s --> %s", work_file, publish_file)
+        #         publish_folder = os.path.dirname(publish_file)
+        #         ensure_folder_exists(publish_folder)
+        #         workFileNorm = os.path.normpath(work_file)
+        #         publishFileNorm = os.path.normpath(publish_file)
+        #         os.rename(workFileNorm, publishFileNorm)
+        #     except Exception:
+        #         raise Exception(
+        #             "Failed to move work file from '%s' to '%s'.\n%s"
+        #             % (work_file, publish_file, traceback.format_exc())
+        #         )
+        #
+        #     self.logger.debug(
+        #         "Moved work file '%s' to publish file '%s'."
+        #         % (work_file, publish_file)
+        #     )
 
         # # copy the file
         # try:
