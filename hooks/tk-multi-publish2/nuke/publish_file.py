@@ -834,7 +834,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         publish_folder = os.path.normpath(os.path.dirname(publish_file))
         workFileNorm = os.path.normpath(work_files[0])
         workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
-        ensure_folder_exists(publish_folder)
+        ensure_folder_exists(os.path.dirname(publish_folder))
         os.rename(workFileDir, publish_folder)
 
         # for work_file in work_files:

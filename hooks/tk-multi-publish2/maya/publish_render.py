@@ -491,7 +491,7 @@ class RenderPublishPlugin(HookBaseClass):
         publish_file = publish_template.apply_fields(work_fields)
 
         publish_folder = os.path.dirname(publish_file)
-        ensure_folder_exists(publish_folder)
+        ensure_folder_exists(os.path.dirname(publish_folder))
         # workFileNorm = os.path.normpath(work_file)
         # publishFileNorm = os.path.normpath(publish_file)
         try:
