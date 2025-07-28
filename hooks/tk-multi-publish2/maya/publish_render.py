@@ -486,7 +486,7 @@ class RenderPublishPlugin(HookBaseClass):
                 "Work file '%s' missing keys required for the publish "
                 "template: %s" % (work_file, missing_keys)
             )
-            continue
+
 
         publish_file = publish_template.apply_fields(work_fields)
 
