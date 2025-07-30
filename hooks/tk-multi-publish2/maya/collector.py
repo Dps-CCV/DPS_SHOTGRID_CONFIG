@@ -474,38 +474,39 @@ class MayaSessionCollector(HookBaseClass):
         namespaceSearch = ":geo"
 
         for object_geo in cmds.ls(assemblies=True):
-            for node in cmds.listRelatives(object_geo, ad=True, fullPath=True):
-                nombre = node.split("|")[-1]
-                if search == nombre or namespaceSearch in nombre:
-                    if self.parent.context.step["name"] == "MODEL":
-                        nodeExport = node
-                        nodeName = cmds.listRelatives(node, p=True)[0]
-                    else:
-                        nodeExport = cmds.listRelatives(node, p=True)[0]
-                        try:
-                            ###nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[1]
-                            nodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
-                        except:
-                            nodeName = str(cmds.listRelatives(node, p=True)[0])
-                        displaynodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
+            if cmds.listRelatives(object_geo, ad=True, fullPath=True):
+                for node in cmds.listRelatives(object_geo, ad=True, fullPath=True):
+                    nombre = node.split("|")[-1]
+                    if search == nombre or namespaceSearch in nombre:
+                        if self.parent.context.step["name"] == "MODEL":
+                            nodeExport = node
+                            nodeName = cmds.listRelatives(node, p=True)[0]
+                        else:
+                            nodeExport = cmds.listRelatives(node, p=True)[0]
+                            try:
+                                ###nodeName = str(cmds.listRelatives(node, p=True)[0]).split(":")[1]
+                                nodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
+                            except:
+                                nodeName = str(cmds.listRelatives(node, p=True)[0])
+                            displaynodeName = str(cmds.listRelatives(node, p=True)[0]).replace(":", "_")
 
-                    # if not cmds.ls(object_geo, dag=True, type="mesh"):
-                    #     # ignore non-meshes
-                    #     continue
+                        # if not cmds.ls(object_geo, dag=True, type="mesh"):
+                        #     # ignore non-meshes
+                        #     continue
 
-                    geo_object_item = parent_item.create_item(
-                        "maya.session.object_geo", "Object Geometry", displaynodeName
-                    )
+                        geo_object_item = parent_item.create_item(
+                            "maya.session.object_geo", "Object Geometry", displaynodeName
+                        )
 
-                    # set the icon for the item
-                    geo_object_item.set_icon_from_path(icon_path)
+                        # set the icon for the item
+                        geo_object_item.set_icon_from_path(icon_path)
 
-                    work_template_setting = settings.get("Work Template")
+                        work_template_setting = settings.get("Work Template")
 
-                    # store the selection set name so that any attached plugin knows which
-                    # selection set this item represents!
-                    geo_object_item.properties["object_name"] = nodeName
-                    geo_object_item.properties["object"] = nodeExport
+                        # store the selection set name so that any attached plugin knows which
+                        # selection set this item represents!
+                        geo_object_item.properties["object_name"] = nodeName
+                        geo_object_item.properties["object"] = nodeExport
 
     def _collect_particles_geo(self, settings, parent_item):
         """
