@@ -709,7 +709,7 @@ class NukeSessionCollector(HookBaseClass):
                 else:
                     if node['file'].value() not in nodeslist:
                         nodeslist.append(node['file'].value())
-            for dep in node.dependencies():
+            for dep in node.dependencies(nuke.INPUTS):
                 try:
                     select_node_dependencies_recursive(dep)
                 except:
