@@ -361,4 +361,4 @@ settings.tk-multi-shotgunpanel.vred:
           filters: { }
     # Disable context switching since we only have a Project context.
     enable_context_switch: false
-    location: "@common.apps.tk-multi-shotgunpanel.location"
+    location: "@apps.tk-multi-shotgunpanel.location"
