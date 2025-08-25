@@ -72,7 +72,7 @@ frameworks:
       name: tk-framework-lmv
   tk-framework-unrealqt_v1.x.x:
     location:
-      version: v1.2.2
+      version: v1.3.1
       type: github_release
       organization: ue4plugins
       repository: tk-framework-unrealqt
