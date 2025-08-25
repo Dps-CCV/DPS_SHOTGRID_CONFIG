@@ -714,10 +714,10 @@ settings.tk-multi-publish2.vred.asset_step:
         hook: "{self}/publish_file.py:{config}/tk-multi-publish2/unreal/publish_movie.py"
         settings:
           Publish Template: unreal.movie_publish
-    help_url: *help_url
-    location:
-      type: path
-      path: '{CONFIG_FOLDER}/bundles/tk-multi-publish2_ue/2.10.4'
+  help_url: *help_url
+  location:
+    type: path
+    path: '{CONFIG_FOLDER}/bundles/tk-multi-publish2_ue/2.10.4'
 
   settings.tk-multi-publish2.maya.asset_step.unreal:
     collector: "{self}/collector.py:{engine}/tk-multi-publish2/basic/collector.py:{tk-framework-unrealqt_v1.x.x}/tk-multi-publish2/tk-maya/basic/collector.py"
@@ -755,7 +755,7 @@ settings.tk-multi-publish2.vred.asset_step:
           Turntable Map Path: "/Game/turntable/level/turntable.umap"
           Sequence Path: "/Game/turntable/sequence/turntable_sequence.turntable_sequence"
           Turntable Assets Path: "/Game/maya_turntable_assets"
-    help_url: *help_url
-    location:
-      type: path
-      path: '{CONFIG_FOLDER}/bundles/tk-multi-publish2_ue/v2.10.4'
+  help_url: *help_url
+  location:
+    type: path
+    path: '{CONFIG_FOLDER}/bundles/tk-multi-publish2_ue/v2.10.4'
