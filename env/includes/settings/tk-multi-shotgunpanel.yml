@@ -104,6 +104,8 @@ settings.tk-multi-shotgunpanel.maya:
       filters: {published_file_type: Texture}
     - actions: [udim_texture_node]
       filters: {published_file_type: UDIM Image}
+    - actions: [ reference, import ]
+      filters: { published_file_type: Unreal FBX }
     - actions: [publish_clipboard]
       filters: {}
     Task:
@@ -348,3 +350,15 @@ settings.tk-multi-shotgunpanel.vred:
       filters: {}
   actions_hook: "{engine}/tk-multi-shotgunpanel/basic/scene_actions.py"
   location: "@apps.tk-multi-shotgunpanel.location"
+
+
+  #UNREAL
+  settings.tk-multi-shotgunpanel.unreal:
+    actions_hook: '{self}/general_actions.py:{engine}/tk-multi-shotgunpanel/tk-unreal_actions.py'
+    action_mappings:
+      PublishedFile:
+        - actions: [ publish_clipboard ]
+          filters: { }
+    # Disable context switching since we only have a Project context.
+    enable_context_switch: false
+    location: "@common.apps.tk-multi-shotgunpanel.location"
