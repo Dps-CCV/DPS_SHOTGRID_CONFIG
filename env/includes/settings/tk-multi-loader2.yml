@@ -12,6 +12,7 @@
 
 includes:
 - ../app_locations.yml
+- ../unreal/settings/tk-multi-loader2.yml
 
 ################################################################################
 
@@ -534,6 +535,9 @@ settings.tk-multi-loader2.motionbuilder:
     - [project, is, '{context.project}']
     hierarchy: [entity, content]
   location: "@apps.tk-multi-loader2.location"
+
+# unreal
+settings.tk-multi-loader2.unreal: "@settings.tk-multi-loader2.unreal"
 
 # alias
 settings.tk-multi-loader2.alias:

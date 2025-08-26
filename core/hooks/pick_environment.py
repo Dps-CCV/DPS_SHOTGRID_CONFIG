@@ -12,8 +12,8 @@
 Hook which chooses an environment file to use based on the current context.
 """
 
-from tank import Hook
-import os
+from sgtk import Hook
+# import os
 
 
 class PickEnvironment(Hook):
@@ -66,3 +66,4 @@ class PickEnvironment(Hook):
                 return "asset_step"
         
             return None
+        return "site"
