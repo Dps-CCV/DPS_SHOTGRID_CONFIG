@@ -71,3 +71,4 @@ frameworks:
       type: app_store
       name: tk-framework-lmv
 
+include: unreal/frameworks.yml

@@ -1008,35 +1008,5 @@ strings:
     mari_asset_project_name: "{mari.project_name} - Asset {asset_name}, {task_name}"
 
 
-    #
-    # Unreal
-    #
-    #shot_root: "shots"
-    #asset_root: "assets"
-    # level sequence review output from unreal
-    unreal.movie_publish:
-        definition: '@shot_root/DAILIES/HIGH/unreal/{ue_level_sequence}_{ue_world}.v{version}.{ue_mov_ext}'
-    unreal_shot_publish:
-        definition: '@shot_root/publish/unreal/{name}.v{version}.nk'
-    # The location of FBX exports for Unreal
-    unreal.maya_asset_fbx_publish:
-        definition: '@asset_root/publish/fbx/{name}.v{version}.fbx'
-    # The location of turntable review output rendered in Unreal
-    unreal.maya_turntable_render:
-        definition: '@asset_root/work/images/{name}_turntable_v{version}.{ue_mov_ext}'
-    unreal.maya_turntable_publish:
-        definition: '@asset_root/review/{Asset}_{name}_turntable_v{version}.{ue_mov_ext}'
-    # Placeholder location for static mesh assets exported from Unreal
-    # Hook implementation intended to be a starting point for a pipeline
-    # No context info used in template, developers expected to further customize
-    unreal.asset_publish:
-        definition: 'assets/unrealdemo/exports/{YYYY}_{MM}_{DD}/{name}.fbx'
-    # entity-specific templates for importing files into the Unreal content browser
-    # template logic is defined in Python, not settings:
-    # tk-unreal/hooks/tk-multi-loader2/tk-unreal_actions.py
-    unreal_loader_asset_path: "/Game/Assets/{ue_sg_asset_type}/{ue_sg_asset_name}/"
-    unreal_loader_asset_name: "{ue_sg_asset_name}_{name}"
-    unreal_loader_shot_path: "/Game/Cinematics/Sequences/{ue_sg_sequence_name}/{ue_sg_shot_name}/"
-    unreal_loader_shot_name: "{ue_sg_shot_name}_{name}"
-    unreal_loader_project_path: "/Game/Assets/"
-    unreal_loader_project_name: "{name}"
+
+include: ../env/includes/unreal/templates.yml
