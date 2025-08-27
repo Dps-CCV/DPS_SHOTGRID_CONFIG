@@ -37,7 +37,7 @@ settings.tk-multi-breakdown2.nuke:
 
 # nuke studio
 settings.tk-multi-breakdown2.nukestudio:
-  hook_scene_operations: '{self}/tk-nuke_scene_operations.py'
+  hook_scene_operations: '{config}/tk-multi-breakdown/tk-nuke_scene_operations.py'
   location: "@apps.tk-multi-breakdown2.location"
 
 ##Houdini
