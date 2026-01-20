@@ -390,12 +390,12 @@ class BasicFilePublishPlugin(HookBaseClass):
                 item.parent.properties.sg_publish_data["id"]
             )
 
-        # handle copying of work to publish if templates are in play
-        self._copy_work_to_publish(settings, item)
-
         for i in nuke.allNodes("Read"):
             if i['file'].value() == item.properties.path:
                 i.knob('file').setValue(str(publish_path).replace("\\", "/"))
+
+        # handle copying of work to publish if templates are in play
+        self._copy_work_to_publish(settings, item)
 
 
         # arguments for publish registration

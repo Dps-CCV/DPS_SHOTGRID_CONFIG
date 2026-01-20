@@ -34,7 +34,7 @@ def upVersionBase():
     elif len(nuke.selectedNodes()) > 1:
         nuke.message("Select only one Write at a time")
     else:
-        workDir = nuke.selectedNode().knob('tk_cached_proxy_path').value()
+        workDir = nuke.selectedNode().knob('cached_path').value()
         folder = os.path.dirname(workDir)
         root = os.path.dirname(os.path.dirname(workDir))
         renders = []
