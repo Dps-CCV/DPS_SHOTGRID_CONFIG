@@ -1,23 +1,21 @@
 import os
-import shutil
 import threading
-import subprocess
-from subprocess import call
 import nuke
+from pathlib import Path
 
 
-def upVersionCopy(root, lastDir, lastVersion, scriptVersion, newDir):
-        amount = len(os.listdir(os.path.join(root, lastDir)))
+def upVersionCopy(originRoot, workRoot, lastDir, lastVersion, scriptVersion, newDir):
+        amount = len(os.listdir(os.path.join(originRoot, lastDir)))
         task = nuke.ProgressTask("UpVerison")
         count = 0
-        for file in os.listdir(os.path.join(root, lastDir)):
+        for file in os.listdir(os.path.join(originRoot, lastDir)):
             if task.isCancelled():
                 break
             task.setMessage("Step %s of %d" % (count + 1, amount))
 
-            oldCopy = os.path.join(os.path.join(root.replace("/", "\\"), lastDir), file)
+            oldCopy = os.path.join(os.path.join(originRoot.replace("/", "\\"), lastDir), file)
             newFile = file.replace('_v' + str('{:0>3}'.format(lastVersion)), '_v' + str(scriptVersion))
-            newCopy = os.path.join(os.path.join(root.replace("/", "\\"), newDir), newFile)
+            newCopy = os.path.join(os.path.join(workRoot.replace("/", "\\"), newDir), newFile)
 
 
             copystring = 'copy ' + oldCopy + ' ' + newCopy
@@ -34,13 +32,19 @@ def upVersionBase():
     elif len(nuke.selectedNodes()) > 1:
         nuke.message("Select only one Write at a time")
     else:
-        workDir = nuke.selectedNode().knob('cached_path').value()
-        folder = os.path.dirname(workDir)
-        root = os.path.dirname(os.path.dirname(workDir))
+        nodePath = nuke.selectedNode().knob('cached_path').value()
+        workFolder = os.path.dirname(nodePath)
+        step = os.path.basename(nodePath)[-21:-18]
+        base = Path(os.path.abspath(nodePath)).parents[5]
+        workRoot = os.path.dirname(workFolder)
+        publishRoot = os.path.join(base, "PUBLISH", "IMAGES", step)
         renders = []
-        for a in os.listdir(root):
-            if os.path.basename(folder)[:-3] in a:
-                renders.append(a)
+        for a in os.listdir(workRoot):
+            if os.path.basename(workFolder)[:-3] in a:
+                renders.append(a + '_WORK')
+        for a in os.listdir(publishRoot):
+            if os.path.basename(workFolder)[:-3] in a:
+                renders.append(a + '_PUBL')
         scriptVersion = os.path.splitext(os.path.basename(nuke.root().name()))[0][-3:]
         lastDir = renders[len(renders) - 1]
         runCopy = True
@@ -54,13 +58,17 @@ def upVersionBase():
         SetsPanel.addEnumerationPulldown("Escoger version a copiar", listarender)
         ret = SetsPanel.show()
         if ret:
-            lastDir = SetsPanel.value("Escoger version a copiar")
+            if '_PUBL' in SetsPanel.value("Escoger version a copiar"):
+                originRoot = publishRoot
+            else:
+                originRoot = workRoot
+            lastDir = SetsPanel.value("Escoger version a copiar")[:-5]
 
             lastVersion = int(lastDir[-3:])
             newDir = lastDir[:-3] + scriptVersion
 
-            if not os.path.exists(os.path.join(root, newDir)):
-                os.makedirs(os.path.join(root, newDir))
+            if not os.path.exists(os.path.join(workRoot, newDir)):
+                os.makedirs(os.path.join(workRoot, newDir))
 
             else:
                 if nuke.ask(
@@ -77,7 +85,7 @@ def upVersionBase():
 
 
         if runCopy == True:
-            threading.Thread(None, upVersionCopy(root, lastDir, lastVersion, scriptVersion, newDir)).start()
+            threading.Thread(None, upVersionCopy(originRoot, workRoot, lastDir, lastVersion, scriptVersion, newDir)).start()
 
 
 
