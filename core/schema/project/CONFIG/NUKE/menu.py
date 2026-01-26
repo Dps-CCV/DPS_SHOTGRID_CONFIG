@@ -1,8 +1,6 @@
 import nuke
 import os
-import formats
 import presets
-import knobDefaults
 
 
 #DPS IMPORTS
