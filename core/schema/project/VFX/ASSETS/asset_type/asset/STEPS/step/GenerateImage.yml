@@ -11,5 +11,8 @@
 # the type of dynamic content
 type: "static"
 
-# defer creation and only create this folder when Houdini starts
-defer_creation: "tk-flame"
+constrain_by_entity: "$step"
+
+constraints:
+    - { "path": "short_name", "relation": "is", "values": [ "INT" ] }
+
