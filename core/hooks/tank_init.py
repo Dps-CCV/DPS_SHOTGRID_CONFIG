@@ -30,8 +30,8 @@ class TankInit(Hook):
 
         if os.environ.get("SGD_DESKTOP_SITE_INIT_DONE") == None:
             tk = self.parent
-            ##synchronize path cache
-            tk.synchronize_filesystem_structure(full_sync=True)
+            # ##synchronize path cache
+            # tk.synchronize_filesystem_structure(full_sync=True)
             ##Delete old configs
             index = __file__.find("core\\")
             config = __file__[:index]
