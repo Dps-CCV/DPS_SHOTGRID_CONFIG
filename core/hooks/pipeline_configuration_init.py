@@ -28,5 +28,13 @@ class PipelineConfigurationInit(Hook):
         os.environ['CONFIG_FOLDER'] = config
         os.environ["FormExt"] = 'exr'
         os.environ["CompressionExt"] = 'none'
+        if os.environ.get("RUN_SYNC_FILESYSTEM") == None:
+            try:
+                tk = self.parent
+                # ##synchronize path cache
+                tk.synchronize_filesystem_structure(full_sync=True)
+                os.environ["RUN_SYNC_FILESYSTEM"] = "1"
+            except
+                print("No sync was done")
 
         pass
