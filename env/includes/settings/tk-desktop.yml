@@ -29,7 +29,7 @@ settings.tk-desktop.site:
 
 # project
 settings.tk-desktop.project:
-  display_name: "Dare Planet Studio"
+  display_name: "EFECTOSCOPIO"
 #  sg_software_entity:
   apps:
     tk-multi-pythonconsole:

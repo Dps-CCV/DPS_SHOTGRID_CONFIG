@@ -577,6 +577,14 @@ paths:
         definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.{SEQ}.png'
     nuke_imageplane_pub_proxy:
         definition: '@shot_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_{task_name}_v{version}_proxy/{Shot}_IMP_{task_name}_v{version}_proxy.{SEQ}.png'
+    nuke_imageplane_mov:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_MP4_{task_name}_v{version}/{Shot}_IMP_{task_name}_v{version}.mp4'
+    nuke_imageplane_mov_proxy:
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_MP4_{task_name}_v{version}_proxy/{Shot}_IMP_{task_name}_v{version}_proxy.mp4'
+    nuke_imageplane_mov_pub:
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/MP4/{Step}/{Shot}_IMP_{task_name}_v{version}.mp4'
+    nuke_imageplane_mov_pub_proxy:
+        definition: '@shot_root/PUBLISH/IMAGE_PLANE/MP4/{Step}/{Shot}_IMP_{task_name}_v{version}_proxy.mp4'
     nuke_mattepaint:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Shot}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_mattepaint_proxy:
@@ -706,7 +714,7 @@ paths:
         definition: '@asset_root/PUBLISH/SCENES/{Step}/MAYA/{Asset}_{Step}_{name}_v{version}.{maya_extension}'
     # The location where maya shader networks are written/published
     maya_asset_shader_publish:
-        definition: '@asset_root/PUBLISH/SHADING/{Step}/{Asset}_{Step}_{name}_v{version}.ma'
+        definition: '@asset_root/PUBLISH/SHADING/{Step}/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.mb'
         root_name: 'primary'
     # The location of published maya cameras
     maya_asset_camera_publish:
@@ -879,6 +887,14 @@ paths:
         definition: '@asset_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_v{version}/{Asset}_IMP_v{version}.{SEQ}.png'
     nuke_asset_imageplane_pub_proxy:
         definition: '@asset_root/PUBLISH/IMAGE_PLANE/PNG/{Step}/NUKE_IMP_v{version}_proxy/{Asset}_IMP_v{version}_proxy.{SEQ}.png'
+    nuke_asset_imageplane_mov:
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_MP4_v{version}/{Asset}_IMP_v{version}.mp4'
+    nuke_asset_imageplane_mov_proxy:
+        definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_IMP_MP4_v{version}_proxy/{Asset}_IMP_v{version}_proxy.mp4'
+    nuke_asset_imageplane_mov_pub:
+        definition: '@asset_root/PUBLISH/IMAGE_PLANE/MP4/{Step}/{Asset}_IMP_v{version}.mp4'
+    nuke_asset_imageplane_mov_pub_proxy:
+        definition: '@asset_root/PUBLISH/IMAGE_PLANE/MP4/{Step}/{Asset}_IMP_v{version}_proxy.mp4'
     nuke_asset_mattepaint:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_BMP_{task_name}_v{version}/{Asset}_BMP_{nuke.output}_{task_name}_v{version}.{SEQ}.tiff'
     nuke_asset_mattepaint_proxy:

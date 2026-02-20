@@ -130,17 +130,23 @@ class ContextChange(get_hook_baseclass()):
 
                 if current_engine._Engine__engine_instance_name == 'tk-nuke':
                     import nuke
-                    # reloadConfig = nuke.root().knob('reloadConfig')
-                    # reloadConfig.execute()
-                    # self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
-                    # ####DPS Write Shortcuts
-                    # # # CUSTOM SHORTCUTS
-                    # write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-                    # write_node_item.setShortcut("")
-                    #
-                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("Exr 16bits [Shotgun]").setShortcut('w')
-                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("PRECOMP [Shotgun]").setShortcut('Alt+w')
-                    # nuke.menu('Nodes').findItem("ShotGrid").findItem("TECH_PRECOMP [Shotgun]").setShortcut('Alt+j')
+                    reloadConfig = nuke.root().knob('reloadConfig')
+                    reloadConfig.execute()
+                    self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    try:
+                        ####DPS Write Shortcuts
+                        # # CUSTOM SHORTCUTS
+                        write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+                        write_node_item.setShortcut("")
+
+                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                            "Render 16bits").setShortcut('w')
+                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                            "PRECOMP").setShortcut('Alt+w')
+                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                            "TECH_PRECOMP").setShortcut('Alt+j')
+                    except:
+                        self.engine.logger.info("No se ha podido registrar los atajos de nuke write")
 
 
 

@@ -13,7 +13,6 @@ Hook that gets executed every time a new PipelineConfiguration instance is creat
 """
 
 from tank import Hook
-import tank
 import os
 
 

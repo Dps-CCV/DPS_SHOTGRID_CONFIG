@@ -14,41 +14,66 @@
 includes:
 - ../app_locations.yml
 # expected fields in the configuration file for this engine
-settings.tk-multi-scenebuilder.main:
-  # Copyright (c) 2021 Shotgun Software Inc.
-  #
-  # CONFIDENTIAL AND PROPRIETARY
-  #
-  # This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-  # Source Code License included in this distribution package. See LICENSE.
-  # By accessing, using, copying or modifying this work you indicate your
-  # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-  # not expressly granted therein are reserved by Shotgun Software Inc.
 
-  # Metadata defining the behavior and requirements for this app
-
-  # expected fields in the configuration file for this app
-
-  actions_hook:
-
+# Alias
+settings.tk-multi-scenebuilder.alias:
   presets:
+    - name: Reference
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.step, is, '{context.step}' ]
+          action_mappings:
+            Alias File: import_as_reference
+    - name: Import
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.step, is, '{context.step}' ]
+          action_mappings:
+            Alias File: import
+  location: "@apps.tk-multi-scenebuilder.location"
 
-  supported_engines:
+# VRED
+settings.tk-multi-scenebuilder.vred:
+  presets:
+    - name: Alias Wire
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.downstream_tasks.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.downstream_tasks.Task.step, is, '{context.step}' ]
+          action_mappings:
+            Alias File: import
+    - name: VRED Scene
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.step, is, '{context.step}' ]
+          action_mappings:
+            VRED Scene: smart_reference
+  location: "@apps.tk-multi-scenebuilder.location"
 
-  # the Shotgun fields that this app needs in order to operate correctly
-  requires_shotgun_fields:
-
-  # More verbose description of this item
-  display_name: "Scene Builder"
-  description: "Automate the build of your scene by helping retrieving and loading published files."
-
-  # Required minimum versions for this item to run
-  requires_shotgun_version:
-  requires_core_version: "v0.19.1"
-  requires_engine_version:
-
-  # the frameworks required to run this app
-  frameworks:
-      - {"name": "tk-framework-shotgunutils", "version": "v5.x.x", "minimum_version": "v5.2.1"}
-      - {"name": "tk-framework-qtwidgets", "version": "v2.x.x"}
+# MAYA
+settings.tk-multi-scenebuilder.maya:
+  presets:
+    - name: Alias Wire
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.downstream_tasks.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.downstream_tasks.Task.step, is, '{context.step}' ]
+          action_mappings:
+            MAYA SCENE: import
+    - name: VRED Scene
+      actions:
+        - context:
+            - [ entity.Asset.parents, in, '{context.entity}' ]
+            - [ task.Task.content, is, '{context.task.name}' ]
+            - [ task.Task.step, is, '{context.step}' ]
+          action_mappings:
+            VRED Scene: smart_reference
   location: "@apps.tk-multi-scenebuilder.location"

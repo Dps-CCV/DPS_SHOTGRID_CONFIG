@@ -87,6 +87,16 @@ class MayaActions(HookBaseClass):
                 }
             )
 
+        if "multi_reference" in actions:
+            action_instances.append(
+                {
+                    "name": "multi_reference",
+                    "params": None,
+                    "caption": "Create Multiple References",
+                    "description": "This will add the item to the scene as a standard reference a number of times.",
+                }
+            )
+
         if "reference_alembic" in actions:
             action_instances.append(
                 {
@@ -237,6 +247,9 @@ class MayaActions(HookBaseClass):
         if name == "reference":
             self._create_reference(path, sg_publish_data)
 
+        if name == "multi_reference":
+            self._create_multi_reference(path, sg_publish_data)
+
         if name == "reference_alembic":
             self._create_reference_alembic(path, sg_publish_data)
 
@@ -359,6 +372,57 @@ class MayaActions(HookBaseClass):
             mergeNamespacesOnClash=True,
             namespace=namespace,
         )
+
+    def _create_multi_reference(self, path, sg_publish_data):
+        """
+        Create multiple references with the same settings Maya would use
+        if you used the create settings dialog.
+
+        :param path: Path to file.
+        :param sg_publish_data: Shotgun data dictionary with all the standard publish fields.
+        """
+        if not os.path.exists(path):
+            raise Exception("File not found on disk - '%s'" % path)
+
+        # make a name space out of entity name + publish name
+        # e.g. bunny_upperbody
+        # namespace = "%s %s" % (
+        #     sg_publish_data.get("entity").get("name"),
+        #     sg_publish_data.get("name"),
+        # )
+        eng = sgtk.platform.current_engine()
+        con = eng.context
+        asset_name = sg_publish_data.get("name").replace(" ", "_")
+
+        if con.entity['type'] == "Asset":
+            namespace = ":"
+        else:
+            namespace = asset_name
+
+        result = cmds.promptDialog(
+            title='Create Multiple references',
+            message='Enter number of references:',
+            button=['OK', 'Cancel'],
+            defaultButton='OK',
+            cancelButton='Cancel',
+            dismissString='Cancel')
+        number = 0
+        if result == 'OK':
+            try:
+                number = int(cmds.promptDialog(query=True, text=True))
+            except:
+                cmds.confirmDialog(title='Error', message='There was a problem with the given input. Only int numbers are allowed')
+
+        # Now create the reference object in Maya.
+        if number>0:
+            for copy in range(number):
+                cmds.file(
+                    path,
+                    reference=True,
+                    loadReferenceDepth="all",
+                    mergeNamespacesOnClash=False,
+                    namespace=namespace,
+                )
 
 
 

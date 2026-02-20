@@ -25,7 +25,7 @@ publish_help_url: &help_url "https://help.autodesk.com/view/SGSUB/ENU/?guid=SG_S
 settings.tk-multi-publish2.standalone:
   collector: "{self}/collector.py"
   publish_plugins:
-  - name: Publish to ShotGrid
+  - name: Publish to Flow Production Tracking
     hook: "{self}/publish_file.py"
     settings: {}
   - name: Upload for review

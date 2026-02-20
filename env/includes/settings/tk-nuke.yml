@@ -46,8 +46,6 @@ settings.tk-nuke.hiero.project:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
@@ -79,12 +77,12 @@ settings.tk-nuke.hiero.project:
   spreadsheet_context_menu:
   - app_instance: tk-hiero-openinshotgun
     keep_in_menu: false
-    name: "Open in Shotgun"
+    name: "Open in Flow Production Tracking"
     requires_selection: true
   timeline_context_menu:
   - app_instance: tk-hiero-openinshotgun
     keep_in_menu: false
-    name: "Open in Shotgun"
+    name: "Open in Flow Production Tracking"
     requires_selection: true
   menu_favourites:
   - app_instance: tk-multi-workfiles2
@@ -111,8 +109,6 @@ settings.tk-nuke.hiero.sequence:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
@@ -176,8 +172,6 @@ settings.tk-nuke.hiero.shot:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
@@ -226,8 +220,6 @@ settings.tk-nuke.hiero.shot_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
@@ -270,8 +262,6 @@ settings.tk-nuke.asset:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   menu_favourites:
@@ -314,8 +304,6 @@ settings.tk-nuke.asset_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   menu_favourites:
@@ -353,8 +341,6 @@ settings.tk-nuke.project:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
 
@@ -376,8 +362,6 @@ settings.tk-nuke.sequence:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   menu_favourites:
@@ -398,8 +382,6 @@ settings.tk-nuke.shot:
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
 
@@ -444,8 +426,6 @@ settings.tk-nuke.shot_step:
     tk-nuke-quickreview: "@settings.tk-nuke-quickreview"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
 
@@ -495,8 +475,6 @@ settings.tk-nuke.nukestudio.asset_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
@@ -542,8 +520,6 @@ settings.tk-nuke.nukestudio.project:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
@@ -605,8 +581,6 @@ settings.tk-nuke.nukestudio.sequence:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
@@ -670,8 +644,6 @@ settings.tk-nuke.nukestudio.shot:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
@@ -720,8 +692,6 @@ settings.tk-nuke.nukestudio.shot_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-bg-publish:
-      location: "@apps.tk-multi-bg-publish.location"
     tk-multi-scenebuilder:
       location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:

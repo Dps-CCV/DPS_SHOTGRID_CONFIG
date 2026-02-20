@@ -78,10 +78,8 @@ class SceneOperation(HookClass):
             self.vaccineFix()
 
             # e = sgtk.platform.current_engine()
-            # e.apps["tk-multi-breakdown"].show_breakdown_dialog()
-            e = sgtk.platform.current_engine()
-            h = e.commands['Scene Breakdown...']['callback']
-            h()
+            # h = e.commands['Scene Breakdown...']['callback']
+            # h()
 
             ### Routine for asking artists if the wanna change the status of the task to in progress in case it is in rev or notas status
             sg = self.parent.shotgun

@@ -35,27 +35,27 @@ settings.tk-multi-workfiles2: &settings_tk-multi-workfiles2
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_get_badge: "{config}/tk-multi-workfiles2/get_badge.py"
@@ -69,27 +69,27 @@ settings.tk-multi-workfiles2.launch_at_startup:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   location: "@apps.tk-multi-workfiles2.location"
@@ -201,27 +201,27 @@ settings.tk-multi-workfiles2.houdini.asset_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-houdini.py"
@@ -238,27 +238,27 @@ settings.tk-multi-workfiles2.houdini.shot_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-houdini.py"
@@ -279,27 +279,27 @@ settings.tk-multi-workfiles2.maya.asset_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-maya.py"
@@ -316,27 +316,27 @@ settings.tk-multi-workfiles2.maya.shot_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-maya.py"
@@ -357,27 +357,27 @@ settings.tk-multi-workfiles2.nuke.asset_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-nuke.py"
@@ -395,27 +395,27 @@ settings.tk-multi-workfiles2.nuke.shot_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
-    hierarchy: [sg_sequence, code]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
+    hierarchy: [sg_sequence.Sequence.episode, sg_sequence.Sequence.code, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-nuke.py"
@@ -437,27 +437,27 @@ settings.tk-multi-workfiles2.photoshop.asset_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     hierarchy: [sg_sequence, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}' ]
   allow_task_creation: False
   location: "@apps.tk-multi-workfiles2.location"
@@ -474,27 +474,27 @@ settings.tk-multi-workfiles2.photoshop.shot_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     hierarchy: [sg_sequence, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}' ]
   allow_task_creation: False
   location: "@apps.tk-multi-workfiles2.location"
@@ -510,27 +510,27 @@ settings.tk-multi-workfiles2.aftereffects:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     hierarchy: [sg_sequence, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}' ]
   allow_task_creation: False
   hook_scene_operation: "{engine}/tk-multi-workfiles2/basic/scene_operation.py"
@@ -547,27 +547,27 @@ settings.tk-multi-workfiles2.aftereffects.asset_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     hierarchy: [sg_sequence, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}' ]
   allow_task_creation: False
   hook_scene_operation: "{engine}/tk-multi-workfiles2/basic/scene_operation.py"
@@ -584,27 +584,27 @@ settings.tk-multi-workfiles2.aftereffects.shot_step:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
   - caption: Shots
     entity_type: Shot
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     hierarchy: [sg_sequence, code]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   my_tasks_filters:
-    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'sap', 'apr'] ]
+    - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}' ]
   allow_task_creation: False
   hook_scene_operation: "{engine}/tk-multi-workfiles2/basic/scene_operation.py"
@@ -784,13 +784,13 @@ settings.tk-multi-workfiles2.mari:
     entity_type: Asset
     hierarchy: [sg_asset_type, code]
     filters:
-      - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+      - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
     sub_hierarchy:
       entity_type: Task
       filters:
-        - [ sg_status_list, not_in, ['bid', 'omt', 'hld'] ]
+        - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr'] ]
       link_field: entity
       hierarchy: [step]
-  my_tasks_extra_display_fields: [sg_person.HumanUser.name, sg_status_list]
+  my_tasks_extra_display_fields: [sg_status_list, step]
   allow_task_creation: False
   location: "@apps.tk-multi-workfiles2.location"
