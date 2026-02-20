@@ -34,7 +34,7 @@ class PipelineConfigurationInit(Hook):
                 # ##synchronize path cache
                 tk.synchronize_filesystem_structure(full_sync=True)
                 os.environ["RUN_SYNC_FILESYSTEM"] = "1"
-            except
+            except:
                 print("No sync was done")
 
         pass
