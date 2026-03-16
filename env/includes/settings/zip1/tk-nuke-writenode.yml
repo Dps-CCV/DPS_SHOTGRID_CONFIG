@@ -44,7 +44,7 @@ settings.tk-nuke-writenode.asset:
         datatype: 16 bit half
         channels: all
         autocrop: true
-        compression: none
+        compression: Zip (1 scanline)
       tank_type: Rendered Image
       tile_color: [ 0, 209, 107 ]
       promote_write_knobs: ["compression"]
@@ -149,7 +149,7 @@ settings.tk-nuke-writenode.shot:
       datatype: 16 bit half
       channels: all
       autocrop: true
-      compression: none
+      compression: Zip (1 scanline)
     tank_type: Rendered Image
     tile_color: [0, 209, 107]
     promote_write_knobs: ["compression"]
