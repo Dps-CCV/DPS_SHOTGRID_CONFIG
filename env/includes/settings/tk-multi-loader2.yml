@@ -285,7 +285,7 @@ settings.tk-multi-loader2.nuke:
     entity_type: Task
     filters:
       - [ project, is, '{context.project}' ]
-      - {"filter_operator": "any", "filters": [[ entity, is, '{context.entity}' ], [ entity.Asset.shots, is, '{context.entity}' ], [ entity.Asset.assets, is, '{context.entity}' ], [ entity.Shot.assets, is, '{context.entity}' ]]}
+      - {"filter_operator": "any", "filters": [[ entity.Asset.shots, is, '{context.entity}' ], [ entity.Asset.assets, is, '{context.entity}' ], [ entity.Shot.assets, is, '{context.entity}' ], [ entity.Shot.shots, is, '{context.entity}' ]]}
       - [ sg_status_list, not_in, [ 'bid',  'omt', 'otr', 'hld' ] ]
       - {"filter_operator": "any", "filters": [[ entity.Shot.sg_status_list, not_in, [ 'bid',  'omt', 'otr', 'hld' ] ], [ entity.Asset.sg_status_list, not_in, [ 'bid',  'omt', 'otr', 'hld' ] ]]}
     hierarchy: [ entity, content ]
@@ -314,13 +314,6 @@ settings.tk-multi-loader2.nuke:
     - [project, is, '{context.project}']
     - [ sg_status_list, not_in, ['bid',  'omt', 'otr', 'hld'] ]
     hierarchy: [sg_sequence.Sequence.episode, sg_sequence, code]
-  - caption: My Tasks
-    entity_type: Task
-    filters:
-    - [task_assignees, is, '{context.user}']
-    - [project, is, '{context.project}']
-    - [ sg_status_list, not_in, ['bid',  'omt', 'otr', 'hld'] ]
-    hierarchy: [entity, content]
   publish_filters: [["sg_status_list", "is_not", null]]
   location: "@apps.tk-multi-loader2.location"
 

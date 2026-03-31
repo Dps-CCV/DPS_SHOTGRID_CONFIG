@@ -77,3 +77,4 @@ settings.tk-multi-scenebuilder.maya:
           action_mappings:
             VRED Scene: smart_reference
   location: "@apps.tk-multi-scenebuilder.location"
+

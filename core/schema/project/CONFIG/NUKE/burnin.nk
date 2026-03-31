@@ -1,23 +1,18 @@
-#! C:/Program Files/Nuke13.2v3/nuke-13.2.3.dll -nx
-version 13.2 v3
+#! C:/Program Files/Nuke15.0v4/nuke-15.0.4.dll -nx
+version 15.0 v4
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="0" w="1919" h="1028" screen="0">
+    <window x="0" y="0" w="1917" h="1026" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="1256" stretch="1"/>
+            <split size="1254" stretch="1"/>
             <splitter orientation="2">
-                <split size="579"/>
-                <dock id="" activePageId="Viewer.1">
-                    <page id="Viewer.1"/>
-                </dock>
-                <split size="407"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <split size="985"/>
+                <dock id="" activePageId="DAG.2" focus="true">
                     <page id="DAG.1"/>
-                    <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
                     <page id="DAG.2"/>
                 </dock>
@@ -26,6 +21,24 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <dock id="" activePageId="Properties.1">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+    <window x="3841" y="777" w="1912" h="1026" screen="1">
+        <splitter orientation="2">
+            <split size="1026"/>
+            <dock id="" activePageId="Viewer.1">
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+    <window x="-2160" y="-279" w="1078" h="1866" maximized="1" screen="2">
+        <splitter orientation="1">
+            <split size="1078"/>
+            <dock id="" activePageId="Curve Editor.1">
+                <page id="Curve Editor.1"/>
+                <page id="uk.co.thefoundry.scripteditor.1"/>
             </dock>
         </splitter>
     </window>
@@ -33,7 +46,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 }
 Root {
  inputs 0
- name P:/PROYECTOS/DIN_DIM/CONFIG/NUKE/burnin.nk
+ name P:/RUEGA_POR_NOSOTRAS/CONFIG/NUKE/burnin.nk
  frame 981
  first_frame 981
  last_frame 990
@@ -42,20 +55,20 @@ Root {
  colorManagement OCIO
  OCIO_config aces_1.1
  defaultViewerLUT "OCIO LUTs"
- workingSpaceLUT "ACES - ACEScg"
+ workingSpaceLUT ACEScg
  monitorLut ACES/Rec.709
  monitorOutLUT "sRGB (ACES)"
- int8Lut "Utility - sRGB - Texture"
+ int8Lut "sRGB - Texture"
  int16Lut texture_paint
  logLut compositing_log
- floatLut "ACES - ACES2065-1"
+ floatLut ACES2065-1
 }
 Group {
  inputs 0
  name Group1
  note_font Verdana
  selected true
- xpos -236
+ xpos -251
  ypos -33
  mapsize {0.15 0.15}
 }
@@ -70,7 +83,6 @@ Group {
   frame 0
   useFrame true
   name AddTimeCode2
-  selected true
   xpos 385
   ypos 22
  }
@@ -91,7 +103,7 @@ Group {
   label "\[knob this.aspect_selection]"
   note_font Helvetica
   xpos 389
-  ypos 137
+  ypos 122
   addUserKnob {20 guides l "dGuides v1"}
   addUserKnob {26 tx_aspect l "@b;Aspect Ratio"}
   addUserKnob {4 aspect_selection l Aspect t "\n" M {"Input       " 1.00 1.19 1.25 1.33 1.35 1.37 1.43 1.50 1.56 1.60 1.66 1.75 1.778 1.85 2.00 2.20 2.35 2.40 2.55 2.59 2.76 4.00 Custom "" "" "" "" "" "" "" ""}}
@@ -176,7 +188,7 @@ Group {
    xpos -61
    ypos -71
   }
-set Nd7cc4c00 [stack 0]
+set Nc918cc00 [stack 0]
   Dot {
    name Dot5
    xpos 803
@@ -187,7 +199,7 @@ set Nd7cc4c00 [stack 0]
    xpos 803
    ypos 560
   }
-push $Nd7cc4c00
+push $Nc918cc00
   NoOp {
    name calc
    tile_color 0xff1663ff
@@ -235,7 +247,7 @@ push $Nd7cc4c00
    addUserKnob {15 title_v}
    title_v {{"title_guide.x + ( title_area.x / 2 )" i} {title_guide.y i} {"title_guide.r - ( title_area.x / 2 )" i} {title_guide.t i}}
   }
-set Nd7cc5800 [stack 0]
+set Nc918d800 [stack 0]
   Rectangle {
    replace true
    area {{"ceil( calc.title_guide.x - calc.line )" i} {"ceil( calc.title_guide.y - calc.line )" i} {"ceil( calc.title_guide.r + calc.line )" i} {"ceil( calc.title_guide.t + calc.line )" i}}
@@ -253,7 +265,7 @@ set Nd7cc5800 [stack 0]
    xpos 604
    ypos 129
   }
-set Nd7cf6000 [stack 0]
+set Nc91c8000 [stack 0]
   Rectangle {
    replace true
    area {{input.area.x i} {"( ( input.area.y + input.area.t ) / 2 ) - calc.line" i} {input.area.r i} {"( ( input.area.y + input.area.t ) / 2 ) + calc.line" i}}
@@ -280,7 +292,7 @@ set Nd7cf6000 [stack 0]
    xpos 667
    ypos 232
   }
-push $Nd7cf6000
+push $Nc91c8000
   Merge2 {
    inputs 2
    name Merge5
@@ -307,7 +319,7 @@ push $Nd7cf6000
    xpos 638
    ypos 478
   }
-push $Nd7cc5800
+push $Nc918d800
   Rectangle {
    replace true
    area {{"ceil( calc.action_guide.x - calc.line )" i} {"ceil( calc.action_guide.y - calc.line )" i} {"ceil( calc.action_guide.r + calc.line )" i} {"ceil( calc.action_guide.t + calc.line )" i}}
@@ -368,7 +380,7 @@ push $Nd7cc5800
    xpos 462
    ypos 395
   }
-push $Nd7cc5800
+push $Nc918d800
   Rectangle {
    replace true
    area {{"ceil( calc.ar_guide.x == 0 ? calc.ar_guide.x : calc.ar_guide.x - calc.line )" i} {"ceil( calc.ar_guide.y == 0 ? calc.ar_guide.y : calc.ar_guide.y - calc.line )" i} {"ceil( calc.ar_guide.r == width ? calc.ar_guide.r : calc.ar_guide.r + calc.line )" i} {"ceil( calc.ar_guide.t == height ? calc.ar_guide.t : calc.ar_guide.t + calc.line )" i}}
@@ -386,7 +398,7 @@ push $Nd7cc5800
    xpos 207
    ypos 129
   }
-set Nac872400 [stack 0]
+set Nc6992400 [stack 0]
   Text {
    message "\[value parent.arguide_label]"
    font "\[value parent.font]"
@@ -417,7 +429,7 @@ set Nac872400 [stack 0]
    ypos 209
    disable {{!calc.ar_isbigger i}}
   }
-push $Nac872400
+push $Nc6992400
   Text {
    message "\[if \[string compare \[value parent.aspect_selection] Custom] \{return \[value parent.aspect_selection]:1\} else \{return \[value parent.aspect_custom]:1\}]"
    font "\[value parent.font]"
@@ -448,7 +460,7 @@ push $Nac872400
    ypos 206
    disable {{!calc.ar_isbigger i}}
   }
-push $Nac872400
+push $Nc6992400
   Switch {
    inputs 3
    which {{parent.arguide_label_mode i}}
@@ -462,7 +474,7 @@ push $Nac872400
    xpos 241
    ypos 321
   }
-push $Nd7cc5800
+push $Nc918d800
   Rectangle {
    replace true
    invert true
@@ -477,7 +489,7 @@ push $Nd7cc5800
    xpos 87
    ypos 169
   }
-push $Nd7cc5800
+push $Nc918d800
   Merge2 {
    inputs 2
    mix {{parent.aspectmask_mix i}}
@@ -519,6 +531,12 @@ push $Nd7cc5800
    ypos 618
   }
  end_group
+ Reformat {
+  format "1920 1080 0 0 1920 1080 1 HD_1080"
+  name Reformat3
+  xpos 389
+  ypos 160
+ }
  Text {
   message "\{top_left\}"
   size {{"\[value input.width]/40"}}
@@ -527,7 +545,7 @@ push $Nd7cc5800
   box {{"\[value input.width]/20"} {"\[value input.height]-\[value input.height]/20"} {"\[value input.width]/20+(\[value input.width]/3)"} {"\[value input.height]-(\[value input.height]/3)"}}
   name top_left_text
   xpos 389
-  ypos 210
+  ypos 212
  }
  Text {
   message "\[format %04d \[frame]]"
@@ -559,7 +577,7 @@ push $Nd7cc5800
   box {{"\[value input.width]/20"} {"\[value input.height]/20"} {"\[value input.width]/20+(\[value input.width]/3)"} {"(\[value input.height]/3)"}}
   name bottom_left_text
   xpos 389
-  ypos 288
+  ypos 286
  }
  Read {
   inputs 0
@@ -579,10 +597,12 @@ push $Nd7cc5800
   ypos 236
  }
  Transform {
-  translate {100 100}
+  translate {300 1800}
+  scale 2
   name Transform
+  selected true
   xpos 260
-  ypos 277
+  ypos 260
  }
  Constant {
   inputs 0
@@ -609,15 +629,21 @@ push $Nd7cc5800
  }
  Switch {
   inputs 2
-  which {{"\[python -execlocal first_frame\\ =\\ nuke.root()\\\[\\\"first_frame\\\"\\].value()\\ncurr_frame\\ =\\ nuke.root()\\\[\\\"frame\\\"\\].value()\\n\\nif\\ curr_frame\\ <\\ first_frame:\\n\\ \\ #\\ frames\\ before\\ the\\ start\\ of\\ the\\ sequence\\n\\ \\ #\\ switch\\ to\\ slate\\n\\ \\ ret\\ =\\ 0\\nelse:\\n\\ \\ #\\ play\\ back\\ sequence\\ with\\ burnins\\n\\ \\ ret\\ =\\ 1\\n\\n]" x4 0 x1004 0 x1005 1}}
+  which {{"\[python -execlocal curr_frame\\ =\\ nuke.root()\\\[\\\"frame\\\"\\].value()\\nnodefirst\\ =\\ nuke.thisNode().input(1).frameRange().first()\\n\\nif\\ curr_frame\\ <\\ nodefirst:\\n\\ \\ #\\ frames\\ before\\ the\\ start\\ of\\ the\\ sequence\\n\\ \\ #\\ switch\\ to\\ slate\\n\\ \\ ret\\ =\\ 0\\nelse:\\n\\ \\ #\\ play\\ back\\ sequence\\ with\\ burnins\\n\\ \\ ret\\ =\\ 1\\n\\n]" x4 0 x1004 0 x1005 1}}
   name slate_or_burnin_chooser
   label "Switches to the slate if curr_frame < start_frame for the current scene."
-  xpos 389
-  ypos 347
+  xpos 382
+  ypos 360
+ }
+ Reformat {
+  format "1920 1080 0 0 1920 1080 1 HD_1080"
+  name Reformat2
+  xpos 382
+  ypos 396
  }
  Output {
   name Output1
-  xpos 389
-  ypos 473
+  xpos 370
+  ypos 482
  }
 end_group

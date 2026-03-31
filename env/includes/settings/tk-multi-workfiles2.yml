@@ -417,6 +417,13 @@ settings.tk-multi-workfiles2.nuke.shot_step:
   my_tasks_filters:
     - [ sg_status_list, not_in, ['bid', 'omt', 'hld', 'otr', 'sap', 'apr', 'psu', 'pcl'] ]
     - [ task_assignees, is, '{context.user}']
+  sort_fields:
+    tasks:
+      - { field_code: entity, display_name: Link }
+      - { field_code: due_date, display_name: Due Date }
+      - { field_code: start_date, display_name: Start Date }
+      - { field_code: sg_status_list, display_name: Status }
+      - { field_code: step, display_name: Step }
   allow_task_creation: False
   hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-nuke.py"
   hook_get_badge: "{config}/tk-multi-workfiles2/get_badge.py"

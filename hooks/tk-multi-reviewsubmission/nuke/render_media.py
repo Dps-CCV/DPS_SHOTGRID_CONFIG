@@ -10,11 +10,12 @@
 
 import sgtk
 import os
-import sys
 import nuke
 import shutil
 from datetime import date
 import time
+import subprocess
+import sys
 
 from tank_vendor import six
 
@@ -88,9 +89,6 @@ class RenderMedia(HookBaseClass):
         output_node = None
         ctx = self.__app.context
 
-        if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
-            width = 1080
-            height = 1920
 
         # create group where everything happens
         group = nuke.nodes.Group()
@@ -98,8 +96,38 @@ class RenderMedia(HookBaseClass):
         # now operate inside this group
         group.begin()
         try:
+            # try:
+            #     farmkey = os.environ['ON_FARM']
+            #     farm = True
+            # except:
+            #     farm = False
+            # if farm is not True:
+            drive, rest = os.path.splitdrive(nuke.toNode("preferences").knob("localCachePath").evaluate())
+            local = drive
+            renderFolder = os.path.dirname(input_path)
+            localRenderFolder = renderFolder.replace(os.environ['MOUNT'], local)
+
+            copystring = f'robocopy "{renderFolder}" "{localRenderFolder}" /MT:12 /J'
+
+            self.__app.log_info('Copying read to local.')
+            with subprocess.Popen(
+                    copystring,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1  # line-buffered
+            ) as proc:
+                for line in proc.stdout:
+                    sys.stdout.write(line)  # stream to your console (or handle it as you like)
+                    self.__app.log_info(
+                        line
+                    )
+                return_code = proc.wait()
             # create read node
-            read = nuke.nodes.Read(name="source", file=input_path.replace(os.sep, "/"))
+            self.__app.log_info('Adding slate nodes')
+            local_input = input_path.replace(os.environ['MOUNT'], local)
+            read = nuke.nodes.Read(name="source", file=local_input.replace(os.sep, "/"))
             read["on_error"].setValue("black")
             read["first"].setValue(first_frame)
             read["last"].setValue(last_frame)
@@ -108,8 +136,6 @@ class RenderMedia(HookBaseClass):
             ## Disable localization to ensure that frames are rendered without problems
             read["localizationPolicy"].setValue('off')
             #read.forceUpdateLocalization()
-            if color_space:
-                read["colorspace"].setValue(color_space)
             if "_IPL_" in read['file'].value():
                 read["colorspace"].setValue('Output - Rec.709')
             elif "_IMP_" in read['file'].value():
@@ -156,7 +182,7 @@ class RenderMedia(HookBaseClass):
             # and the slate
             slate_str = "Project: %s\n" % ctx.project["name"]
             slate_str += "%s: %s\n" % (ctx.entity["type"], ctx.entity["name"])
-            slate_str += "Name: %s\n" % name.capitalize()
+            slate_str += "Name: %s\n" % name.upper()
             slate_str += "Version: %s\n" % version_str
 
             if ctx.task:
@@ -177,10 +203,7 @@ class RenderMedia(HookBaseClass):
             output_node.setInput(0, scale)
 
             ###Set Write colorspace output to render ACES - Output - Rec 709
-            if os.environ['PROJECT'] == 'AVATAR_GLASGOW':
-                output_node.knob('colorspace').setValue('sRGB')
-            else:
-                output_node.knob('colorspace').setValue('Output - Rec.709')
+            output_node.knob('colorspace').setValue('Output - Rec.709')
             output_node.knob('create_directories').setValue(True)
 
 
@@ -190,15 +213,9 @@ class RenderMedia(HookBaseClass):
 
         if output_node:
             serverPath = output_node.knob('file').evaluate()
-            try:
-                farmkey = os.environ['ON_FARM']
-                farm = True
-            except:
-                farm = False
-            if farm is not True:
-                local = nuke.toNode("preferences").knob("localCachePath").evaluate()[:-1]
-                localPath = serverPath.replace(os.environ['MOUNT'], local)
-                output_node.knob('file').setValue(localPath)
+            # if farm is not True:
+            localPath = serverPath.replace(os.environ['MOUNT'], local)
+            output_node.knob('file').setValue(localPath)
 
 
             # Make sure the output folder exists
@@ -206,17 +223,43 @@ class RenderMedia(HookBaseClass):
             self.__app.ensure_folder_exists(output_folder)
             read['reload'].execute()
             time.sleep(5)
+            nuke.showDag(group)
+            self.__app.log_info("Rendering Qt")
             nuke.executeMultiple(
                     [output_node], ([first_frame - 1, last_frame, 1],), [nuke.views()[0]]
                 )
-            if farm is not True:
-                shutil.copy(localPath, serverPath)
-                os.remove(localPath)
-                output_node.knob('file').setValue(serverPath)
+            # if farm is not True:
+            self.__app.log_info("Copying local qt file")
+            shutil.copy(localPath, serverPath)
+
+
 
 
         # Cleanup after ourselves
         nuke.delete(group)
+        self.__app.log_info("Deleting local render")
+        try:
+            os.remove(localPath)
+            #deletestring = f'rmdir /s /q "{localRenderFolder}"'
+            deletestring = f'powershell -NoProfile -Command Remove-Item -LiteralPath "{localRenderFolder}" -Recurse -Force -Verbose'
+
+            with subprocess.Popen(
+                    deletestring,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1  # line-buffered
+            ) as proc:
+                for line in proc.stdout:
+                    sys.stdout.write(line)  # stream to your console (or handle it as you like)
+                    self.__app.log_info(
+                        line
+                    )
+                return_code = proc.wait()
+            #shutil.rmtree(localRenderFolder)
+        except:
+            self.__app.log_info("No local files were deleted")
 
         return output_path
 

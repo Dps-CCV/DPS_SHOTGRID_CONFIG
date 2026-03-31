@@ -33,6 +33,7 @@ settings.tk-hiero-export:
   hook_customize_export_ui: '{config}/tk-hiero-export/hiero_customize_export_ui.py'
   hook_update_cuts: '{config}/tk-hiero-export/hiero_update_cuts.py'
   hook_update_shot: '{config}/tk-hiero-export/hiero_update_shot.py'
+  hook_translate_template: '{config}/tk-hiero-export/hiero_translate_template.py'
   vref_published_file_type: VREF Hiero
   parafx_published_file_type: PARAFX Hiero
   location: "@apps.tk-hiero-export.location"

@@ -29,28 +29,24 @@ class EngineInit(Hook):
         :type engine: :class:`~sgtk.platform.Engine`
         """
         if engine.name == "tk-maya":
+            import maya.cmds as cmds
+            import sgtk
             def SetResolution(self):
-                import maya.cmds as cmds
-                import maya.mel as mel
-                import sgtk
                 engine = sgtk.platform.current_engine()
                 sg = engine.shotgun
                 context = engine.context.entity
                 shot = sg.find_one(context['type'], [['id', 'is', context['id']]], ['sg_width', 'sg_height'])
                 if shot['sg_width'] != None:
-                    pAx = maya.cmds.getAttr("defaultResolution.pixelAspect")
-                    pAr = maya.cmds.getAttr("defaultResolution.deviceAspectRatio")
-                    maya.cmds.setAttr("defaultResolution.aspectLock", 0)
-                    maya.cmds.setAttr("defaultResolution.width", shot['sg_width'])
-                    maya.cmds.setAttr("defaultResolution.height", shot['sg_height'])
-                    maya.cmds.setAttr("defaultResolution.pixelAspect", pAx)
-                    maya.cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
-                    maya.cmds.setAttr("defaultResolution.aspectLock", 1)
+                    pAx = cmds.getAttr("defaultResolution.pixelAspect")
+                    pAr = cmds.getAttr("defaultResolution.deviceAspectRatio")
+                    cmds.setAttr("defaultResolution.aspectLock", 0)
+                    cmds.setAttr("defaultResolution.width", shot['sg_width'])
+                    cmds.setAttr("defaultResolution.height", shot['sg_height'])
+                    cmds.setAttr("defaultResolution.pixelAspect", pAx)
+                    cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
+                    cmds.setAttr("defaultResolution.aspectLock", 1)
                     texto = "Render settings resolution changed to: " + str(shot['sg_width']) + "x" + str(shot['sg_height'])
-                    cmds.confirmDialog(title="Change status", message=texto)
-                else:
-                    texto = "Resolution fields could not be found in Shotgun"
-                    cmds.confirmDialog(title="Change status", message=texto)
+                    cmds.confirmDialog(title="Resolution Mismatch", message=texto)
 
             # first, set up our callback, calling out to a method inside the app module contained
             # in the python folder of the app

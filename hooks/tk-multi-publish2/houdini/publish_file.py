@@ -11,7 +11,7 @@
 import os
 import pprint
 import traceback
-import platform
+import shutil
 
 import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
@@ -842,12 +842,9 @@ class BasicFilePublishPlugin(HookBaseClass):
                 else:
                     workFileNorm = os.path.normpath(work_file)
                     publishFileNorm = os.path.normpath(publish_file)
-                    if platform.system() == 'Windows':
-                        copyCommand = 'copy '
-                    else:
-                        copyCommand = 'cp '
-                    copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
+                    copystring = 'copy ' + workFileNorm + ' ' + publishFileNorm
                     os.popen(copystring)
+                    #shutil.copyfile(workFileNorm, publishFileNorm)
 
             except Exception:
                 raise Exception(

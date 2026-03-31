@@ -22,15 +22,15 @@ path.windows.mari: C:\Program Files\Mari4.6v4\Bundle\bin\Mari4.6v4.exe
 # Motionbuilder
 path.windows.motionbuilder: C:\Program Files\Autodesk\MotionBuilder 2020\bin\x64\motionbuilder.exe
 
-## Hiero
-#path.linux.hiero: "Nuke14.0"
-#path.mac.hiero: "/Applications/Nuke14.0v2/Hiero14.0v2.app"
-#path.windows.hiero: C:\Program Files\Nuke14.0v2\Nuke14.0.exe
+# Hiero
+path.linux.hiero: ""
+path.mac.hiero: ""
+path.windows.hiero: ""
 
 # RV
 path.linux.rv: "rv"
 path.mac.rv: "/Applications/RV.app"
-path.windows.rv: C:\Program Files\Shotgrid\RV-2022.3.1\bin\rv.exe
+path.windows.rv: C:\Program Files\Autodesk\RV-2025.0.0\bin\rv.exe
 
 # Resolve
 path.linux.resolve: "davinci"

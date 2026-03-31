@@ -59,6 +59,7 @@ settings.tk-nuke-writenode.asset:
         colorspace: "linear"
         metadata: "all metadata"
         compression: Zip (1 scanline)
+        interleave: channels
       tank_type: Rendered Image
       tile_color: [ 8, 192, 209 ]
       promote_write_knobs: [ ]
@@ -174,6 +175,7 @@ settings.tk-nuke-writenode.shot:
       colorspace: "linear"
       metadata: "all metadata"
       compression: Zip (1 scanline)
+      interleave: channels
     tank_type: Rendered Image
     tile_color: [ 8, 192, 209 ]
     promote_write_knobs: []

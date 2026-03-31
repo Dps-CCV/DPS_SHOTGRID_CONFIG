@@ -11,6 +11,7 @@
 import nuke
 import os
 import sgtk
+import logging
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
@@ -122,6 +123,7 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         """
 
         accepted = True
+        checked = True
         review_submission_app = self.parent.engine.apps.get("tk-multi-reviewsubmission")
         if review_submission_app is None:
             accepted = False
@@ -161,7 +163,10 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
                 "Submit for review plugin accepted: %s" % (path,),
                 extra={"action_show_folder": {"path": path}},
             )
-        return {"accepted": accepted, "checked": True}
+        if item.properties.get("publish_type") not in ['BG_MATTEPAINT', 'RENDER_NUKE']:
+            checked = False
+
+        return {"accepted": accepted, "checked": checked}
 
     def validate(self, settings, item):
         """
@@ -181,6 +186,19 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         # in the tk-nuke-writenode app, then the write node app falls back on the
         # full-res template. Or if they rendered in full res and then switched to
         # proxy mode later. In this case, this is likely user error, so we catch it.
+        checked = True
+        self.logger.info("test de actualizado")
+        for i in item.tasks:
+            if i.plugin.name == 'Publish Renders to Shotgun':
+                if i.checked == False:
+                    checked = False
+        for i in item.parent.parent.tasks:
+            if i.plugin.name == 'Publish Script to Shotgun':
+                if i.checked == False:
+                    checked = False
+        if checked == False:
+            self.logger.error("In order to publish the quicktime version, you have to publish the render")
+            return False
         root_node = nuke.root()
         proxy_mode_on = root_node["proxy"].value()
         if proxy_mode_on:
@@ -216,8 +234,37 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         sg_task = self.parent.context.task
         comment = item.description
         thumbnail_path = item.get_thumbnail_as_path()
+
+
         progress_cb = lambda *args, **kwargs: None
         review_submission_app = self.parent.engine.apps.get("tk-multi-reviewsubmission")
+
+        # Add a custom handler to forward review app logs to publisher logger
+        review_logger = review_submission_app.logger
+
+        # Create a handler that forwards to publisher logger
+        class PublisherLogHandler(logging.Handler):
+            def __init__(self, publisher_logger):
+                super(PublisherLogHandler, self).__init__()
+                self.publisher_logger = publisher_logger
+
+            def emit(self, record):
+                # Forward the log record to publisher logger
+                msg = self.format(record)
+
+                if record.levelno >= logging.ERROR:
+                    self.publisher_logger.error(msg)
+                elif record.levelno >= logging.WARNING:
+                    self.publisher_logger.warning(msg)
+                elif record.levelno >= logging.INFO:
+                    self.publisher_logger.info(msg)
+                else:
+                    self.publisher_logger.debug(msg)
+
+        # Add the custom handler
+        custom_handler = PublisherLogHandler(self.logger)
+        custom_handler.setLevel(logging.DEBUG)
+        review_logger.addHandler(custom_handler)
 
         render_template = item.properties.get("work_template")
         if render_template is None:
@@ -238,16 +285,30 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
             )
 
         render_path_fields = render_template.get_fields(render_path)
+        render_path_fields['name'] = sg_publish_data["code"]
         first_frame = item.properties.get("first_frame")
         last_frame = item.properties.get("last_frame")
         colorspace = item.properties.get("color_space")
+        if item.properties.get("publish_type") in ['PRECOMP', 'TECH_PRECOMP']:
+            first_frame = item.properties.get("render_first")
+            last_frame = item.properties.get("render_last")
 
+        publishes = [sg_publish_data]
+        try:
+            sg_parent_publish_data = item.parent.parent.properties.get("sg_publish_data")
+            if sg_parent_publish_data is not None:
+                publishes = [sg_publish_data, sg_parent_publish_data]
+        except:
+            self.logger.info("No parent publish data found")
+
+        self.logger.info("Starting ReviewSubmission")
+        self.logger.info("Copying files to local")
         version = review_submission_app.render_and_submit_version(
             publish_template,
             render_path_fields,
             first_frame,
             last_frame,
-            [sg_publish_data],
+            publishes,
             sg_task,
             comment,
             thumbnail_path,

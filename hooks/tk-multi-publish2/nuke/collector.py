@@ -98,9 +98,10 @@ class NukeSessionCollector(HookBaseClass):
 
             # run node collection if not in hiero
             if hasattr(engine, "hiero_enabled") and not engine.hiero_enabled:
-                self.collect_sg_writenodes(project_item)
-                self.collect_sg_writeGeoCam_nodes(project_item)
-                self.collect_sg_writeGeo_nodes(project_item)
+                item_types = {}
+                self.collect_sg_writenodes(project_item, item_types)
+                self.collect_sg_writeGeoCam_nodes(project_item, item_types)
+                self.collect_sg_writeGeo_nodes(project_item, item_types)
                 self.collect_node_outputs(project_item)
         else:
             nuke.message("Estás en modo proxy. Desactivalo para publicar")
@@ -168,6 +169,7 @@ class NukeSessionCollector(HookBaseClass):
         import hiero.core
 
         publisher = self.parent
+
 
         # go ahead and build the path to the icon for use by any projects
         icon_path = os.path.join(
@@ -285,7 +287,7 @@ class NukeSessionCollector(HookBaseClass):
                     # collected within the current session.
                     item.name = "%s (%s)" % (item.name, node.name())
 
-    def collect_sg_writenodes(self, parent_item):
+    def collect_sg_writenodes(self, parent_item, item_types):
         """
         Collect any rendered sg write nodes in the session.
 
@@ -307,11 +309,15 @@ class NukeSessionCollector(HookBaseClass):
         last_frame = int(nuke.root()["last_frame"].value())
 
         for node in sg_writenode_app.get_write_nodes():
-            publish_path_CHECK = sg_writenode_app.get_node_render_path(node)
+            # publish_path_CHECK = sg_writenode_app.get_node_render_path(node)
 
 
             # see if any frames have been rendered for this write node
             rendered_files = sg_writenode_app.get_node_render_files(node)
+            try:
+                rendered_files = sorted(rendered_files)
+            except:
+                self.logger.info ("Unable to sort the rendered files")
             if not rendered_files:
                 continue
 
@@ -326,12 +332,12 @@ class NukeSessionCollector(HookBaseClass):
             # the sequence path, template knowledge provided by the
             # tk-nuke-writenode app. The base collector makes some "zero config"
             # assupmtions about the path that we don't need to make here.
-            if node.knob('tk_profile_list').value() in ["Render 16bits"]:
-                item_type = "%s.sequence" % (item_info["item_type"],)
+            if node.knob('tk_profile_list').value() in ["IMAGE_PLANE_MOV"]:
+                item_type = "%s.video" % (item_info["item_type"],)
+                type_display = "%s Video" % (item_info["type_display"],)
             else:
-                item_type = "%s.precompSequence" % (item_info["item_type"],)
-            type_display = "%s Sequence" % (item_info["type_display"],)
-
+                item_type = "%s.sequence" % (item_info["item_type"],)
+                type_display = "%s Sequence" % (item_info["type_display"],)
             # we'll publish the path with the frame/eye spec (%V, %04d)
             publish_path = sg_writenode_app.get_node_render_path(node)
 
@@ -339,16 +345,6 @@ class NukeSessionCollector(HookBaseClass):
             render_template = sg_writenode_app.get_node_render_template(node)
             render_path_fields = render_template.get_fields(publish_path)
 
-            # rp_name = render_path_fields.get("name")
-            # rp_channel = render_path_fields.get("channel")
-            # if not rp_name and not rp_channel:
-            #     publish_name = "%s %s" %(node.knob('tk_profile_list').value(), node.knob('tank_channel').value())
-            # elif not rp_name:
-            #     publish_name = "Channel %s" % rp_channel
-            # elif not rp_channel:
-            #     publish_name = rp_name
-            # else:
-            #     publish_name = "%s, Channel %s" % (rp_name, rp_channel)
 
             publish_name = "%s %s" % ('_'.join(os.path.splitext(os.path.basename(publish_path))[0].split('_')[:-1]), node.knob('tank_channel').value())
 
@@ -358,10 +354,84 @@ class NukeSessionCollector(HookBaseClass):
             # use the path basename and nuke writenode name for display
             (_, filename) = os.path.split(publish_path)
             display_name = "%s (%s)" % (publish_name, node.name())
+            icon_path = item_info["icon_path"]
 
-            # create and populate the item
-            item = parent_item.create_item(item_type, type_display, display_name)
-            item.set_icon_from_path(item_info["icon_path"])
+
+            if node.knob('tk_profile_list').value() == "MATTE_PAINT":
+                if "MATTE_PAINT" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.mattepaint", "MATTE_PAINTS",
+                                                            "All Session MATTE_PAINTS")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["MATTE_PAINT"] = renderdivider
+                # create and populate the item
+                item = item_types["MATTE_PAINT"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "BG_MATTEPAINT"
+
+            elif node.knob('tk_profile_list').value() in ["IMAGE_PLANE", "IMAGE_PLANE_MOV"]:
+                if "IMAGE_PLANE" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.imageplane", "IMAGE_PLANES",
+                                                            "All Session IMAGE_PLANES")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["IMAGE_PLANE"] = renderdivider
+                # create and populate the item
+                item = item_types["IMAGE_PLANE"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "IMAGE_PLANE"
+
+            elif node.knob('tk_profile_list').value() == "PRECOMP":
+                if "PRECOMP" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.precomp", "PRECOMPS",
+                                                            "All Session PRECOMPS")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["PRECOMP"] = renderdivider
+                # create and populate the item
+                item = item_types["PRECOMP"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "PRECOMP"
+                item.properties["render_first"] = int(rendered_files[0][-8:-4])
+                item.properties["render_last"] = int(rendered_files[-1][-8:-4])
+
+            elif node.knob('tk_profile_list').value() == "TECH_PRECOMP":
+                if "TECH_PRECOMP" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.tech_precomp", "TECH_PRECOMPS",
+                                                            "All Session TECH_PRECOMPS")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["TECH_PRECOMP"] = renderdivider
+                # create and populate the item
+                item = item_types["TECH_PRECOMP"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "TECH_PRECOMP"
+                item.properties["render_first"] = int(rendered_files[0][-8:-4])
+                item.properties["render_last"] = int(rendered_files[-1][-8:-4])
+
+            elif node.knob('tk_profile_list').value() == "ALPHA":
+                if "ALPHA" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.alpha", "ALPHAS",
+                                                            "All Session ALPHAS")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["ALPHA"] = renderdivider
+                # create and populate the item
+                item = item_types["ALPHA"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "ALPHA_RENDER"
+
+            else:
+                if "RENDER" not in item_types:
+                    renderdivider = parent_item.create_item("nuke.session.renders", "RENDERS",
+                                                            "All Session Renders")
+                    renderdivider.set_icon_from_path(icon_path)
+                    renderdivider.expanded = False
+                    item_types["RENDER"] = renderdivider
+                # create and populate the item
+                item = item_types["RENDER"].create_item(item_type, type_display, display_name)
+                item.set_icon_from_path(item_info["icon_path"])
+                item.properties["publish_type"] = "RENDER_NUKE"
 
             # if the supplied path is an image, use the path as # the thumbnail.
             item.set_thumbnail_from_path(path)
@@ -395,18 +465,6 @@ class NukeSessionCollector(HookBaseClass):
             # secondary publish plugins
             item.properties["sg_writenode"] = node
 
-            if node.knob('tk_profile_list').value() == "MATTE_PAINT":
-                item.properties["publish_type"] = "BG_MATTEPAINT"
-            elif node.knob('tk_profile_list').value() in ["IMAGE_PLANE", "IMAGE_PLANE_MOV"]:
-                item.properties["publish_type"] = "IMAGE_PLANE"
-            elif node.knob('tk_profile_list').value() == "PRECOMP":
-                item.properties["publish_type"] = "PRECOMP"
-            elif node.knob('tk_profile_list').value() == "TECH_PRECOMP":
-                item.properties["publish_type"] = "TECH_PRECOMP"
-            elif node.knob('tk_profile_list').value() == "ALPHA":
-                item.properties["publish_type"] = "ALPHA_RENDER"
-            else:
-                item.properties["publish_type"] = "RENDER_NUKE"
 
             # Collect dependencies from node
             item.properties["publish_dependencies"] = self.list_dependencies(node)
@@ -419,7 +477,7 @@ class NukeSessionCollector(HookBaseClass):
             self.logger.info("Collected file: %s" % (publish_path,))
 
 
-    def collect_sg_writeGeoCam_nodes(self, parent_item):
+    def collect_sg_writeGeoCam_nodes(self, parent_item, item_types):
         """
         Collect any rendered sg write nodes in the session.
 
@@ -549,7 +607,7 @@ class NukeSessionCollector(HookBaseClass):
 
             self.logger.info("Collected file: %s" % (publish_path,))
 
-    def collect_sg_writeGeo_nodes(self, parent_item):
+    def collect_sg_writeGeo_nodes(self, parent_item, item_types):
         """
         Collect any rendered sg write nodes in the session.
 

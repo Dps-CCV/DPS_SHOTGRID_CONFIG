@@ -11,12 +11,11 @@
 import os
 import pprint
 import traceback
-import datetime
 
 import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
-import platform
 import nuke
+import shutil
 
 HookBaseClass = sgtk.get_hook_baseclass()
 

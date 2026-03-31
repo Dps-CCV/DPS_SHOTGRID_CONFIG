@@ -9,6 +9,7 @@
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 import maya.cmds as cmds
+import maya.mel as mel
 
 import sgtk
 from sgtk.platform.qt import QtGui
@@ -159,6 +160,7 @@ class SceneOperation(HookClass):
 
             # do new file:
             cmds.file(newFile=True, force=True)
+            mel.eval('setPreferredRenderSetupPreset default_render_settings false;')
             return True
     def CheckFrameRate(self, context):
         ### Routine for checking frame rate against project settings in the web

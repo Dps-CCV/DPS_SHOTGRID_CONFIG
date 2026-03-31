@@ -18,6 +18,9 @@ import sgtk
 
 
 
+
+
+
 class ContextChange(get_hook_baseclass()):
     """
     - If an engine **starts up**, the ``current_context`` passed to the hook
@@ -92,7 +95,7 @@ class ContextChange(get_hook_baseclass()):
                     self.logger.info("Environment variable SHOT changed to %s", str(current_context.entity["name"]))
                     self.logger.info("Environment variable SHOT_FOLDER changed to %s", str(shot_path))
 
-                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["project.Project.sg_format", "sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
+                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["project.Project.sg_format", "sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_lmt", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
                     os.environ["SEQ"] = str(seq["sg_sequence"]["name"])
                     os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
                     methods = ''
@@ -112,6 +115,10 @@ class ContextChange(get_hook_baseclass()):
 
                         os.environ["LMT"] = str(clip["sg_source_clip.SourceClip.sg_lmt"])
                         self.logger.info("Environment variable LMT changed to %s", str(clip["sg_source_clip"]["name"]))
+
+                    elif clip["sg_source_clip"]["sg_lmt"] != "":
+                        os.environ["LMT"] = clip["sg_source_clip"]["sg_lmt"]
+                        self.logger.info("Environment variable LMT changed to %s", clip["sg_source_clip"]["sg_lmt"])
 
                     else:
                         os.environ["CLIP"] = " "
@@ -161,28 +168,25 @@ class ContextChange(get_hook_baseclass()):
                     mel.eval("colorManagementPrefs -refresh;")
 
                     def SetResolution(self):
-                        import maya.cmds as cmds
-                        import maya.mel as mel
-                        import sgtk
                         engine = sgtk.platform.current_engine()
                         sg = engine.shotgun
                         context = engine.context.entity
                         shot = sg.find_one(context['type'], [['id', 'is', context['id']]],
                                            ['sg_width', 'sg_height'])
                         if shot['sg_width'] != None:
-                            pAx = maya.cmds.getAttr("defaultResolution.pixelAspect")
-                            pAr = maya.cmds.getAttr("defaultResolution.deviceAspectRatio")
-                            maya.cmds.setAttr("defaultResolution.aspectLock", 0)
-                            maya.cmds.setAttr("defaultResolution.width", shot['sg_width'])
-                            maya.cmds.setAttr("defaultResolution.height", shot['sg_height'])
-                            maya.cmds.setAttr("defaultResolution.pixelAspect", pAx)
-                            maya.cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
-                            maya.cmds.setAttr("defaultResolution.aspectLock", 1)
+                            pAx = cmds.getAttr("defaultResolution.pixelAspect")
+                            pAr = cmds.getAttr("defaultResolution.deviceAspectRatio")
+                            cmds.setAttr("defaultResolution.aspectLock", 0)
+                            cmds.setAttr("defaultResolution.width", shot['sg_width'])
+                            cmds.setAttr("defaultResolution.height", shot['sg_height'])
+                            cmds.setAttr("defaultResolution.pixelAspect", pAx)
+                            cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
+                            cmds.setAttr("defaultResolution.aspectLock", 1)
                             texto = "Render settings resolution changed to: " + str(shot['sg_width']) + "x" + str(shot['sg_height'])
-                            cmds.confirmDialog(title="Change status", message=texto)
+                            cmds.confirmDialog(title="Resolution Mismatch", message=texto)
                         else:
                             texto = "Resolution fields could not be found in Shotgun"
-                            cmds.confirmDialog(title="Change status", message=texto)
+                            cmds.confirmDialog(title="Resolution Mismatch", message=texto)
 
                     # first, set up our callback, calling out to a method inside the app module contained
                     # in the python folder of the app

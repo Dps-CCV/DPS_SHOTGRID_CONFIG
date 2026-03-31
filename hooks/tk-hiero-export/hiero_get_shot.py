@@ -1,18 +1,37 @@
-from sgtk import Hook
+# Copyright (c) 2013 Shotgun Software Inc.
+#
+# CONFIDENTIAL AND PROPRIETARY
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
+# Source Code License included in this distribution package. See LICENSE.
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
+# not expressly granted therein are reserved by Shotgun Software Inc.
+
+from tank import Hook
+
 
 class HieroGetShot(Hook):
    """
-   Return a Shotgun Shot dictionary for the given Hiero items
+    This class implements a hook that can determines which Shotgun entity
+    should be associated with each task and track item being exported.
    """
 
    def execute(self, task, item, data, **kwargs):
        """
        Takes a hiero.core.TrackItem as input and returns a data dictionary for
        the shot to update the cut info for.
+
+        :param task: The Hiero task being processed.
+        :param item: The hiero.core.TrackItem being processed.
+        :param dict data: A dictionary with cached parent data.
+
+        :returns: A Shot entity.
+        :rtype: dict
        """
 
        # get the parent entity for the Shot
-       parent = self.get_shot_parent(item.parentSequence(), data, item=item)
+       parent = self.get_shot_parent(item.parentSequence(), data)
 
 
        # shot parent field
@@ -40,7 +59,9 @@ class HieroGetShot(Hook):
                "project": self.parent.context.project,
            }
            shot = sg.create("Shot", shot_data, return_fields=fields)
-           self.parent.log_info("Created Shot in Shotgun: %s" % shot_data)
+           self.parent.log_info(
+                "Created Shot in Flow Production Tracking: %s" % shot_data
+            )
        else:
            shot = shots[0]
 
@@ -52,7 +73,7 @@ class HieroGetShot(Hook):
                entity=shot,
                source=item.source(),
                item=item,
-               task=kwargs.get("task")
+               task=kwargs.get("task"),
            )
 
        return shot
@@ -88,9 +109,9 @@ class HieroGetShot(Hook):
        episodes = sg.find("Episode", filters, ["code"])
        if len(episodes) > 1:
            # can not handle multiple episodes with the same name
-           raise StandardError("Multiple episodes named '%s' found" % nuke_studio_episode)
+           raise Exception("Multiple episodes named '%s' found" % nuke_studio_episode)
 
-       if len(episodes) == 0:
+       elif len(episodes) == 0:
            # no episode has previously been created with this name
            # so we must create it in shotgun
            epi_data = {
@@ -123,21 +144,18 @@ class HieroGetShot(Hook):
        if hiero_sequence.guid() in data["parent_cache"]:
            return data["parent_cache"][hiero_sequence.guid()]
        episode = self.get_episode(data, hiero_sequence)
-       # parent not found in cache, grab it from Shotgun
-       # bypass sequence name to get only the base sequence name without version
-       parts = hiero_sequence.name().split("_")
-       hiero_sequenceName = "_".join(parts[:3])
+
        sg = self.parent.shotgun
-       filter = [ ["project", "is", self.parent.context.project], ["code", "is", hiero_sequenceName], ["episode", "is", episode], ]
+       filter = [ ["project", "is", self.parent.context.project], ["code", "is", hiero_sequence.name()], ["episode", "is", episode], ]
        # the entity type of the parent.
        par_entity_type = "Sequence"
        parents = sg.find(par_entity_type, filter)
        if len(parents) > 1:
          # can not handle multiple parents with the same name
-         raise Exception( "Multiple %s entities named '%s' found" % (par_entity_type, hiero_sequenceName) )
+         raise Exception( "Multiple %s entities named '%s' found" % (par_entity_type, hhiero_sequence.name()) )
        if len(parents) == 0:
          # create the parent in shotgun
-         par_data = { "code": hiero_sequenceName, "project": self.parent.context.project, "episode": episode, }
+         par_data = { "code": hiero_sequence.name(), "project": self.parent.context.project, "episode": episode, }
          parent = sg.create(par_entity_type, par_data)
          self.parent.log_info( "Created %s in Shotgun: %s" % (par_entity_type, par_data))
        else:

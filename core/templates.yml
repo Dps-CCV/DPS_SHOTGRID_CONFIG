@@ -58,9 +58,8 @@ keys:
     version:
         type: int
         format_spec: "03"
-    version_folder:
-        type: int
-        format_spec: "03"
+    Track:
+        type: str
     version_four:
        type: int
        format_spec: "04"
@@ -623,7 +622,7 @@ paths:
     hiero_render_path:
         definition: 'VFX/{Episode}/{Sequence}/{Shot}/SOURCE/PARAFX/{Shot}_PARAFX_v{version}/{Shot}_PARAFX_v{version}.{SEQ}.exr'
     hiero_layer_path:
-        definition: 'VFX/{Episode}/{Sequence}/{Shot}/SOURCE/LAYERS/{Shot}_PLT{version_folder}_v{version}/{Shot}_PLT{version_folder}_v{version}.{SEQ}.exr'
+        definition: 'VFX/{Episode}/{Sequence}/{Shot}/SOURCE/LAYERS/{Shot}_PLT{Track}_v{version}/{Shot}_PLT{Track}_v{version}.{SEQ}.exr'
     hiero_sound_path:
         definition: 'VFX/{Episode}/{Sequence}/{Shot}/SOURCE/SOUND/{Shot}_SOUNDS_v{version}.wav'
 
