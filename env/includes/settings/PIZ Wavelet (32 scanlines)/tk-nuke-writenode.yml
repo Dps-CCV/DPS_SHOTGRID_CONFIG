@@ -28,7 +28,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: all
+        channels: rgba
         interleave: channels
         autocrop: true
         compression: PIZ Wavelet (32 scanlines)
@@ -121,7 +121,7 @@ settings.tk-nuke-writenode.shot:
     render_template: nuke_shot_render
     settings:
       datatype: 16 bit half
-      channels: all
+      channels: rgba
       autocrop: true
       compression: PIZ Wavelet (32 scanlines)
       interleave: channels
