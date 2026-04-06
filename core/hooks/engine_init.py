@@ -28,9 +28,12 @@ class EngineInit(Hook):
         :param engine: Engine that has been initialized.
         :type engine: :class:`~sgtk.platform.Engine`
         """
-        # ##synchronize path cache
-        # tk = engine.sgtk
-        # tk.synchronize_filesystem_structure(full_sync=True)
+        ##synchronize path cache
+        if engine.context.project:
+            self.logger.info("SYnchronize folders")
+            tk = engine.sgtk
+            tk.synchronize_filesystem_structure(full_sync=True)
+            self.logger.info("Sync done")
 
         if engine.name == "tk-maya":
             import maya.cmds as cmds
