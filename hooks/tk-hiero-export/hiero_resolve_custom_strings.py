@@ -33,9 +33,9 @@ class HieroResolveCustomStrings(Hook):
         shot_code = task._item.name()
         fields = {}
         fields['Project'] = self.parent.context.project['name']
-        fields['Sequence'] = task._item.parentSequence()
+        fields['Sequence'] = task._item.parentSequence().name()
         fields['Shot'] = shot_code
-        fields['Episode'] = '_'.join(task._item.parentSequence().split('_')[:2])
+        fields['Episode'] = '_'.join(task._item.parentSequence().name()split('_')[:2])
 
         return fields[keyword]
 
