@@ -16,7 +16,7 @@ from tank import Hook
 import os
 import shutil
 import stat
-import sgtk
+
 
 class TankInit(Hook):
     def execute(self, **kwargs):

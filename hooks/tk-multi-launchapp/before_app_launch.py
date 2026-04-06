@@ -103,6 +103,11 @@ class BeforeAppLaunch(tank.Hook):
 
         os.environ['RV_USE_CUTS_IN_SCREENING_ROOM'] = "True"
 
+        arnold_plugin_path = os.path.join(
+            os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
+        )
+        os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
+
 
         os.environ['SHOTGUN_SITE'] = tank.platform.current_engine().sgtk.shotgun_url
 
