@@ -18,7 +18,7 @@ to set environment variables or run scripts as part of the app initialization.
 import os
 import tank
 import sys
-import sgtk
+
 
 
 class BeforeAppLaunch(tank.Hook):
@@ -58,9 +58,6 @@ class BeforeAppLaunch(tank.Hook):
         multi_launchapp = self.parent
         current_context = multi_launchapp.context
 
-        ##synchronize path cache
-        tk = sgtk.sgtk_from_entity('Project', current_context.project["id"])
-        tk.synchronize_filesystem_structure(full_sync=True)
 
         ## Definir variables generales para su posible uso posterior dentro de las aplicaciones
         os.environ["PROJECT"] = str(current_context.project["name"])
