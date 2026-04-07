@@ -28,24 +28,24 @@ class TankInit(Hook):
         The default implementation does nothing.
         """
 
-        if os.environ.get("SGD_DESKTOP_SITE_INIT_DONE") == None:
-            ##Delete old configs
-            index = __file__.find("core\\")
-            config = __file__[:index]
-            parent_folder = os.path.dirname(os.path.dirname(config))
-            def fix_permissions(path):
-                for root, dirs, files in os.walk(path, topdown=False):
-                    for d in dirs:
-                        os.chmod(os.path.join(root, d), stat.S_IWUSR)
-                    for f in files:
-                        os.chmod(os.path.join(root, f), stat.S_IWUSR)
-            if os.environ.get("SGD_DESKTOP_SITE_INIT_DONE") == None:
-                for c in os.listdir(parent_folder):
-                    full_path = os.path.join(parent_folder, c)
-                    if full_path not in config:
-                        print(full_path)
-                        os.chmod(full_path, stat.S_IWUSR)
-                        fix_permissions(full_path)
-                        shutil.rmtree(full_path)
-        os.environ["SGD_DESKTOP_SITE_INIT_DONE"] = "1"
+        def fix_permissions(path):
+            for root, dirs, files in os.walk(path, topdown=False):
+                for d in dirs:
+                    os.chmod(os.path.join(root, d), stat.S_IWUSR)
+                for f in files:
+                    os.chmod(os.path.join(root, f), stat.S_IWUSR)
+        ##Delete old configs
+        index = __file__.find("core\\")
+        config = __file__[:index]
+        parent_folder = os.path.dirname(os.path.dirname(config))
+        if len(os.listdir(parent_folder))<2:
+            pass
+        else:
+            for c in os.listdir(parent_folder):
+                full_path = os.path.join(parent_folder, c)
+                if full_path not in config:
+                    print(full_path)
+                    os.chmod(full_path, stat.S_IWUSR)
+                    fix_permissions(full_path)
+                    shutil.rmtree(full_path)
         pass

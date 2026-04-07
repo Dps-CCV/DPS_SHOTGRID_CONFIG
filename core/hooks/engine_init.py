@@ -30,10 +30,14 @@ class EngineInit(Hook):
         """
         ##synchronize path cache
         if engine.context.project:
-            self.logger.info("SYnchronize folders")
-            tk = engine.sgtk
-            tk.synchronize_filesystem_structure(full_sync=True)
-            self.logger.info("Sync done")
+            self.logger.info("Synchronize folders")
+            try:
+                tk = engine.sgtk
+                tk.synchronize_filesystem_structure(full_sync=True)
+                self.logger.info("Sync done")
+            except Exception as e:
+                self.logger.info("Synchronize folders failed")
+                self.logger.info(e)
 
         if engine.name == "tk-maya":
             import maya.cmds as cmds
