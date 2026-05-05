@@ -100,10 +100,10 @@ class BeforeAppLaunch(tank.Hook):
 
         os.environ['RV_USE_CUTS_IN_SCREENING_ROOM'] = "True"
 
-        arnold_plugin_path = os.path.join(
-            os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
-        )
-        os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
+        # arnold_plugin_path = os.path.join(
+        #     os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
+        # )
+        # os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
 
 
         os.environ['SHOTGUN_SITE'] = tank.platform.current_engine().sgtk.shotgun_url
@@ -111,7 +111,7 @@ class BeforeAppLaunch(tank.Hook):
         os.environ['SHOTGUN_CONFIG_URI'] = "sgtk:descriptor:path?path=" + tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\config"
         os.environ['SHOTGUN_SGTK_MODULE_PATH'] = tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\install\core\python"
 
-        ###Empty variables fro clip and lmt. Later they are set at context change
+        ###Empty variables from clip and lmt. Later they are set at context change
         os.environ["CLIP"] = " "
         os.environ["LMT"] = " "
         os.environ["SHOT"] = " "

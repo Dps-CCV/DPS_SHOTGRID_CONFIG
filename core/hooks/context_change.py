@@ -74,10 +74,10 @@ class ContextChange(get_hook_baseclass()):
         try:
             os.environ["PROJECT"] = str(current_context.project["name"])
             self.logger.info("Environment variable PROJECT changed to %s", str(current_context.project["name"]))
-            arnold_plugin_path = os.path.join(
-                os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
-            )
-            os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
+            # arnold_plugin_path = os.path.join(
+            #     os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
+            # )
+            # os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
             if current_context.entity:
                 current_engine = sgtk.platform.current_engine()
                 os.environ['SHOTGUN_TASK_TYPE'] = str(current_engine.context.task['type'])
