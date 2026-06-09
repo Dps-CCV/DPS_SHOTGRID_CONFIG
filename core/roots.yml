@@ -5,8 +5,8 @@
 primary:
   default: true
   linux_path: null
-  mac_path: /Volumes/PROYECTOS
-  shotgun_storage_id: 268
-  windows_path: P:\
+  mac_path: null
+  shotgun_storage_id: 300
+  windows_path: W:\
 
 # End of file.
