@@ -9,6 +9,8 @@ def main():
     id = 2215
   elif os.environ['BRANCH'] == "22Dogs":
     id = 2443
+  elif os.environ['BRANCH'] == "magma3":
+    id = 2575
   sg.update('PipelineConfiguration', id, data)
 
 
