@@ -401,7 +401,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         publish_dependencies_ids = []
         if "sg_publish_data" in item.parent.parent.properties:
             publish_dependencies_ids.append(
-                item.parent.properties.sg_publish_data["id"]
+                item.parent.parent.properties.sg_publish_data["id"]
             )
 
         for i in nuke.allNodes("Read"):

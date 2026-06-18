@@ -18,10 +18,103 @@ to set environment variables or run scripts as part of the app initialization.
 import os
 import tank
 import sys
+import argparse
 
 
 
 class BeforeAppLaunch(tank.Hook):
+
+    # --------------------------------------------------------------------------
+    # Helpers: find latest .basic.desktop folder and rebuild path
+    # --------------------------------------------------------------------------
+
+    def _find_project_level(self, path_parts, marker=".basic.desktop"):
+        """
+        Returns the index in path_parts where the folder containing marker is found.
+        E.g. for ['L:\\', 'SHOTGUN_CACHE', 'dareplanet', 'p7283c2542.basic.desktop', ...]
+        returns 3.
+        """
+        for i, part in enumerate(path_parts):
+            if marker in part:
+                return i
+        return -1
+
+    def _get_latest_desktop_folder(self, parent_dir, marker=".basic.desktop"):
+        """
+        Scans parent_dir for subdirectories containing marker and returns
+        the name of the most recently modified one, or None if none found.
+        """
+        if not os.path.isdir(parent_dir):
+            raise FileNotFoundError("Parent directory does not exist: {}".format(parent_dir))
+
+        candidates = []
+        try:
+            entries = os.scandir(parent_dir)
+        except PermissionError as e:
+            raise PermissionError("No permission to read: {}".format(parent_dir)) from e
+
+        for entry in entries:
+            if entry.is_dir() and marker in entry.name:
+                try:
+                    candidates.append((entry.name, entry.stat().st_mtime))
+                except OSError:
+                    pass
+
+        if not candidates:
+            return None
+
+        candidates.sort(key=lambda x: x[1], reverse=True)
+        return candidates[0][0]
+
+    def rebuild_path(self, original_path, marker=".basic.desktop"):
+        """
+        Given a full path, finds the segment containing marker, locates the
+        most recently modified folder with that marker in the same parent
+        directory, and returns the fully reconstructed path.
+
+        :param original_path: Full original path, e.g.:
+            'L:\\SHOTGUN_CACHE\\dareplanet\\p7283c2542.basic.desktop\\cfg\\install\\core\\python'
+        :param marker: String that identifies the project cache folder (default: '.basic.desktop')
+        :returns: Reconstructed path with the latest folder substituted in.
+        :raises ValueError: If no folder with marker is found in the path.
+        :raises FileNotFoundError: If the parent directory does not exist.
+        """
+        original_path = os.path.normpath(original_path)
+
+        # Split path into individual parts
+        parts = []
+        head = original_path
+        while True:
+            head, tail = os.path.split(head)
+            if tail:
+                parts.insert(0, tail)
+            elif head:
+                parts.insert(0, head)
+                break
+            else:
+                break
+
+        marker_index = self._find_project_level(parts, marker)
+        if marker_index == -1:
+            raise ValueError(
+                "No folder with '{}' found in path: {}".format(marker, original_path)
+            )
+
+        # Reconstruct parent dir (everything before the marker segment)
+        parent_dir = os.path.join(*parts[:marker_index])
+        if not os.path.isabs(parent_dir):
+            parent_dir = parts[0] + os.sep + os.path.join(*parts[1:marker_index])
+
+        latest_folder = self._get_latest_desktop_folder(parent_dir, marker)
+        if latest_folder is None:
+            raise FileNotFoundError(
+                "No folder with '{}' found in: {}".format(marker, parent_dir)
+            )
+
+        suffix_parts = parts[marker_index + 1:]
+        new_parts = parts[:marker_index] + [latest_folder] + suffix_parts
+        return os.path.join(*new_parts)
+
     """
     Hook to set up the system prior to app launch.
     """
@@ -73,15 +166,18 @@ class BeforeAppLaunch(tank.Hook):
         )
         os.environ["OCIO"] = ocio_path
 
-        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code", "sg_espacio___color", "sg_format", "sg_compression", "sg_formato___ratio"])
+        getColor = tank.platform.current_engine().shotgun.find_one("Project", [["name", "is", str(current_context.project["name"])]], ["code", "sg_espacio___color", "sg_format", "sg_compression", "sg_formato___ratio", "sg_channels"])
 
         os.environ["PROJECTCOLORSPACE"] = str(getColor["sg_espacio___color"])
 
         os.environ["FormExt"] = getColor['sg_format']
-        if getColor['sg_format'] == 'exr':
-            os.environ["CompressionExt"] = getColor['sg_compression']
-        else:
-            os.environ["CompressionExt"] = getColor['sg_format']
+        # if getColor['sg_format'] == 'exr':
+        #     os.environ["CompressionExt"] = getColor['sg_compression']
+        # else:
+        #     os.environ["CompressionExt"] = getColor['sg_format']
+
+        os.environ["COMPRESSION"] = str(getColor["sg_compression"])
+        os.environ["CHANNELS"] = str(getColor["sg_channels"])
 
 
 
@@ -100,16 +196,11 @@ class BeforeAppLaunch(tank.Hook):
 
         os.environ['RV_USE_CUTS_IN_SCREENING_ROOM'] = "True"
 
-        # arnold_plugin_path = os.path.join(
-        #     os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
-        # )
-        # os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
-
 
         os.environ['SHOTGUN_SITE'] = tank.platform.current_engine().sgtk.shotgun_url
 
-        os.environ['SHOTGUN_CONFIG_URI'] = "sgtk:descriptor:path?path=" + tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\config"
-        os.environ['SHOTGUN_SGTK_MODULE_PATH'] = tank.platform.current_engine().sgtk.configuration_descriptor.get_path() + "\install\core\python"
+        os.environ['SHOTGUN_CONFIG_URI'] = tank.platform.current_engine().sgtk.configuration_descriptor.get_uri()
+        os.environ['SHOTGUN_SGTK_MODULE_PATH'] = self.rebuild_path(tank.get_sgtk_module_path().replace('C:', 'L:'))
 
         ###Empty variables from clip and lmt. Later they are set at context change
         os.environ["CLIP"] = " "
@@ -165,8 +256,8 @@ class BeforeAppLaunch(tank.Hook):
 
 
         elif engine_name == "tk-hiero" or engine_name == "tk-nukestudio":
-            hieroPlugin_environ_path = "L:\\HIERO_PLUGIN_PATH"
-            tank.util.append_path_to_env_var("HIERO_PLUGIN_PATH", hieroPlugin_environ_path)
+            # hieroPlugin_environ_path = "L:\\HIERO_PLUGIN_PATH"
+            # tank.util.append_path_to_env_var("HIERO_PLUGIN_PATH", hieroPlugin_environ_path)
             nuke_environ_path = os.path.join(
                 project_path, "CONFIG/NUKE"
             )
@@ -188,6 +279,8 @@ class BeforeAppLaunch(tank.Hook):
             # os.environ['HOUDINI_DPS_PLUGINS'] = houdini_dps_plugins_path
 
             # self.logger.info("Test %s", houdini_environ_path)
+
+
 
 
 
