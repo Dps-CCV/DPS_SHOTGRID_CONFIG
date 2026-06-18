@@ -6,7 +6,7 @@ name: Update SG Config on push
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master", "22Dogs" ]
+    branches: [ "master", "22Dogs", 'magma3' ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -45,3 +45,23 @@ jobs:
           BRANCH: ${{env.BRANCH}}
           UPDATECONFIGKEY: ${{ secrets.UPDATECONFIGKEY }}
         run: python .github/workflows/updateConfig.py
+
+  # New job — merges master into project branch when master is pushed
+  sync-project-branches:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'master'  # only runs when master is pushed
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge master into project branches
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          for branch in magma3; do
+            git checkout $branch
+            git merge master --no-ff -m "Auto-sync from master"
+            git push origin $branch
+          done
