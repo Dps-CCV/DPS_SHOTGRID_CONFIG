@@ -50,6 +50,8 @@ jobs:
   sync-project-branches:
     runs-on: ubuntu-latest
     if: github.ref_name == 'master'  # only runs when master is pushed
+    permissions:
+      contents: write   # <-- this is what was missing
     steps:
       - uses: actions/checkout@v4
         with:
