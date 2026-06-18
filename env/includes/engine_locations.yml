@@ -61,7 +61,7 @@ engines.tk-nuke.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-nuke
-  version: v0.16.0a
+  version: v0.16.0b
 
 engines.tk-photoshopcc.location:
   type: app_store

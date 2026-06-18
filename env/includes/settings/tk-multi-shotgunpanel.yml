@@ -25,7 +25,7 @@ settings.tk-multi-shotgunpanel:
     - actions: [assign_task, task_to_ip, task_to_rev]
       filters: {}
     Version:
-    - actions: [quicktime_clipboard, sequence_clipboard, add_to_playlist]
+    - actions: [quicktime_clipboard, sequence_clipboard, add_to_playlist, version_to_viewed, version_to_notes, version_to_psu]
       filters: {}
   location: "@apps.tk-multi-shotgunpanel.location"
 
@@ -151,7 +151,7 @@ settings.tk-multi-shotgunpanel.nuke:
     - actions: [assign_task, task_to_ip, task_to_rev]
       filters: {}
     Version:
-    - actions: [quicktime_clipboard, sequence_clipboard, add_to_playlist]
+    - actions: [quicktime_clipboard, sequence_clipboard, add_to_playlist, version_to_viewed, version_to_notes, version_to_psu]
       filters: {}
   location: "@apps.tk-multi-shotgunpanel.location"
 

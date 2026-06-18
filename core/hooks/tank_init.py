@@ -27,7 +27,6 @@ class TankInit(Hook):
 
         The default implementation does nothing.
         """
-
         def fix_permissions(path):
             for root, dirs, files in os.walk(path, topdown=False):
                 for d in dirs:
@@ -38,7 +37,7 @@ class TankInit(Hook):
         index = __file__.find("core\\")
         config = __file__[:index]
         parent_folder = os.path.dirname(os.path.dirname(config))
-        if len(os.listdir(parent_folder))<2:
+        if len(os.listdir(parent_folder))<6:
             pass
         else:
             for c in os.listdir(parent_folder):

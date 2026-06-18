@@ -399,7 +399,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         # if the parent item has publish data, get it id to include it in the list of
         # dependencies
         publish_dependencies_ids = []
-        if "sg_publish_data" in item.parent.properties:
+        if "sg_publish_data" in item.parent.parent.properties:
             publish_dependencies_ids.append(
                 item.parent.properties.sg_publish_data["id"]
             )

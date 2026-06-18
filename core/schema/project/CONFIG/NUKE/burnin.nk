@@ -11,7 +11,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1254" stretch="1"/>
             <splitter orientation="2">
                 <split size="985"/>
-                <dock id="" activePageId="DAG.2" focus="true">
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="DopeSheet.1"/>
                     <page id="DAG.2"/>
@@ -33,7 +33,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
         </splitter>
     </window>
-    <window x="-2160" y="-279" w="1078" h="1866" maximized="1" screen="2">
+    <window x="-2160" y="-279" w="1078" h="1866" screen="2">
         <splitter orientation="1">
             <split size="1078"/>
             <dock id="" activePageId="Curve Editor.1">
@@ -46,7 +46,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 }
 Root {
  inputs 0
- name P:/RUEGA_POR_NOSOTRAS/CONFIG/NUKE/burnin.nk
+ name D:/DISCO_EXTRA/DPS_CONFIG/config/core/schema/project/CONFIG/NUKE/burnin.nk
  frame 981
  first_frame 981
  last_frame 990
@@ -69,7 +69,7 @@ Group {
  note_font Verdana
  selected true
  xpos -251
- ypos -33
+ ypos -28
  mapsize {0.15 0.15}
 }
  Input {
@@ -78,14 +78,20 @@ Group {
   xpos 385
   ypos -2
  }
- AddTimeCode {
-  startcode 00:00:00:00
-  frame 0
-  useFrame true
-  name AddTimeCode2
-  xpos 385
-  ypos 22
+set Nf10ec000 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 50
+  xpos 516
+  ypos 1
  }
+ Dot {
+  name Dot2
+  note_font_size 50
+  xpos 516
+  ypos 464
+ }
+push $Nf10ec000
  OCIOLookTransform {
   in_colorspace scene_linear
   look Shot_GRADE
@@ -188,7 +194,7 @@ Group {
    xpos -61
    ypos -71
   }
-set Nc918cc00 [stack 0]
+set Nf10ecc00 [stack 0]
   Dot {
    name Dot5
    xpos 803
@@ -199,7 +205,7 @@ set Nc918cc00 [stack 0]
    xpos 803
    ypos 560
   }
-push $Nc918cc00
+push $Nf10ecc00
   NoOp {
    name calc
    tile_color 0xff1663ff
@@ -247,7 +253,7 @@ push $Nc918cc00
    addUserKnob {15 title_v}
    title_v {{"title_guide.x + ( title_area.x / 2 )" i} {title_guide.y i} {"title_guide.r - ( title_area.x / 2 )" i} {title_guide.t i}}
   }
-set Nc918d800 [stack 0]
+set Nf10ed800 [stack 0]
   Rectangle {
    replace true
    area {{"ceil( calc.title_guide.x - calc.line )" i} {"ceil( calc.title_guide.y - calc.line )" i} {"ceil( calc.title_guide.r + calc.line )" i} {"ceil( calc.title_guide.t + calc.line )" i}}
@@ -265,7 +271,7 @@ set Nc918d800 [stack 0]
    xpos 604
    ypos 129
   }
-set Nc91c8000 [stack 0]
+set Nf1128000 [stack 0]
   Rectangle {
    replace true
    area {{input.area.x i} {"( ( input.area.y + input.area.t ) / 2 ) - calc.line" i} {input.area.r i} {"( ( input.area.y + input.area.t ) / 2 ) + calc.line" i}}
@@ -292,7 +298,7 @@ set Nc91c8000 [stack 0]
    xpos 667
    ypos 232
   }
-push $Nc91c8000
+push $Nf1128000
   Merge2 {
    inputs 2
    name Merge5
@@ -319,7 +325,7 @@ push $Nc91c8000
    xpos 638
    ypos 478
   }
-push $Nc918d800
+push $Nf10ed800
   Rectangle {
    replace true
    area {{"ceil( calc.action_guide.x - calc.line )" i} {"ceil( calc.action_guide.y - calc.line )" i} {"ceil( calc.action_guide.r + calc.line )" i} {"ceil( calc.action_guide.t + calc.line )" i}}
@@ -380,7 +386,7 @@ push $Nc918d800
    xpos 462
    ypos 395
   }
-push $Nc918d800
+push $Nf10ed800
   Rectangle {
    replace true
    area {{"ceil( calc.ar_guide.x == 0 ? calc.ar_guide.x : calc.ar_guide.x - calc.line )" i} {"ceil( calc.ar_guide.y == 0 ? calc.ar_guide.y : calc.ar_guide.y - calc.line )" i} {"ceil( calc.ar_guide.r == width ? calc.ar_guide.r : calc.ar_guide.r + calc.line )" i} {"ceil( calc.ar_guide.t == height ? calc.ar_guide.t : calc.ar_guide.t + calc.line )" i}}
@@ -398,7 +404,7 @@ push $Nc918d800
    xpos 207
    ypos 129
   }
-set Nc6992400 [stack 0]
+set Ne3d82400 [stack 0]
   Text {
    message "\[value parent.arguide_label]"
    font "\[value parent.font]"
@@ -429,7 +435,7 @@ set Nc6992400 [stack 0]
    ypos 209
    disable {{!calc.ar_isbigger i}}
   }
-push $Nc6992400
+push $Ne3d82400
   Text {
    message "\[if \[string compare \[value parent.aspect_selection] Custom] \{return \[value parent.aspect_selection]:1\} else \{return \[value parent.aspect_custom]:1\}]"
    font "\[value parent.font]"
@@ -460,7 +466,7 @@ push $Nc6992400
    ypos 206
    disable {{!calc.ar_isbigger i}}
   }
-push $Nc6992400
+push $Ne3d82400
   Switch {
    inputs 3
    which {{parent.arguide_label_mode i}}
@@ -474,7 +480,7 @@ push $Nc6992400
    xpos 241
    ypos 321
   }
-push $Nc918d800
+push $Nf10ed800
   Rectangle {
    replace true
    invert true
@@ -489,7 +495,7 @@ push $Nc918d800
    xpos 87
    ypos 169
   }
-push $Nc918d800
+push $Nf10ed800
   Merge2 {
    inputs 2
    mix {{parent.aspectmask_mix i}}
@@ -534,8 +540,8 @@ push $Nc918d800
  Reformat {
   format "1920 1080 0 0 1920 1080 1 HD_1080"
   name Reformat3
-  xpos 389
-  ypos 160
+  xpos 394
+  ypos 159
  }
  Text {
   message "\{top_left\}"
@@ -600,7 +606,6 @@ push $Nc918d800
   translate {300 1800}
   scale 2
   name Transform
-  selected true
   xpos 260
   ypos 260
  }
@@ -639,7 +644,13 @@ push $Nc918d800
   format "1920 1080 0 0 1920 1080 1 HD_1080"
   name Reformat2
   xpos 382
-  ypos 396
+  ypos 407
+ }
+ CopyMetaData {
+  inputs 2
+  name CopyMetaData1
+  xpos 382
+  ypos 450
  }
  Output {
   name Output1

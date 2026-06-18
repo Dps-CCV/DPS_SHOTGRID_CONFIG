@@ -47,9 +47,6 @@ settings.tk-nuke.hiero.project:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
-#    tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
@@ -110,9 +107,6 @@ settings.tk-nuke.hiero.sequence:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
-#    tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
     - { app_instance: tk-multi-snapshot, name: Snapshot... }
@@ -173,8 +167,6 @@ settings.tk-nuke.hiero.shot:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false
@@ -221,8 +213,6 @@ settings.tk-nuke.hiero.shot_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false
@@ -258,14 +248,13 @@ settings.tk-nuke.asset:
     tk-multi-about:
       location: "@apps.tk-multi-about.location"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
+    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.nuke"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
     tk-multi-data-validation: "@settings.tk-multi-data-validation.nuke"
+    tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   favourite_directories:
@@ -306,8 +295,6 @@ settings.tk-nuke.asset_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -338,14 +325,11 @@ settings.tk-nuke.project:
     tk-multi-about:
       location: "@apps.tk-multi-about.location"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
+    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.nuke"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
-
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -359,13 +343,11 @@ settings.tk-nuke.sequence:
     tk-multi-about:
       location: "@apps.tk-multi-about.location"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
+    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.nuke"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
@@ -379,13 +361,11 @@ settings.tk-nuke.shot:
     tk-multi-about:
       location: "@apps.tk-multi-about.location"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
-    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
+    tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel.nuke"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2.launch_at_startup"
     tk-nuke-quickreview:
       location: "@apps.tk-nuke-quickreview.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
     tk-multi-data-validation: "@settings.tk-multi-data-validation.nuke"
 
   menu_favourites:
@@ -429,8 +409,6 @@ settings.tk-nuke.shot_step:
     tk-nuke-quickreview: "@settings.tk-nuke-quickreview"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
     tk-multi-data-validation: "@settings.tk-multi-data-validation.nuke"
 
   menu_favourites:
@@ -479,8 +457,6 @@ settings.tk-nuke.nukestudio.asset_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.asset"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false
@@ -524,8 +500,6 @@ settings.tk-nuke.nukestudio.project:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
@@ -585,8 +559,6 @@ settings.tk-nuke.nukestudio.sequence:
     tk-multi-breakdown2: "@settings.tk-multi-breakdown2.nukestudio"
     tk-multi-loader2: "@settings.tk-multi-loader2.nukestudio.project"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
   menu_favourites:
     - { app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o }
@@ -648,8 +620,6 @@ settings.tk-nuke.nukestudio.shot:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false
@@ -696,8 +666,6 @@ settings.tk-nuke.nukestudio.shot_step:
       location: "@apps.tk-nuke-quickreview.location"
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
-    tk-multi-scenebuilder:
-      location: "@apps.tk-multi-scenebuilder.location"
   bin_context_menu:
   - app_instance: tk-multi-workfiles2
     keep_in_menu: false

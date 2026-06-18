@@ -137,9 +137,12 @@ class ContextChange(get_hook_baseclass()):
 
                 if current_engine._Engine__engine_instance_name == 'tk-nuke':
                     import nuke
-                    reloadConfig = nuke.root().knob('reloadConfig')
-                    reloadConfig.execute()
-                    self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    try:
+                        reloadConfig = nuke.root().knob('reloadConfig')
+                        reloadConfig.execute()
+                        self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    except Exception as e:
+                        self.logger.info("Reload Config failed %s", str(e))
                     try:
                         ####DPS Write Shortcuts
                         # # CUSTOM SHORTCUTS

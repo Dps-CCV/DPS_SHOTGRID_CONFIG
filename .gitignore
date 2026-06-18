@@ -6,3 +6,8 @@
 /core/interpreter_Darwin.cfg
 /core/interpreter_Linux.cfg
 /core/interpreter_Windows.cfg
+__pycache__/
+*.pyc
+*.pyo
+*.py~
+*.pyw~
