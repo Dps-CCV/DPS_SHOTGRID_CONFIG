@@ -59,10 +59,10 @@ shared_views:
 displays:
   sRGB - Display:
     - !<View> {name: Raw, colorspace: Raw}
-    - !<Views> [ACES 1.0 - SDR Video, ACES 1.0 - SDR Video (D60 sim on D65), Shot_GRADE-Rec.709, Shot_neutral-Rec.709, Un-tone-mapped]
+    - !<Views> [ACES 1.0 - SDR Video, ACES 1.0 - SDR Video (D60 sim on D65), Un-tone-mapped]
   Rec.1886 Rec.709 - Display:
     - !<View> {name: Raw, colorspace: Raw}
-    - !<Views> [ACES 1.0 - SDR Video, ACES 1.0 - SDR Video (D60 sim on D65), Un-tone-mapped]
+    - !<Views> [ACES 1.0 - SDR Video, ACES 1.0 - SDR Video (D60 sim on D65), Shot_GRADE-Rec.709, Shot_neutral-Rec.709, Un-tone-mapped]
   Rec.1886 Rec.2020 - Display:
     - !<View> {name: Raw, colorspace: Raw}
     - !<Views> [ACES 1.0 - SDR Video, ACES 1.1 - SDR Video (P3 lim), ACES 1.1 - SDR Video (Rec.709 lim), Un-tone-mapped]
