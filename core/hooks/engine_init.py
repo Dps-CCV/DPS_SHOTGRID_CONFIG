@@ -39,6 +39,7 @@ class EngineInit(Hook):
                 self.logger.info("Synchronize folders failed")
                 self.logger.info(e)
 
+
         if engine.name == "tk-maya":
             import maya.cmds as cmds
             import sgtk
@@ -65,4 +66,21 @@ class EngineInit(Hook):
 
             # now register the command with the engine
             engine.register_command("Set Shot Resolution", menu_callback)
+
+        elif engine.name == 'tk-nuke':
+            import nuke
+            try:
+                ####DPS Write Shortcuts
+                # # CUSTOM SHORTCUTS
+                write_node_item = nuke.menu('Nodes').findItem("Image/Write")
+                write_node_item.setShortcut("")
+
+                nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                    "Render 16bits").setShortcut('w')
+                nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                    "PRECOMP").setShortcut('Alt+w')
+                nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
+                    "TECH_PRECOMP").setShortcut('Alt+j')
+            except:
+                self.logger.info("No se ha podido registrar los atajos de nuke write")
         pass

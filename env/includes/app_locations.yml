@@ -124,7 +124,7 @@ apps.tk-hiero-export.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-hiero-export
-  version: v0.8.0m
+  version: v0.8.0n
   private: true
 
 apps.tk-hiero-openinshotgun.location:
@@ -203,8 +203,6 @@ apps.tk-nuke-writenode.location:
   organization: Dps-CCV
   repository: tk-nuke-writenode
   version: v1.7.2
-
-
 apps.tk-flame-export.location:
   name: tk-flame-export
   type: app_store

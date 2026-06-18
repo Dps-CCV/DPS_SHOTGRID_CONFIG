@@ -74,15 +74,34 @@ class GeneralActions(HookBaseClass):
                     "description": "Set the task status to In Progress.",
                 }
             )
-
-        if "task_to_rev" in actions and sg_data.get("sg_status_list") != "rev":
+        if "version_to_viewed" in actions and sg_data.get("sg_status_list") != "vwd":
             action_instances.append(
                 {
-                    "name": "task_to_rev",
+                    "name": "version_to_viewed",
                     "params": None,
-                    "group": "Update task",
-                    "caption": "Set to Pending Review",
-                    "description": "Set the task status to Pending Review.",
+                    "group": "Update Version",
+                    "caption": "Set to Viewed",
+                    "description": "Set the version status to Viewed.",
+                }
+            )
+        if "version_to_notes" in actions and sg_data.get("sg_status_list") != "nts":
+            action_instances.append(
+                {
+                    "name": "version_to_notes",
+                    "params": None,
+                    "group": "Update Version",
+                    "caption": "Set to Notes",
+                    "description": "Set the version status to Notes.",
+                }
+            )
+        if "version_to_psu" in actions and sg_data.get("sg_status_list") != "psu":
+            action_instances.append(
+                {
+                    "name": "version_to_psu",
+                    "params": None,
+                    "group": "Update Version",
+                    "caption": "Set to Pending Supervisor Review",
+                    "description": "Set the version status to Pending Supervisor Review.",
                 }
             )
 
@@ -215,21 +234,22 @@ class GeneralActions(HookBaseClass):
         :param name: Action name string representing one of the items returned by generate_actions.
         :param params: Params data, as specified by generate_actions.
         :param sg_data: Shotgun data dictionary
-        :returns: No return value expected.
+        :returns: Dictionary representing an Entity if action requires a context change in the panel,
+                  otherwise no return value expected.
         """
         app = self.parent
         app.log_debug(
             "Execute action called for action %s. "
-            "Parameters: %s. Shotgun Data: %s" % (name, params, sg_data)
+            "Parameters: %s. PTR Data: %s" % (name, params, sg_data)
         )
 
         if name == "assign_task":
             if app.context.user is None:
                 raise Exception(
-                    "Shotgun Toolkit does not know what Shotgun user you are. "
-                    "This can be due to the use of a script key for authentication "
-                    "rather than using a user name and password login. To assign a "
-                    "Task, you will need to log in using you Shotgun user account."
+                    "Flow Production Tracking Toolkit does not know what PTR user "
+                    "you are. This can be due to the use of a script key for "
+                    "authentication rather than using a user name and password login. "
+                    "To assign a Task, you will need to log in using you PTR user account."
                 )
 
             data = app.shotgun.find_one(
@@ -258,9 +278,12 @@ class GeneralActions(HookBaseClass):
 
         elif name == "task_to_ip":
             app.shotgun.update("Task", sg_data["id"], {"sg_status_list": "ip"})
-
-        elif name == "task_to_rev":
-            app.shotgun.update("Task", sg_data["id"], {"sg_status_list": "rev"})
+        elif name == "version_to_viewed":
+            app.shotgun.update("Version", sg_data["id"], {"sg_status_list": "vwd"})
+        elif name == "version_to_notes":
+            app.shotgun.update("Version", sg_data["id"], {"sg_status_list": "nts"})
+        elif name == "version_to_psu":
+            app.shotgun.update("Version", sg_data["id"], {"sg_status_list": "psu"})
 
         elif name == "quicktime_clipboard":
             self._copy_to_clipboard(sg_data["sg_path_to_movie"])
