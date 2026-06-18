@@ -49,16 +49,26 @@ jobs:
   # New job — merges master into project branch when master is pushed
   sync-project-branches:
     runs-on: ubuntu-latest
-    if: github.ref_name == 'master'  # only runs when master is pushed
+    if: github.ref_name == 'master'
     permissions:
-      contents: write   # <-- this is what was missing
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge master into project branches
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.13'
+
+      - name: install python packages
+        run: pip install shotgun-api3
+
+      - name: Merge master into project branches and update FPT
+        env:
+          UPDATECONFIGKEY: ${{ secrets.UPDATECONFIGKEY }}
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
@@ -66,4 +76,6 @@ jobs:
             git checkout $branch
             git merge master --no-ff -m "Auto-sync from master"
             git push origin $branch
+            SHA=$(git rev-parse --short HEAD)
+            BRANCH=$branch NEWCODE=$SHA python .github/workflows/updateConfig.py
           done
