@@ -202,7 +202,7 @@ apps.tk-nuke-writenode.location:
   type: github_release
   organization: Dps-CCV
   repository: tk-nuke-writenode
-  version: v1.7.2
+  version: v1.7.2g
 apps.tk-flame-export.location:
   name: tk-flame-export
   type: app_store
@@ -221,9 +221,14 @@ apps.tk-multi-bugreporter.location:
   name: tk-multi-bugreporter
   type: path
   path: '{CONFIG_FOLDER}/bundles/tk-multi-bugreporter'
+
 apps.tk-multi-scenebuilder.location:
   type: app_store
   name: tk-multi-scenebuilder
   version: v0.1.1
+#apps.tk-davinci-timelineanalyzer.location:
+#  type: path
+#  name: 'tk-davinci-timelineanalyzer'
+#  path: '{CONFIG_FOLDER}/bundles/tk-davinci-timelineanalyzer'
 
 
