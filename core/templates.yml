@@ -39,6 +39,10 @@ keys:
         type: str
         shotgun_entity_type: Project
         shotgun_field_name: sg_format
+    step_name:
+        type: str
+        shotgun_entity_type: Step
+        shotgun_field_name: code
 
     Sequence:
         type: str
@@ -542,9 +546,9 @@ paths:
     nuke_shot_render_proxy:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}_proxy/{Shot}_{Step}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{Step}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{step_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_pub_proxy:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}_proxy/{Shot}_{Step}_v{version}_proxy.{SEQ}.{FormExt}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}_proxy/{Shot}_{step_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_alpha:
         definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_ALPHA_{nuke.output}_v{version}/{Shot}_ALPHA_{nuke.output}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_alpha_proxy:
@@ -606,9 +610,9 @@ paths:
         definition: '@shot_root/PUBLISH/GEO/{Step}/{Shot}_{Step}_{name}_v{version}.{extension}'
     # review output
     shot_quicktime_quick:
-        definition: '@shot_root/DAILIES/LOW/{Shot}_{Step}_{task_name}_v{version}_{iteration}.mov'
+        definition: '@shot_root/DAILIES/LOW/{Shot}_{step_name}_v{version}_{iteration}.mov'
     nuke_shot_render_movie:
-        definition: '@shot_root/DAILIES/HIGH/{Shot}_{Step}_{task_name}_v{version}.mov'
+        definition: '@shot_root/DAILIES/HIGH/{Shot}_{step_name}_v{version}.mov'
 
     #
     # Hiero
