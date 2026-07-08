@@ -286,6 +286,7 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
 
         render_path_fields = render_template.get_fields(render_path)
         render_path_fields['name'] = sg_publish_data["code"]
+        render_path_fields['step_name'] = self.parent.context.step['name'].lower()
         first_frame = item.properties.get("first_frame")
         last_frame = item.properties.get("last_frame")
         colorspace = item.properties.get("color_space")
