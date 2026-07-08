@@ -295,10 +295,10 @@ class BasicFilePublishPlugin(HookBaseClass):
         path = item.properties.get("path")
 
         checked = True
-        for i in item.parent.parent.tasks:
-            if i.plugin.name == 'Publish Script to Shotgun':
-                if i.checked == False:
-                    checked = False
+        # for i in item.parent.parent.tasks:
+        #     if i.plugin.name == 'Publish Script to Shotgun':
+        #         if i.checked == False:
+        #             checked = False
         if checked == False:
             self.logger.error("In order to publish the quicktime version, you have to publish the render")
             return False
