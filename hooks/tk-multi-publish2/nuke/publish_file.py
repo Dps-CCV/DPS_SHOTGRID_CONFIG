@@ -594,7 +594,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         if work_template and publish_template:
             if work_template.validate(path):
                 work_fields = work_template.get_fields(path)
-                work_fields['step_name'] = self.parent.context.step['name'].lower()
+                work_fields['step_name'] = self.parent.context.step['name']
 
             missing_keys = publish_template.missing_keys(work_fields)
 
@@ -836,7 +836,7 @@ class BasicFilePublishPlugin(HookBaseClass):
             return
 
         work_fields = work_template.get_fields(work_files[0])
-        work_fields['step_name'] = self.parent.context.step['name'].lower()
+        work_fields['step_name'] = self.parent.context.step['name']
 
         missing_keys = publish_template.missing_keys(work_fields)
 
@@ -956,7 +956,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         if work_template:
             if work_template.validate(path):
                 work_fields = work_template.get_fields(path)
-                work_fields['step_name'] = self.parent.context.step['name'].lower()
+                work_fields['step_name'] = self.parent.context.step['name']
 
         # if we have template and fields, use them to determine the version info
         if work_fields and "version" in work_fields:
