@@ -856,6 +856,10 @@ class BasicFilePublishPlugin(HookBaseClass):
                 "Trying to move folder to publish"
             )
             os.rename(workFileDir, publish_folder)
+            for file in os.listdir(publish_folder):
+                old_path = os.path.join(publish_folder, file)
+                new_path = os.path.join(publish_folder, file.replace('CMP', 'Comp'))
+                os.rename(old_path, new_path)
             # movestring = f'move "{workFileDir}" "{publish_folder}"'
             # with subprocess.Popen(
             #         movestring,
