@@ -851,49 +851,49 @@ class BasicFilePublishPlugin(HookBaseClass):
         workFileNorm = os.path.normpath(work_files[0])
         workFileDir = os.path.normpath(os.path.dirname(workFileNorm))
         ensure_folder_exists(os.path.dirname(publish_folder))
-        try:
-            self.logger.info(
-                "Trying to move folder to publish"
-            )
-            os.rename(workFileDir, publish_folder)
-            for file in os.listdir(publish_folder):
-                old_path = os.path.join(publish_folder, file)
-                new_path = os.path.join(publish_folder, file.replace('CMP', 'Comp'))
-                os.rename(old_path, new_path)
-            # movestring = f'move "{workFileDir}" "{publish_folder}"'
-            # with subprocess.Popen(
-            #         movestring,
-            #         shell=True,
-            #         stdout=subprocess.PIPE,
-            #         stderr=subprocess.STDOUT,
-            #         text=True,
-            #         bufsize=1  # line-buffered
-            # ) as proc:
-            #     for line in proc.stdout:
-            #         sys.stdout.write(line)  # stream to your console (or handle it as you like)
-            #         self.logger.info(
-            #             line
-            #         )
-            #     return_code = proc.wait()
-        except:
-            self.logger.info(
-                "Unable to move folder to publish"
-            )
-            copystring = f'robocopy "{workFileDir}" "{publish_folder}" /MT:12 /J'
-            with subprocess.Popen(
-                    copystring,
-                    shell=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
-                    text=True,
-                    bufsize=1  # line-buffered
-            ) as proc:
-                for line in proc.stdout:
-                    sys.stdout.write(line)  # stream to your console (or handle it as you like)
-                    self.logger.info(
-                        line
-                    )
-                return_code = proc.wait()
+        for work_file in work_files:
+            # get the current scene path and extract fields from it using the work
+            work_fields["frame_num"] = int(work_file.split(".")[-2])
+            
+            publish_file = publish_template.apply_fields(work_fields)
+            try:
+                ensure_folder_exists(publish_folder)
+                copy_file(work_file, publish_file)
+                os.rename(work_file, publish_file)
+
+            except Exception:
+                raise Exception(
+                    "Failed to copy work file from '%s' to '%s'.\n%s"
+                    % (work_file, publish_file, traceback.format_exc())
+                )
+        # try:
+        #     self.logger.info(
+        #         "Trying to move folder to publish"
+        #     )
+        #     os.rename(workFileDir, publish_folder)
+        #     for file in os.listdir(publish_folder):
+        #         old_path = os.path.join(publish_folder, file)
+        #         new_path = os.path.join(publish_folder, file.replace('CMP', 'Comp'))
+        #         os.rename(old_path, new_path)
+        # except:
+        #     self.logger.info(
+        #         "Unable to move folder to publish"
+        #     )
+        #     copystring = f'robocopy "{workFileDir}" "{publish_folder}" /MT:12 /J'
+        #     with subprocess.Popen(
+        #             copystring,
+        #             shell=True,
+        #             stdout=subprocess.PIPE,
+        #             stderr=subprocess.STDOUT,
+        #             text=True,
+        #             bufsize=1  # line-buffered
+        #     ) as proc:
+        #         for line in proc.stdout:
+        #             sys.stdout.write(line)  # stream to your console (or handle it as you like)
+        #             self.logger.info(
+        #                 line
+        #             )
+        #         return_code = proc.wait()
 
 
 
