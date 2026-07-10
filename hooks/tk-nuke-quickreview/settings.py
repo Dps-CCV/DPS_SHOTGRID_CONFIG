@@ -139,49 +139,19 @@ class Settings(HookBaseClass):
 
         :param write_node: The nuke write node used to generate the quicktime that is being uploaded.
         """
-        if sgtk.util.is_linux():
-            if nuke.NUKE_VERSION_MAJOR >= 9:
-                # Nuke 9.0v1 removed ffmpeg and replaced it with the mov64 writer
-                # http://help.thefoundry.co.uk/nuke/9.0/#appendices/appendixc/supported_file_formats.html
-                write_node["file_type"].setValue("mov64")
-                write_node["mov64_codec"].setValue("jpeg")
-                write_node["mov64_quality_max"].setValue("3")
-            else:
-                # the 'codec' knob name was changed to 'format' in Nuke 7
-                write_node["file_type"].setValue("ffmpeg")
-                write_node["format"].setValue("MOV format (mov)")
-        elif nuke.NUKE_VERSION_MAJOR > 10 or (
-            nuke.NUKE_VERSION_MAJOR == 10
-            and (nuke.NUKE_VERSION_MINOR > 1 or nuke.NUKE_VERSION_RELEASE > 1)
-        ):
-            # In Nuke 10.0v2, the dependency on the Quicktime desktop application was removed. Because of
-            # that, we have to account for changes in the .mov encoding settings in the Write node.
-            write_node["file_type"].setValue("mov")
-            write_node["mov64_codec"].setValue("AVdn")
-            write_node["mov64_quality_max"].setValue("3")
-            write_node["mov_h264_codec_profile"].setValue("High 4:2:0 8-bit")
-            write_node["mov64_quality"].setValue("High")
-            write_node["mov64_write_timecode"].setValue(1)
-            write_node["colorspace"].setValue("Output - Rec.709")
-        else:
-            write_node["file_type"].setValue("mov")
-            write_node["mov64_codec"].setValue("AVdn")
-            write_node["mov64_quality_max"].setValue("3")
-            write_node["mov_h264_codec_profile"].setValue("High 4:2:0 8-bit")
-            write_node["mov64_quality"].setValue("High")
-            write_node["mov64_write_timecode"].setValue(1)
-            write_node["colorspace"].setValue("Output - Rec.709")
-
-            # if nuke.NUKE_VERSION_MAJOR >= 9:
-            #     # Nuke 9.0v1 changed the codec knob name to meta_codec and added an encoder knob
-            #     # (which defaults to the new mov64 encoder/decoder).
-            #     write_node["meta_codec"].setValue("jpeg")
-            #     write_node["mov64_quality_max"].setValue("3")
-            # else:
-            #     write_node["codec"].setValue("jpeg")
-
-            # note: in older versions of nuke, this settings string represents all the quicktime
-            # code settings used on windows and mac.
-            write_node["settings"].setValue("000000000000000000000000000019a7365616e0000000100000001000000000000018676696465000000010000000e00000000000000227370746c0000000100000000000000006a706567000000000018000003ff000000207470726c000000010000000000000000000000000017f9db00000000000000246472617400000001000000000000000000000000000000530000010000000100000000156d70736f00000001000000000000000000000000186d66726100000001000000000000000000000000000000187073667200000001000000000000000000000000000000156266726100000001000000000000000000000000166d70657300000001000000000000000000000000002868617264000000010000000000000000000000000000000000000000000000000000000000000016656e647300000001000000000000000000000000001663666c67000000010000000000000000004400000018636d66720000000100000000000000006170706c00000014636c75740000000100000000000000000000001c766572730000000100000000000000000003001c00010000")
-        write_node["fps"].setValue(nuke.root()['fps'].value())
+        input_node = write_node.input(0)
+        parent_group = write_node.parent()
+        with parent_group:
+            look = nuke.createNode("OCIOLookTransform")
+            look.setInput(0, input_node)
+            look.knob("look").setValue("SHOT_GRADE")
+        write_node["file_type"].setValue("mov")
+        write_node["mov64_codec"].setValue("AVdn")
+        write_node["mov64_quality_max"].setValue("3")
+        write_node["mov_h264_codec_profile"].setValue("High 4:2:0 8-bit")
+        write_node["mov64_quality"].setValue("High")
+        write_node["mov64_write_timecode"].setValue(1)
         write_node["colorspace"].setValue("Output - Rec.709")
+        write_node["fps"].setValue(nuke.root()['fps'].value())
+        write_node.setInput(0, look)
+
