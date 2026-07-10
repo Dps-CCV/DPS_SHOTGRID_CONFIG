@@ -542,9 +542,9 @@ paths:
         definition: '@shot_root/PUBLISH/SCENES/{Step}/NUKE/{Shot}_{Step}_{task_name}_v{version}.nk'
     # write node outputs
     nuke_shot_render:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{Step}_v{version}.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Shot}_{step_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_proxy:
-        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}_proxy/{Shot}_{Step}_v{version}_proxy.{SEQ}.{FormExt}'
+        definition: '@shot_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}_proxy/{Shot}_{step_name}_v{version}_proxy.{SEQ}.{FormExt}'
     nuke_shot_render_pub:
         definition: '@shot_root/PUBLISH/IMAGES/{Step}/NUKE_{task_name}_v{version}/{Shot}_{step_name}_v{version}.{SEQ}.{FormExt}'
     nuke_shot_render_pub_proxy:
