@@ -8,7 +8,7 @@
 # agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
-import fnmatch
+# import fnmatch
 import os
 
 import maya.cmds as cmds
@@ -103,12 +103,12 @@ class MayaCameraPublishPlugin(HookBaseClass):
                                "correspond to a template defined in "
                                "templates.yml.",
             },
-            "Cameras": {
-                "type": "list",
-                "default": ["camera*"],
-                "description": "Glob-style list of camera names to publish. "
-                               "Example: ['camMain', 'camAux*']."
-            }
+            # "Cameras": {
+            #     "type": "list",
+            #     "default": ["camera*"],
+            #     "description": "Glob-style list of camera names to publish. "
+            #                    "Example: ['camMain', 'camAux*']."
+            # }
         }
 
         # update the base settings
@@ -189,24 +189,24 @@ class MayaCameraPublishPlugin(HookBaseClass):
         publisher = self.parent
         template_name = settings["Publish Template"].value
 
-        # validate the camera name first
-        cam_name = item.properties.get("camera_name")
-        cam_shape = item.properties.get("camera_shape")
+        # # validate the camera name first
+        # cam_name = item.properties.get("camera_name")
+        # cam_shape = item.properties.get("camera_shape")
 
-        if cam_name and cam_shape:
-            if not self._cam_name_matches_settings(cam_name, settings):
-                self.logger.debug(
-                    "Camera name %s does not match any of the configured "
-                    "patterns for camera names to publish. Not accepting "
-                    "session camera item." % (cam_name,)
-                )
-                accepted = False
-        else:
-            self.logger.debug(
-                "Camera name or shape was set on the item properties. Not "
-                "accepting session camera item."
-            )
-            accepted = False
+        # if cam_name and cam_shape:
+        #     if not self._cam_name_matches_settings(cam_name, settings):
+        #         self.logger.debug(
+        #             "Camera name %s does not match any of the configured "
+        #             "patterns for camera names to publish. Not accepting "
+        #             "session camera item." % (cam_name,)
+        #         )
+        #         accepted = False
+        # else:
+        #     self.logger.debug(
+        #         "Camera name or shape was set on the item properties. Not "
+        #         "accepting session camera item."
+        #     )
+        #     accepted = False
 
         # ensure a camera file template is available on the parent item
         work_template = item.parent.properties.get("work_template")
@@ -415,16 +415,17 @@ class MayaCameraPublishPlugin(HookBaseClass):
         # all visible geometry from the current scene together with UV's and
         # face sets for use in Mari.
         alembic_args = [
-            # only renderable objects (visible and not templated)
-            # ~ "-renderableOnly",
-            # write shading group set assignments (Maya 2015+)
+            ## only renderable objects (visible and not templated)
+            ## "-renderableOnly",
+            ## write shading group set assignments (Maya 2015+)
             "-writeFaceSets",
-            # write uv's (only the current uv set gets written)
+            ## write uv's (only the current uv set gets written)
             "-uvWrite",
-            # only export selection
+            ## only export selection
             "-sl",
         ]
-
+        alembic_args.append("-root")
+        alembic_args.append(cmds.ls(selection=True)[0])
         # find the animated frame range to use:
         # ~ start_frame, end_frame = _find_scene_animation_range()
         start_frame = int(cmds.playbackOptions(q=True, min=True))
@@ -457,25 +458,25 @@ class MayaCameraPublishPlugin(HookBaseClass):
         super(MayaCameraPublishPlugin, self).publish(settings, item)
 
 
-    def _cam_name_matches_settings(self, cam_name, settings):
-        """
-        Returns True if the supplied camera name matches any of the configured
-        camera name patterns.
-        """
-
-        # loop through each pattern specified and see if the supplied camera
-        # name matches the pattern
-        cam_patterns = settings["Cameras"].value
-
-        # if no patterns specified, then no constraints on camera name
-        if not cam_patterns:
-            return True
-
-        for camera_pattern in cam_patterns:
-            if fnmatch.fnmatch(cam_name, camera_pattern):
-                return True
-
-        return False
+    # def _cam_name_matches_settings(self, cam_name, settings):
+    #     """
+    #     Returns True if the supplied camera name matches any of the configured
+    #     camera name patterns.
+    #     """
+    #
+    #     # loop through each pattern specified and see if the supplied camera
+    #     # name matches the pattern
+    #     cam_patterns = settings["Cameras"].value
+    #
+    #     # if no patterns specified, then no constraints on camera name
+    #     if not cam_patterns:
+    #         return True
+    #
+    #     for camera_pattern in cam_patterns:
+    #         if fnmatch.fnmatch(cam_name, camera_pattern):
+    #             return True
+    #
+    #     return False
 
 
 def _session_path():

@@ -369,7 +369,9 @@ class MayaActions(HookBaseClass):
             path,
             reference=True,
             loadReferenceDepth="all",
-            mergeNamespacesOnClash=True,
+            mergeNamespacesOnClash=False,
+            groupReference=True,
+            groupName=asset_name,
             namespace=namespace,
         )
 
@@ -420,8 +422,9 @@ class MayaActions(HookBaseClass):
                     path,
                     reference=True,
                     loadReferenceDepth="all",
-                    mergeNamespacesOnClash=False,
                     namespace=namespace,
+                    groupReference=True,
+                    groupName=asset_name
                 )
 
 

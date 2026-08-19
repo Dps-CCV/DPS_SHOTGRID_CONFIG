@@ -14,58 +14,22 @@ import maya.mel as mel
 import sgtk
 from sgtk.util.filesystem import ensure_folder_exists
 from tank_vendor import six
-import pprint
+
+
+
+
+import shutil
+
+
+import re
+import glob
+import json
+from collections import defaultdict
+
 
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
-try:
-    from sgtk.platform.qt import QtCore, QtGui
-except ImportError:
-    CustomWidgetController = None
-else:
-    class PlayblastWidget(QtGui.QWidget):
-        """
-        This is the plugin's custom UI.
-        It is meant to allow the user to generate a playblast and upload it as a version
-        """
-
-        def __init__(self, parent):
-            super(PlayblastWidget, self).__init__(parent)
-
-            # Create a nice simple layout with a checkbox in it.
-            layout = QtGui.QFormLayout(self)
-            self.setLayout(layout)
-
-            label = QtGui.QLabel(
-                "Clicking this checkbox will create a playblast of the scene during publish.",
-                self
-            )
-            label.setWordWrap(True)
-            layout.addRow(label)
-
-            self._check_box = QtGui.QCheckBox("Create Playblast", self)
-            self._check_box.setTristate(False)
-            layout.addRow(self._check_box)
-
-        @property
-        def state(self):
-            """
-            :returns: ``True`` if the checkbox is checked, ``False`` otherwise.
-            """
-            return self._check_box.checkState() == QtCore.Qt.Checked
-
-        @state.setter
-        def state(self, is_checked):
-            """
-            Update the status of the checkbox.
-            :param bool is_checked: When set to ``True``, the checkbox will be
-                checked.
-            """
-            if is_checked:
-                self._check_box.setCheckState(QtCore.Qt.Checked)
-            else:
-                self._check_box.setCheckState(QtCore.Qt.Unchecked)
 
 class MayaSessionPublishPlugin(HookBaseClass):
     """
@@ -79,7 +43,6 @@ class MayaSessionPublishPlugin(HookBaseClass):
 
     """
 
-    _CREATE_PLAYBLAST = "Create Playblast"
 
     # NOTE: The plugin icon and name are defined by the base file plugin.
 
@@ -172,59 +135,12 @@ class MayaSessionPublishPlugin(HookBaseClass):
                 "correspond to a template defined in "
                 "templates.yml.",
             },
-            "Dailies Template": {
-                "type": "template",
-                "default": None,
-                "description": "Template path for dailies work files. Should"
-                               "correspond to a template defined in "
-                               "templates.yml.",
-            },
-            self._CREATE_PLAYBLAST: {
-                "type": "bool",
-                "default": True,
-                "description": "Create Playblast for maya scene."
-            },
         }
 
         # update the base settings
         base_settings.update(maya_publish_settings)
 
         return base_settings
-
-    def create_settings_widget(self, parent):
-        """
-        Creates the widget for our plugin.
-        :param parent: Parent widget for the settings widget.
-        :type parent: :class:`QtGui.QWidget`
-        :returns: Custom widget for this plugin.
-        :rtype: :class:`QtGui.QWidget`
-        """
-        return PlayblastWidget(parent)
-
-    def get_ui_settings(self, widget):
-        """
-        Retrieves the state of the ui and returns a settings dictionary.
-        :param parent: The settings widget returned by :meth:`create_settings_widget`
-        :type parent: :class:`QtGui.QWidget`
-        :returns: Dictionary of settings.
-        """
-        return {self._CREATE_PLAYBLAST: widget.state}
-
-    def set_ui_settings(self, widget, settings):
-        """
-        Populates the UI with the settings for the plugin.
-        :param parent: The settings widget returned by :meth:`create_settings_widget`
-        :type parent: :class:`QtGui.QWidget`
-        :param list(dict) settings: List of settings dictionaries, one for each
-            item in the publisher's selection.
-        :raises NotImplementeError: Raised if this implementation does not
-            support multi-selection.
-        """
-        if len(settings) > 1:
-            raise NotImplementedError()
-        settings = settings[0]
-        widget.state = settings[self._CREATE_PLAYBLAST]
-
 
     @property
     def item_filters(self):
@@ -269,7 +185,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         if settings.get("Publish Template").value:
             item.context_change_allowed = False
 
-        path = _session_path()
+        path = item.properties["path"]
 
         if not path:
             # the session has not been saved before (no path determined).
@@ -297,7 +213,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         """
 
         publisher = self.parent
-        path = _session_path()
+        path =  item.properties["path"]
 
 
 
@@ -329,10 +245,6 @@ class MayaSessionPublishPlugin(HookBaseClass):
 
         # ---- check the session against any attached work template
 
-        # get the path in a normalized state. no trailing separator,
-        # separators are appropriate for current os, no double separators,
-        # etc.
-        path = sgtk.util.ShotgunPath.normalize(path)
 
         # if the session item has a known work template, see if the path
         # matches. if not, warn the user and provide a way to save the file to
@@ -397,9 +309,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         if publish_template:
             item.properties["publish_template"] = publish_template
 
-        # set the session path on the item for use by the base plugin validation
-        # step. NOTE: this path could change prior to the publish phase.
-        item.properties["path"] = path
+
 
         # run the base class validation
         return super(MayaSessionPublishPlugin, self).validate(settings, item)
@@ -416,13 +326,11 @@ class MayaSessionPublishPlugin(HookBaseClass):
 
         # get the path in a normalized state. no trailing separator, separators
         # are appropriate for current os, no double separators, etc.
-        path = sgtk.util.ShotgunPath.normalize(_session_path())
+        path = item.properties["path"]
 
         # ensure the session is saved
         _save_session(path)
 
-        # update the item with the saved session path
-        item.properties["path"] = path
 
         # add dependencies for the base class to register when publishing
         item.properties[
@@ -434,200 +342,8 @@ class MayaSessionPublishPlugin(HookBaseClass):
 
 
 
-        if settings[self._CREATE_PLAYBLAST].value == True:
-
-            # Create Playblast either by generating a turntable camera or using camMain
-
-            uploadPath = self.get_dailies_path(settings, item)
-            publisher = self.parent
-
-
-            '''En esta funcion chequeo que la estructura en la escena y del propia escena sea la correcta,
-            es decir que contenga los nulls geo, basemesh debajo del nombre del asset'''
-
-
-            ##Set First frame
-            first = cmds.playbackOptions(q=True, min=True)
-
-            # Checking Root Structure
-            #rootNodes = cmds.ls(assemblies=True)  # variable con la lista de objetos de la escena
-            rootNodes = cmds.ls(o=True)  # variable con la lista de objetos de la escena
-            maxKeyframe = 120
-            minKeyframe = 0
-            all_keys = []
-
-            '''Se comprueba que solo exista un root null en la escena obviando las camaras'''
-
-            cameras = cmds.listCameras()
-            turntable = True
-            for cam in cameras:
-                if "camMain" in cam:
-                    turntable = False
-                    main = cam
-                else:
-                    try:
-                        rootNodes.remove(cam)
-                    except:
-                        pass
-            '''Compruebo que la estructura del root es correcta'''
-            if len(rootNodes) == 0:
-                error_msg = "Scene structure is incorrect. There is no root nodes."
-                self.logger.error(error_msg)
-                raise Exception(error_msg)
-
-            else:
-
-                # Check for animations
-                anim = False
-                for node in rootNodes:
-                    all_keys = sorted(cmds.keyframe(node,
-                                                    q=True) or [])  # Get all the keys and sort them by order. We use `or []` in-case it has no keys, which will use an empty list instead so it doesn't crash `sort`.
-                    if len(all_keys)>0:  # Check to see if it at least has one key.
-                        anim = True
-                        minKeyframe, maxKeyframe = (all_keys[0], all_keys[-1])  # Print the start and end frames
-                        if all_keys[0] < minKeyframe:
-                            minKeyframe = all_keys[0]
-                        if all_keys[-1] > maxKeyframe:
-                            maxKeyframe = all_keys[-1]
-
-                #rootNode = cmds.listRelatives(rootNodes[0], fullPath=True)
-
-                if turntable == True:
-                    first = 0
-                    ###Set last frame
-                    last = maxKeyframe
-
-                    ### Create camera turntable
-                    obj = cmds.camera()
-                    obj = cmds.rename(obj[0], "turnCam")
-                    cmds.group(obj, name='rotGrp')
-
-                    ## Select asset in scene
-                    if anim:
-                        first = minKeyframe
-                        cmds.setAttr((obj + '.rotate'), -15, 0, 0, type="double3")
-                        cmds.setAttr((obj + 'Shape.panZoomEnabled'), 1)
-                        cmds.xform('rotGrp', ws=True, rp=[0, 0, 0])
-                        cmds.setAttr((obj + 'Shape.zoom'), 1)
-                        cmds.expression(s = 'rotGrp.rotateY = 45')
-                        cmds.viewFit(obj, f=1)
-                        cmds.setAttr((obj + 'Shape.farClipPlane'), (cmds.getAttr(obj + 'Shape.centerOfInterest')*2))
-                        ###Set last frame
-                        cmds.playbackOptions(animationStartTime=first, animationEndTime=maxKeyframe, minTime=first,
-                                             maxTime=maxKeyframe)
-                    else:
-                        cmds.setAttr((obj + '.rotate'), -15, 45, 0, type="double3")
-                        cmds.setAttr((obj + 'Shape.panZoomEnabled'), 0)
-                        cmds.xform('rotGrp', ws=True, rp=[0, 0, 0])
-                        cmds.setAttr((obj + 'Shape.zoom'), 1)
-                        cmds.expression(s = 'rotGrp.rotateY = frame * (360/120)')
-                        cmds.viewFit(obj, f=1)
-                        cmds.setAttr((obj + 'Shape.farClipPlane'), (cmds.getAttr(obj + 'Shape.centerOfInterest')*2))
-                        ###Set last frame
-                        cmds.playbackOptions(animationStartTime=0, animationEndTime=maxKeyframe, minTime=0,
-                                             maxTime=maxKeyframe)
-
-                    cmds.lookThru(obj)
-
-                else:
-                    ##Set First frame
-                    first = cmds.playbackOptions(q=True, min=True)
-                    last = cmds.playbackOptions(q=True, max=True)
-                    cmds.lookThru(main)
-
-
-
-
-                ## Process avi
-                cmds.playblast(format='avi',
-                filename = uploadPath,
-                startTime = first,
-                endTime = last,
-                widthHeight = [1920, 1080],
-                sequenceTime = 0,
-                clearCache = 1,
-                viewer = 0,
-                showOrnaments = 1,
-                percent = 100,
-                compression = 'none',
-                quality = 100,
-                fo = 1)
-
-                if turntable == True:
-                    cmds.delete('rotGrp')
-
-                # Start generation of shotgun version
-
-                path = item.properties["path"]
-
-
-                publish_name = item.properties.get("publish_name")
-                versionName = os.path.splitext(os.path.basename(uploadPath))[0]
-                if not publish_name:
-                    self.logger.debug("Using path info hook to determine publish name.")
-
-                # use the path's filename as the publish name
-                # path_components = publisher.util.get_file_path_components(path)
-                # publish_name = '_'.join(path_components["filename"].split('_')[:-1])
-
-                self.logger.debug("Publish name: %s" % (publish_name,))
-
-                self.logger.info("Creating Version...")
-                version_data = {
-                "project": item.context.project,
-                "code": versionName,
-                "description": item.description,
-                "entity": self._get_version_entity(item),
-                "sg_task": item.context.task,
-                "sg_first_frame": int(first),
-                "sg_last_frame": int(last),
-                "frame_range": str(int(first))+"-"+str(int(last)),
-                }
-
-                if "sg_publish_data" in item.properties:
-                    publish_data = item.properties["sg_publish_data"]
-                version_data["published_files"] = [publish_data]
-
-                version_data["sg_path_to_movie"] = uploadPath
-
-                # log the version data for debugging
-                self.logger.debug(
-                "Populated Version data...",
-                extra = {
-                            "action_show_more_info": {
-                                "label": "Version Data",
-                                "tooltip": "Show the complete Version data dictionary",
-                                "text": "<pre>%s</pre>" % (pprint.pformat(version_data),),
-                            }
-                        },
-            )
-
-                # Create the version
-                version = publisher.shotgun.create("Version", version_data)
-                self.logger.info("Version created!")
-
-                # stash the version info in the item just in case
-                item.properties["sg_version_data"] = version
-
-                self.logger.info("Uploading content...")
-
-                # on windows, ensure the path is utf-8 encoded to avoid issues with
-                # the shotgun api
-                if sgtk.util.is_windows():
-                    upload_path = six.ensure_text(uploadPath)
-                else:
-                    upload_path = uploadPath
-
-                self.parent.shotgun.upload(
-                "Version", version["id"], upload_path, "sg_uploaded_movie"
-
-            )
-
-                self.logger.info("Upload complete!")
-
-            status = {"sg_status_list": "rev"}
-            self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
-            # self.parent.sgtk.shotgun.update("Shot", item.context.entity['id'], status)
+        status = {"sg_status_list": "rev"}
+        self.parent.sgtk.shotgun.update("Task", item.context.task['id'], status)
 
     def finalize(self, settings, item):
         """
@@ -639,6 +355,39 @@ class MayaSessionPublishPlugin(HookBaseClass):
             instances.
         :param item: Item to process
         """
+        if item.context.step['name'] in ['LIGHT', 'LIGHT_A', 'RIG_A', 'TEXTURE_A', 'SHADING_A']:
+            path = cmds.file(query=True, sn=True)
+            file = os.path.basename(path)[:-8]
+            base = os.path.basename(path).split(".")[0]
+            if 'SHOT_FOLDER' in os.environ.keys():
+                ShotFolder = os.path.join(*os.environ['SHOT_FOLDER'].split(os.sep)[3:])
+                archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', ShotFolder, base))[:-5]
+            elif 'ASSET_FOLDER' in os.environ.keys():
+                AssetFolder = os.path.join(*os.environ['ASSET_FOLDER'].split(os.sep)[3:])
+                archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', AssetFolder, base))[:-5]
+            if os.path.exists(archivePath):
+                shutil.rmtree(archivePath)
+            os.makedirs(archivePath)
+            try:
+                self.logger.info("Starting archive of the scene")
+                result = archive_current_scene(archivePath, self.logger, file)
+
+                if result:
+                    self.logger.info("Scene archived successfully: %s" % result)
+                    # Access the published entity created earlier
+                    sg_publish = item.get_property("sg_publish_data")
+
+                    if sg_publish:
+                        # Update Shotgun/FPT fields as needed
+                        self.sgtk.shotgun.update(
+                            sg_publish["type"],
+                            sg_publish["id"],
+                            {"sg_archived": True}  # Any field you want to update
+                        )
+                else:
+                    self.logger.warning("Archive creation returned None - check for errors above")
+            except:
+                self.logger.warning("Archive was not possible")
 
         # do the base class finalization
         super(MayaSessionPublishPlugin, self).finalize(settings, item)
@@ -646,86 +395,6 @@ class MayaSessionPublishPlugin(HookBaseClass):
         # bump the session file to the next version
         self._save_to_next_version(item.properties["path"], item, _save_session)
 
-
-    def _get_version_entity(self, item):
-        """
-        Returns the best entity to link the version to.
-        """
-
-        if item.context.entity:
-            return item.context.entity
-        elif item.context.project:
-            return item.context.project
-        else:
-            return None
-
-    def get_dailies_template(self, settings, item):
-        """
-        Get a publish template for the supplied settings and item.
-
-        :param settings: This plugin instance's configured settings
-        :param item: The item to determine the publish template for
-
-        :return: A template representing the publish path of the item or
-            None if no template could be identified.
-        """
-
-        publisher = self.parent
-        template_name = settings["Dailies Template"].value
-        dailies_template = publisher.get_template_by_name(template_name)
-        item.properties["dailies_template"] = dailies_template
-
-        return dailies_template
-
-    def get_dailies_path(self, settings, item):
-        """
-        Get a publish path for the supplied settings and item.
-
-        :param settings: This plugin instance's configured settings
-        :param item: The item to determine the publish path for
-
-        :return: A string representing the output path to supply when
-            registering a publish for the supplied item
-
-        Extracts the publish path via the configured work and publish templates
-        if possible.
-        """
-
-        # fall back to template/path logic
-        path = _session_path()
-
-        work_template = item.properties.get("work_template")
-        dailies_template = self.get_dailies_template(settings, item)
-
-        work_fields = []
-        dailies_path = None
-
-        # We need both work and publish template to be defined for template
-        # support to be enabled.
-        if work_template and dailies_template:
-
-            if work_template.validate(path):
-                work_fields = work_template.get_fields(path)
-                work_fields["extension"] = "avi"
-
-            missing_keys = dailies_template.missing_keys(work_fields)
-
-            if missing_keys:
-                self.logger.warning(
-                    "Not enough keys to apply work fields (%s) to "
-                    "publish template (%s)" % (work_fields, dailies_template)
-                )
-            else:
-                dailies_path = dailies_template.apply_fields(work_fields)
-                self.logger.debug(
-                    "Used publish template to determine the publish path: %s"
-                    % (dailies_path,)
-                )
-        else:
-            self.logger.debug("dailies_template: %s" % dailies_template)
-            self.logger.debug("work_template: %s" % work_template)
-
-        return dailies_path
 
     def _copy_work_to_publish(self, settings, item):
         """
@@ -799,7 +468,7 @@ class MayaSessionPublishPlugin(HookBaseClass):
         if not os.path.isdir(os.path.dirname(publish_file)):
             os.makedirs(os.path.dirname(publish_file))
 
-        if item.context.step['name'] in ['RIG', 'TEXTURE', 'SHADING', 'RIG_A', 'TEXTURE_A', 'SHADING_A']:
+        if item.context.step['name'] in ['RIG_A', 'TEXTURE_A', 'SHADING_A']:
             cmds.file(publish_file, exportAll=True, preserveReferences=False, force=True, type=typeFile)
         else:
             cmds.file(publish_file, exportAll=True, preserveReferences=True, force=True, type=typeFile)
@@ -850,19 +519,6 @@ def _maya_find_additional_session_dependencies():
             ref_paths.add(texture_path)
 
     return list(ref_paths)
-
-
-def _session_path():
-    """
-    Return the path to the current session
-    :return:
-    """
-    path = cmds.file(query=True, sn=True)
-
-    if path is not None:
-        path = six.ensure_str(path)
-
-    return path
 
 
 def _save_session(path):
@@ -916,3 +572,600 @@ def _get_save_as_action():
         }
     }
 
+
+
+
+
+
+
+
+
+
+# Extension -> archive subfolder mapping (mirrors Maya's Archive Scene logic)
+EXT_TO_FOLDER = {
+    # Scenes / references
+    '.ma':   'scenes',
+    '.mb':   'scenes',
+    # Textures / images
+    '.jpg':  'sourceimages',
+    '.jpeg': 'sourceimages',
+    '.png':  'sourceimages',
+    '.tga':  'sourceimages',
+    '.tif':  'sourceimages',
+    '.tiff': 'sourceimages',
+    '.exr':  'sourceimages',
+    '.hdr':  'sourceimages',
+    '.bmp':  'sourceimages',
+    '.gif':  'sourceimages',
+    '.iff':  'sourceimages',
+    '.sgi':  'sourceimages',
+    '.pic':  'sourceimages',
+    '.psd':  'sourceimages',
+    '.tx':   'sourceimages',
+    '.rat':  'sourceimages',
+    '.map':  'sourceimages',
+    # Caches / geometry
+    '.abc':  'cache',
+    '.vdb':  'cache',
+    '.ass':  'cache',
+    '.fur':  'cache',
+    '.mc':   'cache',
+    '.mcx':  'cache',
+    '.xml':  'cache',
+    '.pc2':  'cache',
+    # Audio
+    '.wav':  'sound',
+    '.aif':  'sound',
+    '.aiff': 'sound',
+    '.mp3':  'sound',
+    # Movies / playblasts
+    '.mov':  'movies',
+    '.avi':  'movies',
+    '.mp4':  'movies',
+    # IES / data
+    '.ies':  'data',
+    '.cube': 'data',
+    '.lut':  'data',
+    '.mel':  'data',
+    '.py':   'data',
+}
+
+# Tokens used by Maya/Arnold for frame-sequence file paths
+SEQUENCE_TOKENS = ['####', '###', '##', '#', '<f>', '<F>', '<frame>', '<FRAME>', '%04d', '%03d', '%02d', '%d']
+
+
+def _resolve_path(path):
+    """
+    Given a path that may contain sequence tokens, return a list of all
+    matching files on disk. Returns a list with the original path if it
+    exists as-is, or glob-expanded paths if tokens are found.
+    """
+    if not path:
+        return []
+
+    # Direct hit
+    if os.path.exists(path):
+        return [path]
+
+    # Replace all known sequence tokens with glob wildcard
+    glob_path = path
+    for token in SEQUENCE_TOKENS:
+        glob_path = glob_path.replace(token, '*')
+
+    if glob_path != path:
+        matches = glob.glob(glob_path)
+        if matches:
+            return sorted(matches)
+
+    return []
+
+
+
+
+class MayaSceneArchiver:
+    """
+    Archive Maya scene with all dependencies including references.
+    Uses Maya's own file dependency query (same as Archive Scene menu)
+    to guarantee every node type is covered.
+    Creates symlinks for all files except the scene file itself.
+    """
+
+    def __init__(self, output_directory):
+        self.output_dir = output_directory
+        self.archive_structure = {}
+        self.collected_files = defaultdict(list)
+        self.reference_mapping = {}
+        self.temp_scene_path = None
+
+    def create_archive(self, logger, archive_name=None):
+        logger.info("=" * 70)
+        logger.info("MAYA SCENE ARCHIVER")
+        logger.info("=" * 70)
+
+        current_scene = cmds.file(query=True, sceneName=True)
+
+        if not current_scene:
+            cmds.warning("Scene is not saved. Please save before archiving.")
+            return None
+
+        if not archive_name:
+            archive_name = os.path.splitext(os.path.basename(current_scene))[0] + "_archive"
+
+        archive_path = os.path.join(self.output_dir, archive_name)
+
+        logger.info("\nOutput Directory: %s" % self.output_dir)
+        logger.info("Archive:          %s" % archive_path)
+        logger.info("Source scene:     %s" % current_scene)
+
+        self._create_directory_structure(logger, archive_path)
+
+        try:
+            logger.info("\n[1/6] Creating temporary scene copy...")
+            self._create_temp_scene_copy(logger)
+
+            logger.info("\n[2/6] Collecting file dependencies...")
+            self._collect_all_files(logger)
+
+            logger.info("\n[3/6] Processing references...")
+            self._process_references(logger)
+
+            logger.info("\n[4/6] Linking files to archive...")
+            self._link_files_to_archive(logger)
+
+            logger.info("\n[4b] Redirecting node attributes to archive paths...")
+            self._redirect_node_attributes(logger)
+
+            logger.info("\n[5/6] Saving archived scene...")
+            archived_scene_path = self._save_archived_scene(logger, archive_name)
+
+            logger.info("\n[6/6] Creating archive manifest...")
+            self._create_manifest(logger, archive_path, archived_scene_path)
+
+            logger.info("\nRestoring original scene...")
+            self._restore_original_scene(logger, current_scene)
+
+            logger.info("\n" + "=" * 70)
+            logger.info("ARCHIVE COMPLETE!")
+            logger.info("Location: %s" % archive_path)
+            logger.info("=" * 70)
+
+            return archive_path
+
+        except Exception as e:
+            logger.info("\nERROR during archiving: %s" % str(e))
+            import traceback
+            traceback.print_exc()
+            self._restore_original_scene(logger, current_scene)
+            return None
+
+    def _create_directory_structure(self, logger, archive_path):
+        self.archive_structure = {
+            'scenes':       os.path.join(archive_path, 'scenes'),
+            'sourceimages': os.path.join(archive_path, 'sourceimages'),
+            'references':   os.path.join(archive_path, 'references'),
+            'cache':        os.path.join(archive_path, 'cache'),
+            'particles':    os.path.join(archive_path, 'particles'),
+            'data':         os.path.join(archive_path, 'data'),
+            'clips':        os.path.join(archive_path, 'clips'),
+            'sound':        os.path.join(archive_path, 'sound'),
+            'movies':       os.path.join(archive_path, 'movies'),
+        }
+
+        for folder_path in self.archive_structure.values():
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+                logger.info("  Created: %s" % folder_path)
+
+    def _create_temp_scene_copy(self, logger):
+        import tempfile
+
+        temp_dir = tempfile.gettempdir()
+        temp_filename = "maya_archive_temp_%s.ma" % os.getpid()
+        self.temp_scene_path = os.path.join(temp_dir, temp_filename)
+
+        cmds.file(rename=self.temp_scene_path)
+        cmds.file(save=True, type='mayaAscii')
+
+        logger.info("  Temporary scene created: %s" % self.temp_scene_path)
+
+    def _collect_all_files(self, logger):
+        """
+        Use Maya's own dependency resolver (cmds.file query=True list=True)
+        which is exactly what the built-in Archive Scene menu uses.
+        This catches every node type automatically: textures, VDBs, caches,
+        references, audio, image planes, Arnold nodes, third-party plugins, etc.
+        Sequence paths (####, <f>, etc.) are expanded via glob.
+        """
+
+        all_deps = cmds.file(query=True, list=True, withoutCopyNumber=True) or []
+
+        current_scene = cmds.file(query=True, sceneName=True)
+        seen_sources = set()
+
+        logger.info("  Maya reported %d dependency path(s)" % len(all_deps))
+
+        for dep_path in all_deps:
+            # Skip the scene itself
+            if current_scene and os.path.normpath(dep_path) == os.path.normpath(current_scene):
+                continue
+            if self.temp_scene_path and os.path.normpath(dep_path) == os.path.normpath(self.temp_scene_path):
+                continue
+
+            resolved = _resolve_path(dep_path)
+
+            if not resolved:
+                logger.info("  WARNING: Could not resolve on disk: %s" % dep_path)
+                continue
+
+            for real_path in resolved:
+                norm = os.path.normpath(real_path)
+                if norm in seen_sources:
+                    continue
+                seen_sources.add(norm)
+
+                ext = os.path.splitext(real_path)[1].lower()
+                category = self._categorise(ext, dep_path)
+                self.collected_files[category].append({
+                    'source':    real_path,
+                    'orig_path': dep_path,
+                })
+
+        # Fallback scan for anything Maya's list missed
+        self._collect_via_node_attrs(logger, seen_sources)
+
+        total = sum(len(v) for v in self.collected_files.values())
+        logger.info("\n  Total files collected: %d" % total)
+        for cat, files in self.collected_files.items():
+            if files:
+                logger.info("    %-16s %d" % (cat + ':', len(files)))
+
+    def _categorise(self, ext, path):
+        """Determine archive subfolder from file extension, with fallbacks."""
+        folder = EXT_TO_FOLDER.get(ext)
+        if folder:
+            return folder
+
+        low = path.lower()
+        if 'sound' in low or 'audio' in low:
+            return 'sound'
+        if 'cache' in low or 'alembic' in low or 'vdb' in low:
+            return 'cache'
+        if 'sourceimages' in low or 'texture' in low or 'tex' in low:
+            return 'sourceimages'
+        if 'movie' in low or 'video' in low:
+            return 'movies'
+
+        return 'data'
+
+    def _collect_via_node_attrs(self, logger, seen_sources):
+        """
+        Fallback scanner: iterate every node in the scene and check a broad
+        list of known file-path attributes. Skips anything already collected.
+        """
+        file_attrs = [
+            'fileTextureName', 'imageName', 'filename',
+            'abc_File', 'cacheFileName', 'cachePath',
+            'dso', 'aiFilename', 'sceneFileName',
+            'cfnFilePath', 'vdbFilePath',
+        ]
+
+        for attr in file_attrs:
+            for node in cmds.ls('*'):
+                if not cmds.attributeQuery(attr, node=node, exists=True):
+                    continue
+                try:
+                    path = cmds.getAttr('%s.%s' % (node, attr))
+                    if not path:
+                        continue
+
+                    resolved = _resolve_path(path)
+                    for real_path in resolved:
+                        norm = os.path.normpath(real_path)
+                        if norm in seen_sources:
+                            continue
+                        seen_sources.add(norm)
+
+                        ext = os.path.splitext(real_path)[1].lower()
+                        category = self._categorise(ext, path)
+                        self.collected_files[category].append({
+                            'source':    real_path,
+                            'orig_path': path,
+                            'node':      node,
+                            'attr':      attr,
+                        })
+                        logger.info("    [fallback] %s  (%s.%s)" % (
+                            os.path.basename(real_path), node, attr))
+                except Exception:
+                    pass
+
+    def _process_references(self, logger):
+        """Import all references into the temp scene."""
+        references = cmds.file(query=True, reference=True) or []
+
+        if not references:
+            logger.info("  No references to process")
+            return
+
+        logger.info("  Found %d reference(s)" % len(references))
+        references.reverse()
+
+        for ref_path in references:
+            try:
+                ref_node = cmds.referenceQuery(ref_path, referenceNode=True)
+                namespace = cmds.referenceQuery(ref_path, namespace=True)
+
+                logger.info("    Importing: %s  (namespace: %s)" % (
+                    os.path.basename(ref_path), namespace))
+
+                cmds.file(ref_path, importReference=True, referenceNode=ref_node)
+
+                self.reference_mapping[ref_node] = {
+                    'original_path': ref_path,
+                    'namespace':     namespace,
+                }
+
+            except Exception as e:
+                logger.info("    WARNING: Could not import reference %s: %s" % (ref_path, str(e)))
+
+        logger.info("  All references imported")
+
+    def _create_link(self, logger, source_path, target_path):
+        """
+        Creates the most appropriate link type based on filesystem and drives.
+        - Same NTFS drive: hard link (mklink /H) - no permissions needed
+        - Different drives / remote: symbolic link (mklink)
+        """
+        source_drive = os.path.splitdrive(os.path.abspath(source_path))[0].lower()
+        target_drive = os.path.splitdrive(os.path.abspath(target_path))[0].lower()
+
+        link_string = 'mklink ' + '"' + target_path + '"' + ' ' + '"' + source_path + '"'
+
+        result = os.popen('cmd.exe /c ' + link_string).read()
+        logger.info("    [mklink result] %s" % result.strip())
+
+    def _link_files_to_archive(self, logger):
+        """
+        Create a link in the archive folder pointing back to the original
+        source file.
+        The scene file itself is NOT processed here.
+        """
+        linked_count  = 0
+        copied_count  = 0
+        skipped_count = 0
+
+        for category, files in self.collected_files.items():
+            if category.startswith('_') or not files:
+                continue
+
+            target_dir = self.archive_structure.get(category, self.archive_structure['data'])
+
+            logger.info("\n  Linking %s (%d file(s))..." % (category, len(files)))
+
+            for file_info in files:
+                source_path = file_info['source']
+
+                if not os.path.exists(source_path):
+                    logger.info("    WARNING: Not on disk: %s" % source_path)
+                    skipped_count += 1
+                    continue
+
+                filename    = os.path.basename(source_path)
+                target_path = os.path.join(target_dir, filename)
+
+                counter = 1
+                base_name, ext = os.path.splitext(filename)
+                while os.path.exists(target_path):
+                    filename    = "%s_%d%s" % (base_name, counter, ext)
+                    target_path = os.path.join(target_dir, filename)
+                    counter += 1
+
+                try:
+                    self._create_link(logger, source_path, target_path)
+
+                    file_info['archive_path']  = target_path
+                    file_info['relative_path'] = os.path.relpath(target_path, self.output_dir)
+
+                    linked_count += 1
+                    logger.info("    ARCHIVED OK: %s" % filename)
+
+                    if 'node' in file_info and 'attr' in file_info:
+                        try:
+                            cmds.setAttr(
+                                '%s.%s' % (file_info['node'], file_info['attr']),
+                                target_path,
+                                type='string'
+                            )
+                        except Exception:
+                            pass
+
+                except Exception as e:
+                    logger.info("    ERROR: %s — %s" % (filename, str(e)))
+                    skipped_count += 1
+
+        logger.info("\n  Processed: %d   Skipped: %d" % (linked_count, skipped_count))
+
+    def _redirect_node_attributes(self, logger):
+        """Redirect all file node attributes to their symlink paths in the archive."""
+
+        # Build map: original source path -> archive link path
+        path_map = {}
+        for files in self.collected_files.values():
+            for file_info in files:
+                if 'archive_path' in file_info:
+                    norm = os.path.normpath(file_info['source'])
+                    path_map[norm] = file_info['archive_path']
+
+        if not path_map:
+            logger.info("  No path remapping needed")
+            return
+
+        logger.info("  Remapping %d path(s) in scene nodes..." % len(path_map))
+
+        file_attrs = [
+            'fileTextureName', 'imageName', 'filename',
+            'abc_File', 'cacheFileName', 'cachePath',
+            'dso', 'aiFilename', 'sceneFileName',
+            'cfnFilePath', 'vdbFilePath',
+        ]
+
+        remapped = 0
+        for attr in file_attrs:
+            for node in cmds.ls('*'):
+                if not cmds.attributeQuery(attr, node=node, exists=True):
+                    continue
+                try:
+                    current = cmds.getAttr('%s.%s' % (node, attr))
+                    if not current:
+                        continue
+                    norm = os.path.normpath(current)
+                    if norm in path_map:
+                        cmds.setAttr(
+                            '%s.%s' % (node, attr),
+                            path_map[norm],
+                            type='string'
+                        )
+                        logger.info("    Remapped %s.%s -> %s" % (node, attr, os.path.basename(path_map[norm])))
+                        remapped += 1
+                except Exception:
+                    pass
+
+        logger.info("  Total remapped: %d" % remapped)
+
+    def _save_archived_scene(self, logger, archive_name):
+        archived_scene_path = os.path.join(
+            self.archive_structure['scenes'],
+            archive_name + '.ma'
+        )
+
+        cmds.file(rename=archived_scene_path)
+        cmds.file(save=True, type='mayaAscii')
+
+        logger.info("  Archived scene saved: %s" % archived_scene_path)
+        return archived_scene_path
+
+    def _create_manifest(self, logger, archive_path, archived_scene_path):
+        manifest_path = os.path.join(archive_path, 'archive_manifest.json')
+
+        manifest = {
+            'archive_name':        os.path.basename(archive_path),
+            'creation_date':       cmds.date(),
+            'maya_version':        cmds.about(version=True),
+            'archived_scene':      os.path.relpath(archived_scene_path, archive_path),
+            'file_counts': {
+                cat: len(files)
+                for cat, files in self.collected_files.items()
+                if not cat.startswith('_')
+            },
+            'total_files': sum(
+                len(v) for k, v in self.collected_files.items()
+                if not k.startswith('_')
+            ),
+            'references_imported': len(self.reference_mapping),
+            'structure': {
+                key: os.path.relpath(path, archive_path)
+                for key, path in self.archive_structure.items()
+            },
+        }
+
+        with open(manifest_path, 'w') as f:
+            json.dump(manifest, f, indent=2)
+
+        logger.info("  Manifest created: %s" % manifest_path)
+
+    def _restore_original_scene(self, logger, original_scene_path):
+        cmds.file(original_scene_path, open=True, force=True)
+
+        if self.temp_scene_path and os.path.exists(self.temp_scene_path):
+            try:
+                os.remove(self.temp_scene_path)
+            except Exception:
+                pass
+
+        logger.info("Original scene restored: %s" % original_scene_path)
+
+
+# ============================================================================
+# USAGE FUNCTIONS
+# ============================================================================
+
+def archive_current_scene(output_directory, logger, archive_name=None):
+    """
+    Archive the current Maya scene with all dependencies.
+
+    :param output_directory: Directory where archive folder will be created
+    :param archive_name:     Optional name for archive folder
+    :return:                 Path to archive directory
+
+    Usage:
+        archive_path = archive_current_scene('D:/archives')
+        archive_path = archive_current_scene('D:/archives', 'shot010_v003')
+    """
+    if not os.path.exists(output_directory):
+        try:
+            os.makedirs(output_directory)
+            logger.info("Created output directory: %s" % output_directory)
+        except Exception as e:
+            cmds.error("Cannot create output directory: %s" % str(e))
+            return None
+
+    archiver = MayaSceneArchiver(output_directory)
+    return archiver.create_archive(logger, archive_name)
+
+
+def archive_scene_interactive(logger):
+    """Interactive version — prompts user for output directory and archive name."""
+    output_dir = cmds.fileDialog2(
+        dialogStyle=2,
+        fileMode=3,
+        caption='Select Archive Output Directory'
+    )
+
+    if not output_dir:
+        logger.info("Archive cancelled")
+        return None
+
+    output_dir = output_dir[0]
+
+    current_scene = cmds.file(query=True, sceneName=True)
+    default_name = (
+        os.path.splitext(os.path.basename(current_scene))[0] + "_archive"
+        if current_scene else "maya_scene_archive"
+    )
+
+    result = cmds.promptDialog(
+        title='Archive Name',
+        message='Enter archive name:',
+        text=default_name,
+        button=['OK', 'Cancel'],
+        defaultButton='OK',
+        cancelButton='Cancel',
+        dismissString='Cancel'
+    )
+
+    if result == 'OK':
+        archive_name = cmds.promptDialog(query=True, text=True)
+        return archive_current_scene(output_dir, archive_name)
+
+    return None
+
+
+def archive_to_project_archives_folder(logger, archive_name=None):
+    """
+    Archive to the current project's 'archives' folder.
+
+    :param archive_name: Optional archive name
+    :return:             Path to archive
+    """
+    workspace = cmds.workspace(query=True, rootDirectory=True)
+
+    if not workspace:
+        cmds.warning("No project set. Please set a project first.")
+        return None
+
+    archives_folder = os.path.join(workspace, 'archives')
+
+    if not os.path.exists(archives_folder):
+        os.makedirs(archives_folder)
+        logger.info("Created archives folder: %s" % archives_folder)
+
+    return archive_current_scene(archives_folder, archive_name)

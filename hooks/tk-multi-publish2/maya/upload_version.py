@@ -13,6 +13,10 @@ import glob
 import pprint
 import sgtk
 from tank_vendor import six
+import maya.mel as mel
+import maya.cmds as cmds
+import subprocess
+import sys
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
@@ -29,7 +33,7 @@ class UploadVersionPlugin(HookBaseClass):
         """
 
         # look for icon one level up from this hook's folder in "icons" folder
-        return os.path.join(self.disk_location, "icons", "review.png")
+        return os.path.join(self.disk_location, "icons", "video.png")
 
     @property
     def name(self):
@@ -50,15 +54,16 @@ class UploadVersionPlugin(HookBaseClass):
         shotgun_url = publisher.sgtk.shotgun_url
 
         media_page_url = "%s/page/media_center" % (shotgun_url,)
-        review_url = "https://www.shotgunsoftware.com/features/#review"
+        review_url = "https://www.shotgridsoftware.com/features/#review"
 
         return """
-        Upload the file to Shotgun for review.<br><br>
+        Upload the file to Flow Production Tracking for review.<br><br>
 
-        A <b>Version</b> entry will be created in Shotgun and a transcoded
-        copy of the file will be attached to it. The file can then be reviewed
-        via the project's <a href='%s'>Media</a> page, <a href='%s'>RV</a>, or
-        the <a href='%s'>Shotgun Review</a> mobile app.
+        A <b>Version</b> entry will be created in Flow Production Tracking and
+        a transcoded copy of the file will be attached to it. The file can then
+        be reviewed via the project's <a href='%s'>Media</a> page,
+        <a href='%s'>RV</a>, or the <a href='%s'>Flow Production Tracking Review</a>
+        mobile app.
         """ % (
             media_page_url,
             review_url,
@@ -89,18 +94,32 @@ class UploadVersionPlugin(HookBaseClass):
         return {
             "File Extensions": {
                 "type": "str",
-                "default": "jpeg, jpg, png, mov, mp4, pdf, exr",
+                "default": "jpeg, jpg, png, mov, mp4, pdf, exr, avi, ma, mb",
                 "description": "File Extensions of files to include",
             },
             "Upload": {
                 "type": "bool",
                 "default": True,
-                "description": "Upload content to Shotgun?",
+                "description": "Upload content to Flow Production Tracking?",
             },
             "Link Local File": {
                 "type": "bool",
                 "default": True,
                 "description": "Should the local file be referenced by Shotgun",
+            },
+            "Dailies Template": {
+                "type": "template",
+                "default": None,
+                "description": "Template path for published dailies. Should"
+                               "correspond to a template defined in "
+                               "templates.yml.",
+            },
+            "Dailies Low Template": {
+                "type": "template",
+                "default": None,
+                "description": "Template path for published playblast. Should"
+                               "correspond to a template defined in "
+                               "templates.yml.",
             },
         }
 
@@ -115,7 +134,7 @@ class UploadVersionPlugin(HookBaseClass):
         """
 
         # we use "video" since that's the mimetype category.
-        return ["file.image", "file.video", "maya.session.playblast", "maya.session.playblastSeq"]
+        return ["file.image", "file.video", "maya.session.playblast", "maya.session.playblastSeq", "maya.session.render", "maya.session"]
 
     def accept(self, settings, item):
         """
@@ -144,9 +163,10 @@ class UploadVersionPlugin(HookBaseClass):
         """
 
         publisher = self.parent
-        file_path = item.properties["path"]
+        path = item.properties["path"]
 
-        file_info = publisher.util.get_file_path_components(file_path)
+        # Accept any files with a valid extension defined in the setting "File Extensions"
+        file_info = publisher.util.get_file_path_components(path)
         extension = file_info["extension"].lower()
 
         valid_extensions = []
@@ -157,15 +177,24 @@ class UploadVersionPlugin(HookBaseClass):
 
         self.logger.debug("Valid extensions: %s" % valid_extensions)
 
-        if extension in valid_extensions:
-            # log the accepted file and display a button to reveal it in the fs
-            self.logger.info(
-                "Version upload plugin accepted: %s" % (file_path,),
-                extra={"action_show_folder": {"path": file_path}},
-            )
+        if item.type == "maya.session":
+            template_name = settings["Dailies Low Template"].value
+        elif item.type == "maya.session.render":
+            template_name = settings["Dailies Template"].value
+        dailies_template = publisher.get_template_by_name(template_name)
+        item.properties["dailies_template"] = dailies_template
 
-            # return the accepted info
-            return {"accepted": True}
+        if dailies_template:
+            if extension in valid_extensions or item.type == "maya.session":
+                # log the accepted file and display a button to reveal it in the fs
+                self.logger.info(
+                    "Version upload plugin accepted: %s" % (path,),
+                    extra={"action_show_folder": {"path": path}},
+                )
+
+                # return the accepted info
+                return {"accepted": True}
+
         else:
             self.logger.debug(
                 "%s is not in the valid extensions list for Version creation"
@@ -186,7 +215,11 @@ class UploadVersionPlugin(HookBaseClass):
 
         :returns: True if item is valid, False otherwise.
         """
-        return True
+        if self.get_dailies_path(settings, item) != None:
+            item.properties["Dailies_path"] = self.get_dailies_path(settings, item)
+            return True
+        else:
+            return False
 
     def publish(self, settings, item):
         """
@@ -199,39 +232,225 @@ class UploadVersionPlugin(HookBaseClass):
         """
 
         publisher = self.parent
-        path = item.properties["path"]
-        uploadPath = item.properties["path"]
+        uploadPath = item.properties["Dailies_path"]
 
-        if "sequence_paths" in item.properties.keys():
+        if "sequence_paths" in item.properties.keys() and item.type == "maya.session.render":
 
-            file = os.path.basename(path)[:-9] + '.mov'
-            outMov = os.path.join(path[:path.find('STEPS')], 'DAILIES', 'HIGH', file)
 
-            uploadPath = outMov
-            ocio = os.environ['OCIO']
-            lutFile = os.path.join(os.path.dirname(ocio), 'baked', 'maya', 'Rec.709 for ACEScg Maya.csp')
-            defLut = lutFile.replace(os.sep, '/').replace((':'+'/'), (os.sep + ':' + '/'))
+            first = item.properties['sequence_paths'][0][-8:-4]
+            last = item.properties['sequence_paths'][-1][-8:-4]
 
-            start_number = item.properties["sequence_paths"][0][-8:-4]
+            framerate = str(mel.eval('float $fps = `currentTimeUnitToFPS`'))
+            start_number = first
+            in_path = item.properties['publish_path'].replace("####", '%04d')
+            in_sequence = in_path.replace('\\', '/')
+            lut_path = r"L\:/NUKE_CONFIG/ACESCg_to_Rec709.cube"  # keep the backslash before the colon
+            out_mov = uploadPath.replace('\\', '/')
+            font_path = "C\:/Windows/Fonts/arial.ttf"
+            Project = item.context.project['name']
+            Entity = item.context.entity['name']
+            Logo = os.path.join(self.disk_location, os.pardir, "icons", "EFCT_LOGO_v2.png")
 
-            import maya.mel as mel
-            fps = str(mel.eval('float $fps = `currentTimeUnitToFPS`'))
+            Project_esc = _escape_drawtext_text(Project)
+            Entity_esc = _escape_drawtext_text(Entity)
 
-            qtString = """ffmpeg -start_number {} -y -i {} -vf "lut3d='{}', scale= 1920:-1, colorspace=all=bt709:iall=bt709:trc=srgb:fast=1" -c:v prores_ks -profile:v 3 -vendor apl0 -pix_fmt yuv422p10le -r {} {}""".format(start_number, path, defLut, fps, outMov)
-            os.popen(qtString)
+            # Build the vf chain:
+            vf_original = (
+                "format=gbrpf32le,"
+                f"lut3d='{lut_path}',"
+                "scale=1920:1080,format=yuv422p10le"
+            )
 
-        # allow the publish name to be supplied via the item properties. this is
-        # useful for collectors that have access to templates and can determine
-        # publish information about the item that doesn't require further, fuzzy
-        # logic to be used here (the zero config way)
-        publish_name = item.properties.get("publish_name")
-        if not publish_name:
+            # Build the vf chain:
+            filter_complex = (
+                f"[0:v]{vf_original}[base];"
+                f"[base]"
+                # Top-left: Project
+                f"drawtext=fontfile='{font_path}':"
+                f"text='{Project_esc}':"
+                f"fontcolor=white:fontsize=36:x=20:y=20:"
+                f"borderw=2:bordercolor=black@0.6,"
 
-            self.logger.debug("Using path info hook to determine publish name.")
+                # Bottom-left: Entity
+                f"drawtext=fontfile='{font_path}':"
+                f"text='{Entity_esc}':"
+                f"fontcolor=white:fontsize=32:x=20:y=H-th-20:"
+                f"borderw=2:bordercolor=black@0.6,"
 
-            # use the path's filename as the publish name
-            path_components = publisher.util.get_file_path_components(path)
-            publish_name = '_'.join(path_components["filename"].split('_')[:1])
+                # Bottom-right: current (absolute) frame number = start_number + n
+                # Note: escape colons inside eif with \\
+                f"drawtext=fontfile='{font_path}':"
+                f"text='%{{eif\\:n+{start_number}\\:d}}':"
+                f"fontcolor=white:fontsize=32:x=W-tw-20:y=H-th-20:"
+                f"borderw=2:bordercolor=black@0.6"
+                f"[txt];"
+                # Logo overlay on top-right (20px margin)
+                # main W/H come from [txt]; overlay w/h come from [1:v]
+                f"[txt][1:v]overlay=W-w-20:20:format=auto:eval=init"
+            )
+
+
+            # Assemble the final command with all quotes preserved
+            cmd = (
+                f'ffmpeg -framerate {framerate} -start_number {start_number} '
+                f'-i "{in_sequence}" '
+                f'-i "{Logo}" '          # logo image
+                f'-filter_complex "{filter_complex}" '
+                f'-c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le '
+                f'-movflags +write_colr -color_primaries bt709 -color_trc bt709 -colorspace bt709 '
+                f'"{out_mov}"'
+            )
+            self.logger.info(cmd)
+            self.logger.info(os.environ['PATH'])
+
+            with subprocess.Popen(
+                    cmd,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1  # line-buffered
+            ) as proc:
+                for line in proc.stdout:
+                    sys.stdout.write(line)  # stream to your console (or handle it as you like)
+                    self.logger.info(line)
+                return_code = proc.wait()
+
+            print("Exit code:", return_code)
+
+        elif item.type == "maya.session":
+
+            # Create Playblast either by generating a turntable camera or using camMain
+
+
+
+            '''En esta funcion chequeo que la estructura en la escena y del propia escena sea la correcta,
+            es decir que contenga los nulls geo, basemesh debajo del nombre del asset'''
+
+            ##Set First frame
+            # first = cmds.playbackOptions(q=True, min=True)
+
+            # Checking Root Structure
+            # rootNodes = cmds.ls(assemblies=True)  # variable con la lista de objetos de la escena
+            rootNodes = cmds.ls(o=True)  # variable con la lista de objetos de la escena
+            maxKeyframe = 120
+            minKeyframe = 0
+            all_keys = []
+
+            '''Se comprueba que solo exista un root null en la escena obviando las camaras'''
+
+            cameras = cmds.listCameras()
+            turntable = True
+            for cam in cameras:
+                if "camMain" in cam:
+                    turntable = False
+                    main = cam
+                else:
+                    try:
+                        rootNodes.remove(cam)
+                    except:
+                        pass
+            '''Compruebo que la estructura del root es correcta'''
+            if len(rootNodes) == 0:
+                error_msg = "Scene structure is incorrect. There is no root nodes."
+                self.logger.error(error_msg)
+                raise Exception(error_msg)
+
+            else:
+
+                # Check for animations
+                anim = False
+                for node in rootNodes:
+                    all_keys = sorted(cmds.keyframe(node,
+                                                    q=True) or [])  # Get all the keys and sort them by order. We use `or []` in-case it has no keys, which will use an empty list instead so it doesn't crash `sort`.
+                    if len(all_keys) > 0:  # Check to see if it at least has one key.
+                        anim = True
+                        minKeyframe, maxKeyframe = (all_keys[0], all_keys[-1])  # Print the start and end frames
+                        if all_keys[0] < minKeyframe:
+                            minKeyframe = all_keys[0]
+                        if all_keys[-1] > maxKeyframe:
+                            maxKeyframe = all_keys[-1]
+
+                # rootNode = cmds.listRelatives(rootNodes[0], fullPath=True)
+
+                if turntable == True:
+                    first = 0
+                    ###Set last frame
+                    last = maxKeyframe
+
+                    ### Create camera turntable
+                    obj = cmds.camera()
+                    obj = cmds.rename(obj[0], "turnCam")
+                    cmds.group(obj, name='rotGrp')
+
+                    ## Select asset in scene
+                    if anim:
+                        first = minKeyframe
+                        cmds.setAttr((obj + '.rotate'), -15, 0, 0, type="double3")
+                        cmds.setAttr((obj + 'Shape.panZoomEnabled'), 1)
+                        cmds.xform('rotGrp', ws=True, rp=[0, 0, 0])
+                        cmds.setAttr((obj + 'Shape.zoom'), 1)
+                        cmds.expression(s='rotGrp.rotateY = 45')
+                        cmds.viewFit(obj, f=1)
+                        cmds.setAttr((obj + 'Shape.farClipPlane'),
+                                     (cmds.getAttr(obj + 'Shape.centerOfInterest') * 2))
+                        ###Set last frame
+                        cmds.playbackOptions(animationStartTime=first, animationEndTime=maxKeyframe, minTime=first,
+                                             maxTime=maxKeyframe)
+                    else:
+                        cmds.setAttr((obj + '.rotate'), -15, 45, 0, type="double3")
+                        cmds.setAttr((obj + 'Shape.panZoomEnabled'), 0)
+                        cmds.xform('rotGrp', ws=True, rp=[0, 0, 0])
+                        cmds.setAttr((obj + 'Shape.zoom'), 1)
+                        cmds.expression(s='rotGrp.rotateY = frame * (360/120)')
+                        cmds.viewFit(obj, f=1)
+                        cmds.setAttr((obj + 'Shape.farClipPlane'),
+                                     (cmds.getAttr(obj + 'Shape.centerOfInterest') * 2))
+                        ###Set last frame
+                        cmds.playbackOptions(animationStartTime=0, animationEndTime=maxKeyframe, minTime=0,
+                                             maxTime=maxKeyframe)
+
+                    cmds.lookThru(obj)
+
+                else:
+                    ##Set First frame
+                    first = cmds.playbackOptions(q=True, min=True)
+                    last = cmds.playbackOptions(q=True, max=True)
+                    cmds.lookThru(main)
+                    previousMaskOpacity = cmds.getAttr((main + '.displayGateMaskOpacity'))
+                    previousAspectRatio = cmds.getAttr("defaultResolution.deviceAspectRatio")
+                    previousOverscan = cmds.getAttr(main + ".overscan")
+                    cmds.setAttr((main + '.displayGateMaskColor'), 0, 0, 0, type="double3")
+                    cmds.setAttr((main + '.displayGateMaskOpacity'), 1)
+                    cmds.setAttr((main + '.overscan'), 1.0)
+                    proj = sgtk.platform.current_engine().shotgun.find_one('Project', [['name', 'is', item.context.project['name']]], ['sg_formato___ratio'])
+                    cmds.setAttr("defaultResolution.deviceAspectRatio", round(float(proj['sg_formato___ratio']), 3))
+
+                ## Process avi
+                cmds.playblast(format='avi',
+                               filename=uploadPath,
+                               startTime=first,
+                               endTime=last,
+                               widthHeight=[1920, 1080],
+                               sequenceTime=0,
+                               clearCache=1,
+                               viewer=0,
+                               showOrnaments=1,
+                               percent=100,
+                               compression='none',
+                               quality=100,
+                               fo=1)
+
+                if turntable == True:
+                    cmds.delete('rotGrp')
+                else:
+                    cmds.setAttr((main + '.displayGateMaskOpacity'), previousMaskOpacity)
+                    cmds.setAttr("defaultResolution.deviceAspectRatio", previousAspectRatio)
+                    cmds.setAttr(main + ".overscan", previousOverscan)
+
+        # use the path's filename as the publish name
+        path_components = publisher.util.get_file_path_components(uploadPath)
+        publish_name = path_components["filename"]
 
         self.logger.debug("Publish name: %s" % (publish_name,))
 
@@ -242,17 +461,32 @@ class UploadVersionPlugin(HookBaseClass):
             "description": item.description,
             "entity": self._get_version_entity(item),
             "sg_task": item.context.task,
+            "sg_first_frame": int(first),
+            "sg_last_frame": int(last),
+            "frame_count": int(int(last) - int(first)),
+            "frame_range": str(first) + "-" + str(last),
         }
 
         if "sg_publish_data" in item.properties:
             publish_data = item.properties["sg_publish_data"]
             version_data["published_files"] = [publish_data]
 
+            try:
+                sg_parent_publish_data = item.parent.parent.properties.get("sg_publish_data")
+                if sg_parent_publish_data is not None:
+                    version_data["published_files"] = [publish_data, sg_parent_publish_data]
+            except:
+                self.logger.info("No parent publish data found")
+
+
         if settings["Link Local File"].value:
             version_data["sg_path_to_movie"] = uploadPath
 
+        if item.type == "maya.session.render":
+            version_data["sg_path_to_frames"] = item.properties["publish_path"]
+
         # log the version data for debugging
-        self.logger.debug(
+        self.logger.info(
             "Populated Version data...",
             extra={
                 "action_show_more_info": {
@@ -272,26 +506,24 @@ class UploadVersionPlugin(HookBaseClass):
 
         thumb = item.get_thumbnail_as_path()
 
-        if settings["Upload"].value:
-            self.logger.info("Uploading content...")
+        self.logger.info("Uploading content...")
 
-            # on windows, ensure the path is utf-8 encoded to avoid issues with
-            # the shotgun api
-            if sgtk.util.is_windows():
-                upload_path = six.ensure_text(uploadPath)
-            else:
-                upload_path = uploadPath
+        # on windows, ensure the path is utf-8 encoded to avoid issues with
+        # the shotgun api
 
-            self.parent.shotgun.upload(
-                "Version", version["id"], upload_path, "sg_uploaded_movie"
-            )
-        elif thumb:
-            # only upload thumb if we are not uploading the content. with
-            # uploaded content, the thumb is automatically extracted.
-            self.logger.info("Uploading thumbnail...")
-            self.parent.shotgun.upload_thumbnail("Version", version["id"], thumb)
+        if sgtk.util.is_windows():
+            upload_path = six.ensure_text(uploadPath)
+        else:
+            upload_path = uploadPath
+
+        self.parent.shotgun.upload(
+            "Version", version["id"], upload_path, "sg_uploaded_movie"
+        )
 
         self.logger.info("Upload complete!")
+
+
+
 
     def finalize(self, settings, item):
         """
@@ -304,7 +536,7 @@ class UploadVersionPlugin(HookBaseClass):
         :param item: Item to process
         """
 
-        path = item.properties["path"]
+        path = item.properties["sg_version_data"]["sg_path_to_movie"]
         version = item.properties["sg_version_data"]
 
         self.logger.info(
@@ -329,3 +561,85 @@ class UploadVersionPlugin(HookBaseClass):
             return item.context.project
         else:
             return None
+
+
+    def get_dailies_path(self, settings, item):
+        """
+        Get a publish path for the supplied settings and item.
+
+        :param settings: This plugin instance's configured settings
+        :param item: The item to determine the publish path for
+
+        :return: A string representing the output path to supply when
+            registering a publish for the supplied item
+
+        Extracts the publish path via the configured work and publish templates
+        if possible.
+        """
+
+
+
+        # fall back to template/path logic
+        path = _session_path()
+        work_template = item.properties.get("work_template")
+        dailies_template = item.properties["dailies_template"]
+
+
+
+        work_fields = []
+        dailies_path = None
+
+        # We need both work and publish template to be defined for template
+        # support to be enabled.
+        if work_template and dailies_template:
+
+            if work_template.validate(path):
+                work_fields = work_template.get_fields(path)
+                if item.type == "maya.session":
+                    work_fields["extension"] = "avi"
+                elif item.type == "maya.session.render":
+                    work_fields["maya.layer_name"] = item.properties["maya.layer_name"]
+                    work_fields["extension"] = "mov"
+
+
+            missing_keys = dailies_template.missing_keys(work_fields)
+
+
+            if missing_keys:
+                self.logger.warning(
+                    "Not enough keys to apply work fields (%s) to "
+                    "publish template (%s)" % (work_fields, dailies_template)
+                )
+            else:
+                dailies_path = dailies_template.apply_fields(work_fields)
+                self.logger.debug(
+                    "Used publish template to determine the publish path: %s"
+                    % (dailies_path,)
+                )
+        else:
+            self.logger.debug("dailies_template: %s" % dailies_template)
+            self.logger.debug("work_template: %s" % work_template)
+
+
+        return dailies_path
+
+def _session_path():
+    """
+    Return the path to the current session
+    :return:
+    """
+    path = cmds.file(query=True, sn=True)
+
+    if path is not None:
+        path = six.ensure_str(path)
+
+    return path
+
+
+def _escape_drawtext_text(s: str) -> str:
+    """
+    Escape a Python string for safe use inside FFmpeg drawtext text='...'.
+    - Escape backslashes and single quotes.
+    - Leave ffmpeg expression placeholders like %{...} alone if you pass them as raw strings.
+    """
+    return s.replace("\\", "\\\\").replace("'", r"\'")

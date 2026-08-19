@@ -350,8 +350,12 @@ class RenderMedia(HookBaseClass):
             if nuke.NUKE_VERSION_MAJOR >= 9:
                 # Nuke 9.0v1 changed the codec knob name to meta_codec and added an encoder knob
                 # (which defaults to the new mov64 encoder/decoder).
-                settings["meta_codec"] = "jpeg"
-                settings["mov64_quality_max"] = "3"
+                #settings["meta_codec"] = "jpeg"
+                #settings["mov64_quality_max"] = "3"
+                settings["mov64_codec"] = "appr"
+                settings["mov64_quality"] = "High"
+                settings["mov64_fast_start"] = True
+                settings["mov64_write_timecode"] = True
             else:
                 settings["codec"] = "jpeg"
 
