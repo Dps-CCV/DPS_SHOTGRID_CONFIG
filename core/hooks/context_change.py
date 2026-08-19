@@ -120,9 +120,14 @@ class ContextChange(get_hook_baseclass()):
                         os.environ["LMT"] = clip["sg_source_clip"]["sg_lmt"]
                         self.logger.info("Environment variable LMT changed to %s", clip["sg_source_clip"]["sg_lmt"])
 
+                    elif clip["sg_lmt"] != "":
+                        os.environ["LMT"] = clip["sg_lmt"]
+                        self.logger.info("Environment variable LMT changed to %s", clip["sg_lmt"])
+
+
                     else:
                         os.environ["CLIP"] = " "
-                        os.environ["LMT"] = " "
+                        os.environ["LMT"] = "LMT_TEST.cube"
 
 
                 elif current_context.entity["type"] == 'Asset':
@@ -131,7 +136,7 @@ class ContextChange(get_hook_baseclass()):
                     template = tk.templates["asset_root"]
                     fields = current_context.as_template_fields(template)
                     asset_path = template.apply_fields(fields)
-                    os.environ["ASSET_FOLDER"] = str(shot_path)
+                    os.environ["ASSET_FOLDER"] = str(asset_path)
                     self.logger.info("Environment variable ASSET_FOLDER changed to %s", str(asset_path))
                     self.logger.info("Environment variable ASSET changed to %s", str(current_context.entity["name"]))
 

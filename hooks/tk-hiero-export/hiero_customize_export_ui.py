@@ -59,10 +59,16 @@ class HieroCustomizeExportUI(HookBaseClass):
                 tooltip="Update 'sg_source_clip' on the Shot entity.",
             ),
             dict(
-                label="Source Clip Field::",
+                label="Source Clip Field:",
                 name="custom_sourceClip_text_property",
                 value="exr.owner",
                 tooltip="Update source clip data looking to this metadata field.",
+            ),
+            dict(
+                label="Export CDLS and LMT:",
+                name="custom_cdls_bool_property",
+                value=True,
+                tooltip="Export and updates cdls and lmt on the Shot entity.",
             ),
             dict(
                 label="Metadata:",

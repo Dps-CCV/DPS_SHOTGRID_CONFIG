@@ -132,7 +132,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
         self.logger.info(template_name)
 
         # ensure a work file template is available on the parent item
-        work_template = item.parent.properties.get("work_template")
+        work_template = item.properties.get("work_template")
         if not work_template:
             self.logger.debug(
                 "A work template is required for the session item in order to "
@@ -211,7 +211,7 @@ class MayaObjectGeometryUSDPublishPlugin(HookBaseClass):
             raise Exception(error_msg)
 
         # get the configured work file template
-        work_template = item.parent.properties.get("work_template")
+        work_template = item.properties.get("work_template")
 
         #publish_template = item.properties.get("publish_template")
         # get the current scene path and extract fields from it using the work

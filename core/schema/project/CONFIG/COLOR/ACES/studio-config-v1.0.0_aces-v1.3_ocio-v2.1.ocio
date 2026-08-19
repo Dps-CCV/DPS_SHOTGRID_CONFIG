@@ -106,7 +106,7 @@ looks:
     transform: !<GroupTransform>
       children:
         - !<FileTransform> {src: $SHOT.cc, interpolation: linear, direction: forward}
-
+        - !<FileTransform> {src: $LMT.cube, interpolation: linear, direction: forward}
   - !<Look>
     name: Shot_neutral
     process_space: ACES - ACEScg
@@ -1120,7 +1120,7 @@ colorspaces:
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
-        - !<DisplayViewTransform> {src: ACES2065-1, display: sRGB - Display, view: ACES 1.0 - SDR Video}
+        - !<DisplayViewTransform> {src: ACES2065-1, display: Rec.1886 Rec.709 - Display, view: ACES 1.0 - SDR Video}
 
   - !<ColorSpace>
     name: Output - sRGB
@@ -1136,7 +1136,7 @@ colorspaces:
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
-        - !<DisplayViewTransform> {src: ACES2065-1, display: Rec.1886 Rec.709 - Display, view: ACES 1.0 - SDR Video}
+        - !<DisplayViewTransform> {src: ACES2065-1, display: sRGB - Display, view: ACES 1.0 - SDR Video}
 
 
 

@@ -28,7 +28,7 @@ settings.tk-nuke-writenode.asset:
       render_template: nuke_asset_render
       settings:
         datatype: 16 bit half
-        channels: rgba
+        channels: all
         autocrop: true
         compression: none
         interleave: channels
@@ -137,7 +137,7 @@ settings.tk-nuke-writenode.shot:
     settings:
       datatype: 16 bit half
       channels: rgba
-      colorspace: "Utility - Raw"
+      colorspace: "Raw"
       metadata: "all metadata"
       compression: Zip (1 scanline)
     tank_type: Rendered Image

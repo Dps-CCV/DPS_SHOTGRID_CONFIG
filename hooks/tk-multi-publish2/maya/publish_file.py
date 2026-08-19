@@ -13,6 +13,7 @@ import pprint
 import traceback
 import maya.cmds as cmds
 from tank_vendor import six
+import shutil
 
 import sgtk
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
@@ -998,12 +999,13 @@ class BasicFilePublishPlugin(HookBaseClass):
                 ensure_folder_exists(publish_folder)
                 workFileNorm = os.path.normpath(work_file)
                 publishFileNorm = os.path.normpath(publish_file)
-                if platform.system() == 'Windows':
-                    copyCommand = 'copy '
-                else:
-                    copyCommand = 'cp '
-                copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
-                os.popen(copystring)
+                # if platform.system() == 'Windows':
+                #     copyCommand = 'copy '
+                # else:
+                #     copyCommand = 'cp '
+                # copystring = copyCommand + workFileNorm + ' ' + publishFileNorm
+                # os.popen(copystring)
+                shutil.copyfile(workFileNorm, publishFileNorm)
             except Exception:
                 raise Exception(
                     "Failed to copy work file from '%s' to '%s'.\n%s"

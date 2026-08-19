@@ -188,16 +188,6 @@ settings.tk-multi-publish2.maya.asset_step:
       Cameras: ["*camMain*"]
   pre_publish: "{self}/pre_publish.py:{config}/tk-multi-publish2/maya/pre_publish.py"
   publish_plugins:
-#  - name: Publish File to Shotgun
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_file.py"
-#    settings: {
-#      Alembic Publish Template: maya_asset_object_publish
-#    }
-  - name: Upload for review
-    hook: "{self}/upload_version.py:{config}/tk-multi-publish2/maya/upload_version.py"
-    settings:
-        File Extensions: "jpeg, jpg, png, mov, mp4, pdf, avi, exr"
-        Link Local File: True
   - name: Begin file versioning
     hook: "{engine}/tk-multi-publish2/basic/start_version_control.py"
     settings: {}
@@ -205,16 +195,20 @@ settings.tk-multi-publish2.maya.asset_step:
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_session.py"
     settings:
         Publish Template: maya_asset_publish
-        Dailies Template: maya_asset_low_dailies_publish
-  - name: Publish OBJECT GEO USD
-    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
-    settings:
-      Publish Template: maya_asset_object_usd_publish
+#  - name: Publish OBJECT GEO USD
+#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
+#    settings:
+#      Publish Template: maya_asset_object_usd_publish
 
   - name: Publish OBJECT GEO to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo.py"
     settings:
       Publish Template: maya_asset_object_publish
+
+  - name: Publish SHADING to Shotgun
+    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_shader.py"
+    settings:
+      Publish Template: maya_asset_shader_publish
 
   - name: Publish PARTICLES GEO to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_particles.py"
@@ -223,26 +217,21 @@ settings.tk-multi-publish2.maya.asset_step:
 #  - name: Publish Geometry SET to Shotgun
 #    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_abc_set.py"
 #    settings:
-#      Publish Template: maya_asset_set_publish
-#  - name: Publish Shaders
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_shader_network.py"
-#    settings:
-#        Publish Template: maya_asset_shader_publish
-#  - name: Publish Playblast
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_playblast.py"
-#    settings:
-#        Publish Template: maya_asset_playblast_publish
   - name: Publish Render
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_render.py"
     settings:
         Publish Template: maya_asset_render_publish
-        Dailies Template: maya_asset_dailies_publish
-        Link Local File: True
   - name: Publish Camera
     hook: "{config}/tk-multi-publish2/maya/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
     settings:
         Publish Template: maya_asset_camera_publish
-        Cameras: ["*camMain*"]
+  - name: Upload for review
+    hook: "{self}/upload_version.py:{config}/tk-multi-publish2/maya/upload_version.py"
+    settings:
+      File Extensions: "jpeg, jpg, png, mov, mp4, pdf, avi, exr, ma, mb"
+      Link Local File: True
+      Dailies Template: maya_asset_dailies_publish
+      Dailies Low Template: maya_asset_low_dailies_publish
   post_phase: "{self}/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
@@ -252,19 +241,10 @@ settings.tk-multi-publish2.maya.shot_step:
   collector: "{self}/collector.py:{config}/tk-multi-publish2/maya/collector.py"
   collector_settings:
       Work Template: maya_shot_work
-      Background Processing: True
+#      Background Processing: True
+      Cameras: ["*camMain*"]
   pre_publish: "{self}/pre_publish.py:{config}/tk-multi-publish2/maya/pre_publish.py"
   publish_plugins:
-#  - name: Publish File to Shotgun
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_file.py"
-#    settings: {
-#      Alembic Publish Template: maya_shot_object_publish
-#    }
-  - name: Upload for review
-    hook: "{self}/upload_version.py:{config}/tk-multi-publish2/maya/upload_version.py"
-    settings:
-      File Extensions: "jpeg, jpg, png, mov, mp4, pdf, avi, exr"
-      Link Local File: True
   - name: Begin file versioning
     hook: "{engine}/tk-multi-publish2/basic/start_version_control.py"
     settings: {}
@@ -272,21 +252,15 @@ settings.tk-multi-publish2.maya.shot_step:
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_session.py"
     settings:
         Publish Template: maya_shot_publish
-        Dailies Template: maya_shot_low_dailies_publish
 
   - name: Publish Camera
     hook: "{config}/tk-multi-publish2/maya/publish_file.py:{config}/tk-multi-publish2/maya/publish_camera.py"
     settings:
         Publish Template: maya_shot_camera_publish
-        Cameras: ["*camMain*"]
-#  - name: Publish Session Geometry
-#    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/publish_session_geometry.py"
+#  - name: Publish OBJECT GEO USD
+#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
 #    settings:
-#        Publish Template: shot_alembic_cache
-  - name: Publish OBJECT GEO USD
-    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo_usd.py"
-    settings:
-      Publish Template: maya_shot_object_usd_publish
+#      Publish Template: maya_shot_object_usd_publish
 
   - name: Publish OBJECT GEO to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_object_geo.py"
@@ -297,20 +271,17 @@ settings.tk-multi-publish2.maya.shot_step:
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_particles.py"
     settings:
       Publish Template: maya_shot_object_publish
-#  - name: Publish Geometry SET to Shotgun
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_abc_set.py"
-#    settings:
-#      Publish Template: maya_shot_set_publish
-#  - name: Publish Playblast
-#    hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_playblast.py"
-#    settings:
-#        Publish Template: maya_shot_playblast_publish
   - name: Publish Render
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/maya/publish_render.py"
     settings:
         Publish Template: maya_shot_render_publish
-        Dailies Template: maya_shot_dailies_publish
-        Link Local File: True
+  - name: Upload for review
+    hook: "{self}/upload_version.py:{config}/tk-multi-publish2/maya/upload_version.py"
+    settings:
+      File Extensions: "jpeg, jpg, png, mov, mp4, pdf, avi, exr, ma, mb"
+      Link Local File: True
+      Dailies Template: maya_shot_dailies_publish
+      Dailies Low Template: maya_shot_low_dailies_publish
   post_phase: "{self}/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
@@ -691,3 +662,4 @@ settings.tk-multi-publish2.vred.asset_step:
   post_phase: "{self}/post_phase.py"
   help_url: *help_url
   location: "@apps.tk-multi-publish2.location"
+

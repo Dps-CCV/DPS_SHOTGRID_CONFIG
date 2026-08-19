@@ -392,7 +392,7 @@ paths:
         definition: '@shot_root/PUBLISH/PLAYBLAST/{Shot}_{Step}_{name}_PLAYBLAST_v{version}.{extension}'
     # The location of published maya renders
     maya_shot_render_publish:
-        definition: '@shot_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Shot}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
+        definition: '@shot_root/PUBLISH/IMAGES/{Step}/MAYA/{name}_v{version}/{maya.camera_name}/{maya.layer_name}/{Shot}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
     # The location of published maya renders dailies
     maya_shot_dailies_publish:
         definition: '@shot_root/DAILIES/HIGH/{Shot}_{Step}_{name}_{maya.layer_name}_v{version}.{extension}'
@@ -735,7 +735,7 @@ paths:
         definition: '@asset_root/PUBLISH/GEO/{Step}/MAYA/{Asset}_{Step}_{name}_{maya.object_name}_v{version}.ass'
     # The location of published maya renders
     maya_asset_render_publish:
-        definition: '@asset_root/PUBLISH/IMAGES/{Step}/MAYA/{maya.layer_name}/{Asset}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/MAYA/{name}_v{version}/{maya.camera_name}/{maya.layer_name}/{Asset}_{Step}_{name}_v{version}_{maya.layer_name}.{frame_num}.{extension}'
     # The location of published maya renders dailies
     maya_asset_dailies_publish:
         definition: '@asset_root/DAILIES/HIGH/{Asset}_{Step}_{name}_{maya.layer_name}_v{version}.{extension}'
