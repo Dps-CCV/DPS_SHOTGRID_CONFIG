@@ -72,12 +72,12 @@ class ContextChange(get_hook_baseclass()):
         from sgtk.platform import current_engine
         engine = current_engine()
         try:
-            os.environ["PROJECT"] = str(current_context.project["name"])
-            self.logger.info("Environment variable PROJECT changed to %s", str(current_context.project["name"]))
+            os.environ['PROJECT'] = str(current_context.project['name'])
+            self.logger.info('Environment variable PROJECT changed to %s', str(current_context.project['name']))
             # arnold_plugin_path = os.path.join(
-            #     os.environ["PROJECT_PATH"], "CONFIG", "MAYA", "ARNOLD_SHADERS"
+            #     os.environ['PROJECT_PATH'], 'CONFIG', 'MAYA', 'ARNOLD_SHADERS'
             # )
-            # os.environ["ARNOLD_PLUGIN_PATH"] += os.pathsep + arnold_plugin_path
+            # os.environ['ARNOLD_PLUGIN_PATH'] += os.pathsep + arnold_plugin_path
             if current_context.entity:
                 current_engine = sgtk.platform.current_engine()
                 os.environ['SHOTGUN_TASK_TYPE'] = str(current_engine.context.task['type'])
@@ -85,95 +85,96 @@ class ContextChange(get_hook_baseclass()):
                 os.environ['SHOTGUN_ENTITY_TYPE'] = str(current_engine.context.task['type'])
                 os.environ['SHOTGUN_ENTITY_ID'] = str(current_engine.context.task['id'])
 
-                if current_context.entity["type"] == 'Shot':
-                    os.environ["SHOT"] = current_context.entity["name"]
+                if current_context.entity['type'] == 'Shot':
+                    os.environ['SHOT'] = current_context.entity['name']
                     tk = current_engine.sgtk
-                    template = tk.templates["shot_root"]
+                    template = tk.templates['shot_root']
                     fields = current_context.as_template_fields(template)
                     shot_path = template.apply_fields(fields)
-                    os.environ["SHOT_FOLDER"] = str(shot_path)
-                    self.logger.info("Environment variable SHOT changed to %s", str(current_context.entity["name"]))
-                    self.logger.info("Environment variable SHOT_FOLDER changed to %s", str(shot_path))
+                    os.environ['SHOT_FOLDER'] = str(shot_path)
+                    self.logger.info('Environment variable SHOT changed to %s', str(current_context.entity['name']))
+                    self.logger.info('Environment variable SHOT_FOLDER changed to %s', str(shot_path))
 
-                    seq = current_context.sgtk.shotgun.find_one("Shot", [["id", "is", current_context.entity["id"]]], ["project.Project.sg_format", "sg_sequence", "sg_efecto_a_hacer", "sg_method", "sg_lmt", "sg_source_clip", "sg_source_clip.SourceClip.sg_lmt"])
-                    os.environ["SEQ"] = str(seq["sg_sequence"]["name"])
-                    os.environ["DESCRIPTION"] = str(seq["sg_efecto_a_hacer"])
+                    seq = current_context.sgtk.shotgun.find_one('Shot', [['id', 'is', current_context.entity['id']]], ['project.Project.sg_format', 'sg_sequence', 'sg_efecto_a_hacer', 'sg_method', 'sg_lmt', 'sg_source_clip', 'sg_source_clip.SourceClip.sg_lmt'])
+                    os.environ['SEQ'] = str(seq['sg_sequence']['name'])
+                    os.environ['DESCRIPTION'] = str(seq['sg_efecto_a_hacer'])
                     methods = ''
-                    for i in seq["sg_method"]:
+                    for i in seq['sg_method']:
                         methods += ' ' + i['name'] + ','
-                    os.environ["METHODS"] = methods
-                    self.logger.info("Environment variable SEQ changed to %s", str(seq["sg_sequence"]["name"]))
+                    os.environ['METHODS'] = methods
+                    self.logger.info('Environment variable SEQ changed to %s', str(seq['sg_sequence']['name']))
 
 
                     clip = seq
-
+                    lmt = ''
 
                     ###Fill clip and lmt settings if we have those values. If we don't we set empty variables because OCIO configs don't work if there are no env variables created
-                    if clip["sg_source_clip"]:
-                        os.environ["CLIP"] = str(clip["sg_source_clip"]["name"])
-                        self.logger.info("Environment variable CLIP changed to %s", str(clip["sg_source_clip"]["name"]))
+                    if clip['sg_source_clip']:
+                        os.environ['CLIP'] = str(clip['sg_source_clip']['name'])
+                        self.logger.info('Environment variable CLIP changed to %s', str(clip['sg_source_clip']['name']))
+                        if clip['sg_source_clip']['sg_lmt']:
+                            lmt = clip['sg_source_clip']['sg_lmt']
 
-                        os.environ["LMT"] = str(clip["sg_source_clip.SourceClip.sg_lmt"])
-                        self.logger.info("Environment variable LMT changed to %s", str(clip["sg_source_clip"]["name"]))
+                        # os.environ['LMT'] = str(clip['sg_source_clip.SourceClip.sg_lmt'])
+                        # self.logger.info('Environment variable LMT changed to %s', str(clip['sg_source_clip']['name']))
+                    else:
+                        os.environ['CLIP'] = ' '
 
-                    elif clip["sg_source_clip"]["sg_lmt"] != "":
-                        os.environ["LMT"] = clip["sg_source_clip"]["sg_lmt"]
-                        self.logger.info("Environment variable LMT changed to %s", clip["sg_source_clip"]["sg_lmt"])
-
-                    elif clip["sg_lmt"] != "":
-                        os.environ["LMT"] = clip["sg_lmt"]
-                        self.logger.info("Environment variable LMT changed to %s", clip["sg_lmt"])
-
+                    if clip['sg_lmt']:
+                        lmt = clip['sg_lmt']
+                    if lmt != '':
+                        os.environ['LMT'] = lmt
+                        self.logger.info('Environment variable LMT changed to %s', lmt)
 
                     else:
-                        os.environ["CLIP"] = " "
-                        os.environ["LMT"] = "LMT_TEST.cube"
+                        os.environ['LMT'] = 'LMT_TEST.cube'
+                        self.logger.info('No LMT found')
 
 
-                elif current_context.entity["type"] == 'Asset':
-                    os.environ["ASSET"] = current_context.entity["name"]
+                elif current_context.entity['type'] == 'Asset':
+                    os.environ['ASSET'] = current_context.entity['name']
                     tk = current_engine.sgtk
-                    template = tk.templates["asset_root"]
+                    template = tk.templates['asset_root']
                     fields = current_context.as_template_fields(template)
                     asset_path = template.apply_fields(fields)
-                    os.environ["ASSET_FOLDER"] = str(asset_path)
-                    self.logger.info("Environment variable ASSET_FOLDER changed to %s", str(asset_path))
-                    self.logger.info("Environment variable ASSET changed to %s", str(current_context.entity["name"]))
+                    os.environ['ASSET_FOLDER'] = str(asset_path)
+                    self.logger.info('Environment variable ASSET_FOLDER changed to %s', str(asset_path))
+                    self.logger.info('Environment variable ASSET changed to %s', str(current_context.entity['name']))
 
                 if current_engine._Engine__engine_instance_name == 'tk-nuke':
                     import nuke
                     try:
                         reloadConfig = nuke.root().knob('reloadConfig')
                         reloadConfig.execute()
-                        self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                        self.logger.info('Reload Config %s', str(current_engine._Engine__engine_instance_name))
                     except Exception as e:
-                        self.logger.info("Reload Config failed %s", str(e))
+                        self.logger.info('Reload Config failed %s', str(e))
                     try:
                         ####DPS Write Shortcuts
                         # # CUSTOM SHORTCUTS
-                        write_node_item = nuke.menu('Nodes').findItem("Image/Write")
-                        write_node_item.setShortcut("")
+                        write_node_item = nuke.menu('Nodes').findItem('Image/Write')
+                        write_node_item.setShortcut('')
 
-                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "Render 16bits").setShortcut('w')
-                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "PRECOMP").setShortcut('Alt+w')
-                        nuke.menu('Nodes').findItem("Flow Production Tracking").findItem(
-                            "TECH_PRECOMP").setShortcut('Alt+j')
+                        nuke.menu('Nodes').findItem('Flow Production Tracking').findItem(
+                            'Render 16bits').setShortcut('w')
+                        nuke.menu('Nodes').findItem('Flow Production Tracking').findItem(
+                            'PRECOMP').setShortcut('Alt+w')
+                        nuke.menu('Nodes').findItem('Flow Production Tracking').findItem(
+                            'TECH_PRECOMP').setShortcut('Alt+j')
                     except:
-                        self.engine.logger.info("No se ha podido registrar los atajos de nuke write")
+                        self.engine.logger.info('No se ha podido registrar los atajos de nuke write')
 
 
 
                 elif current_engine._Engine__engine_instance_name == 'tk-houdini':
                     import hou
                     hou.Color.reloadOCIO()
-                    self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                    self.logger.info('Reload Config %s', str(current_engine._Engine__engine_instance_name))
 
                 elif current_engine._Engine__engine_instance_name == 'tk-maya':
                     import maya.cmds as cmds
                     import maya.mel as mel
-                    mel.eval("colorManagementPrefs -refresh;")
+                    mel.eval('colorManagementPrefs -refresh;')
 
                     def SetResolution(self):
                         engine = sgtk.platform.current_engine()
@@ -182,26 +183,26 @@ class ContextChange(get_hook_baseclass()):
                         shot = sg.find_one(context['type'], [['id', 'is', context['id']]],
                                            ['sg_width', 'sg_height'])
                         if shot['sg_width'] != None:
-                            pAx = cmds.getAttr("defaultResolution.pixelAspect")
-                            pAr = cmds.getAttr("defaultResolution.deviceAspectRatio")
-                            cmds.setAttr("defaultResolution.aspectLock", 0)
-                            cmds.setAttr("defaultResolution.width", shot['sg_width'])
-                            cmds.setAttr("defaultResolution.height", shot['sg_height'])
-                            cmds.setAttr("defaultResolution.pixelAspect", pAx)
-                            cmds.setAttr("defaultResolution.deviceAspectRatio", pAr)
-                            cmds.setAttr("defaultResolution.aspectLock", 1)
-                            texto = "Render settings resolution changed to: " + str(shot['sg_width']) + "x" + str(shot['sg_height'])
-                            cmds.confirmDialog(title="Resolution Mismatch", message=texto)
+                            pAx = cmds.getAttr('defaultResolution.pixelAspect')
+                            pAr = cmds.getAttr('defaultResolution.deviceAspectRatio')
+                            cmds.setAttr('defaultResolution.aspectLock', 0)
+                            cmds.setAttr('defaultResolution.width', shot['sg_width'])
+                            cmds.setAttr('defaultResolution.height', shot['sg_height'])
+                            cmds.setAttr('defaultResolution.pixelAspect', pAx)
+                            cmds.setAttr('defaultResolution.deviceAspectRatio', pAr)
+                            cmds.setAttr('defaultResolution.aspectLock', 1)
+                            texto = 'Render settings resolution changed to: ' + str(shot['sg_width']) + 'x' + str(shot['sg_height'])
+                            cmds.confirmDialog(title='Resolution Mismatch', message=texto)
 
                     # first, set up our callback, calling out to a method inside the app module contained
                     # in the python folder of the app
                     try:
                         menu_callback = lambda: SetResolution(self)
                     except Exception as e:
-                        self.logger.info("Reload Config %s", str(current_engine._Engine__engine_instance_name))
+                        self.logger.info('Reload Config %s', str(current_engine._Engine__engine_instance_name))
 
                     # now register the command with the engine
-                    engine.register_command("Set Shot Resolution", menu_callback)
+                    engine.register_command('Set Shot Resolution', menu_callback)
 
 
         except:
