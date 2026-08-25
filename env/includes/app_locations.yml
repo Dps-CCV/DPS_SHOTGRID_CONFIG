@@ -226,4 +226,9 @@ apps.tk-multi-scenebuilder.location:
   name: tk-multi-scenebuilder
   version: v0.1.1
 
+apps.tk-dps-copyversion.location:
+  type: git
+  path: https://github.com/Dps-CCV/tk-dps-copyversion.git
+  version: v1.0.0
+
 

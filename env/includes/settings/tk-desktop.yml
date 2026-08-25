@@ -45,6 +45,8 @@ settings.tk-desktop.project:
     tk-multi-demo:
       location: "@apps.tk-multi-demo.location"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
+    tk-dps-copyversion:
+      location: "@apps.tk-dps-copyversion.location"
   groups:
   - matches:
     - "*Hiero *"
