@@ -231,4 +231,9 @@ apps.tk-multi-scenebuilder.location:
 #  name: 'tk-davinci-timelineanalyzer'
 #  path: '{CONFIG_FOLDER}/bundles/tk-davinci-timelineanalyzer'
 
+apps.tk-dps-copyversion.location:
+  type: git
+  path: https://github.com/Dps-CCV/tk-dps-copyversion.git
+  version: v1.0.0
+
 
