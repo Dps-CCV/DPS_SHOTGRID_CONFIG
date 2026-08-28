@@ -229,6 +229,11 @@ apps.tk-multi-scenebuilder.location:
 apps.tk-dps-copyversion.location:
   type: git
   path: https://github.com/Dps-CCV/tk-dps-copyversion.git
-  version: v1.0.2
+  version: v1.1.3
+
+apps.tk-efectoscopio-reporter.location:
+  type: git
+  path: https://github.com/Dps-CCV/tk-efectoscopio-reporter.git
+  version: v1.0.0
 
 
