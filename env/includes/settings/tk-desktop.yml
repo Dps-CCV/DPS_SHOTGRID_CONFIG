@@ -51,8 +51,8 @@ settings.tk-desktop.project:
       location: "@apps.tk-efectoscopio-reporter.location"
   groups:
   - matches:
-      - "*copyversion *"
-      - "*reporter*"
+    - "*copyversion *"
+    - "*reporter*"
     name: Produccion
   - matches:
     - "*Hiero *"
