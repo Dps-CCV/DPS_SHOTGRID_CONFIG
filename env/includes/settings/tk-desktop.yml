@@ -47,7 +47,13 @@ settings.tk-desktop.project:
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
     tk-dps-copyversion:
       location: "@apps.tk-dps-copyversion.location"
+    tk-efectoscopio-reporter:
+      location: "@apps.tk-efectoscopio-reporter.location"
   groups:
+  - matches:
+      - "*copyversion *"
+      - "*reporter*"
+    name: Produccion
   - matches:
     - "*Hiero *"
     - "*DaviDinci Resolve*"
