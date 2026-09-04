@@ -142,6 +142,11 @@ class Settings(HookBaseClass):
         input_node = write_node.input(0)
         parent_group = write_node.parent()
         with parent_group:
+            # Configurar el Reformat que viene del .nk (input 0 del write original)
+            reformat = input_node  # ya es el Reformat según lo que describes
+            reformat["format"].setValue("HD_1080")  # o el formato que necesites
+            reformat["resize"].setValue("width")
+            #Creacion de Look transform
             look = nuke.createNode("OCIOLookTransform")
             look.setInput(0, input_node)
             look.knob("look").setValue("SHOT_GRADE")
