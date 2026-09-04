@@ -112,8 +112,8 @@ class ContextChange(get_hook_baseclass()):
                     if clip['sg_source_clip']:
                         os.environ['CLIP'] = str(clip['sg_source_clip']['name'])
                         self.logger.info('Environment variable CLIP changed to %s', str(clip['sg_source_clip']['name']))
-                        if clip['sg_source_clip']['sg_lmt']:
-                            lmt = clip['sg_source_clip']['sg_lmt']
+                        if clip['sg_source_clip.SourceClip.sg_lmt']:
+                            lmt = clip['sg_source_clip.SourceClip.sg_lmt']
 
                         # os.environ['LMT'] = str(clip['sg_source_clip.SourceClip.sg_lmt'])
                         # self.logger.info('Environment variable LMT changed to %s', str(clip['sg_source_clip']['name']))
@@ -205,6 +205,7 @@ class ContextChange(get_hook_baseclass()):
                     engine.register_command('Set Shot Resolution', menu_callback)
 
 
-        except:
+        except Exception as e:
+            self.logger.info(str(e))
             pass
         pass
