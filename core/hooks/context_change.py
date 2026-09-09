@@ -127,7 +127,7 @@ class ContextChange(get_hook_baseclass()):
                         self.logger.info('Environment variable LMT changed to %s', lmt)
 
                     else:
-                        os.environ['LMT'] = 'LMT_TEST.cube'
+                        os.environ['LMT'] = 'LMT_TEST'
                         self.logger.info('No LMT found')
 
 
