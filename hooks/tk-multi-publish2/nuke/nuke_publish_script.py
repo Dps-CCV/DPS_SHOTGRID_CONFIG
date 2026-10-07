@@ -336,42 +336,42 @@ class NukeSessionPublishPlugin(HookBaseClass):
         # do the base class finalization
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
 
-        # EFECTOSCOPIO ARCHIVING
-        scriptPath = os.path.normpath(nuke.root().name())
-        base = os.path.basename(nuke.root().name()).split(".")[0]
-        if 'SHOT_FOLDER' in os.environ.keys():
-            ShotFolder = os.path.join(*os.environ['SHOT_FOLDER'].split(os.sep)[3:])
-            archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', ShotFolder, base))[:-5]
-        elif 'ASSET_FOLDER' in os.environ.keys():
-            AssetFolder = os.path.join(*os.environ['ASSET_FOLDER'].split(os.sep)[3:])
-            archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', AssetFolder, base))[:-5]
+        # # EFECTOSCOPIO ARCHIVING
+        # scriptPath = os.path.normpath(nuke.root().name())
+        # base = os.path.basename(nuke.root().name()).split(".")[0]
+        # if 'SHOT_FOLDER' in os.environ.keys():
+        #     ShotFolder = os.path.join(*os.environ['SHOT_FOLDER'].split(os.sep)[3:])
+        #     archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', ShotFolder, base))[:-5]
+        # elif 'ASSET_FOLDER' in os.environ.keys():
+        #     AssetFolder = os.path.join(*os.environ['ASSET_FOLDER'].split(os.sep)[3:])
+        #     archivePath = os.path.normpath(os.path.join(os.environ['PROJECT_PATH'], 'ARCHIVE', AssetFolder, base))[:-5]
 
 
 
-        try:
-            self.logger.info("Starting Archive of the script. Be patient my friend")
-            if os.path.exists(archivePath):
-                shutil.rmtree(archivePath)
-            os.makedirs(archivePath)
-            WrapItUpLogger.WrapItUp(nk=scriptPath, out=archivePath, parentdircount=3, startnow=True, fonts=True,
-                              licinteractive=True, relativerelinked=True, gizmos=True, logger=self.logger)
+        # try:
+        #     self.logger.info("Starting Archive of the script. Be patient my friend")
+        #     if os.path.exists(archivePath):
+        #         shutil.rmtree(archivePath)
+        #     os.makedirs(archivePath)
+        #     WrapItUpLogger.WrapItUp(nk=scriptPath, out=archivePath, parentdircount=3, startnow=True, fonts=True,
+        #                       licinteractive=True, relativerelinked=True, gizmos=True, logger=self.logger)
 
 
-            # Access the published entity created earlier
-            type = item.get_property("parched_type")
-            id = item.get_property("parched_id")
+        #     # Access the published entity created earlier
+        #     type = item.get_property("parched_type")
+        #     id = item.get_property("parched_id")
 
-            if type != None and id != None:
-                # Update Shotgun/FPT fields as needed
-                self.sgtk.shotgun.update(
-                    type,
-                    id,
-                    {"sg_archived": True}  # Any field you want to update
-                )
+        #     if type != None and id != None:
+        #         # Update Shotgun/FPT fields as needed
+        #         self.sgtk.shotgun.update(
+        #             type,
+        #             id,
+        #             {"sg_archived": True}  # Any field you want to update
+        #         )
 
-            self.logger.info("Scene archived successfully")
-        except:
-            self.logger.warning("Archive was not possible")
+        #     self.logger.info("Scene archived successfully")
+        # except:
+        #     self.logger.warning("Archive was not possible")
 
 
 
