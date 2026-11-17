@@ -316,6 +316,20 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
             colorspace,
         )
         if version:
+            # The stock tk-multi-reviewsubmission submitter names the Version with
+            # name.replace("_", " ").capitalize(), which lowercases everything but the
+            # first letter. Restore the movie file name (same case, underscores kept).
+            try:
+                movie_template = review_submission_app.get_template("movie_path_template")
+                movie_path = movie_template.apply_fields(render_path_fields)
+                version_name = os.path.splitext(os.path.basename(movie_path))[0]
+                if version_name and version.get("code") != version_name:
+                    version_name_mod = version_name.replace('_', ' ')
+                    self.parent.shotgun.update("Version", version["id"], {"code": version_name_mod})
+                    version["code"] = version_name_mod
+            except Exception as e:
+                self.logger.warning("Could not restore the Version name: %s" % e)
+
             self.logger.info(
                 "Version uploaded for file: %s" % (render_path,),
                 extra={
