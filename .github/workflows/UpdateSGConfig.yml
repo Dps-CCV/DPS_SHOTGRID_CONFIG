@@ -59,9 +59,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9.13'
+          python-version: '3.12'
 
       - name: install python packages
         run: pip install shotgun-api3
