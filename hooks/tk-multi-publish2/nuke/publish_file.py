@@ -265,7 +265,13 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         path = item.properties.path
         checked = True
-        if item.properties.get("publish_type") not in ['BG_MATTEPAINT', 'RENDER_NUKE', 'IMAGE_PLANE', 'ALPHA_RENDER']:
+        in_tree = item.properties.get("in_tree")
+        if in_tree is not None:
+            # PRECOMP, TECH_PRECOMP, MATTE_PAINT, IMAGE_PLANE, ALPHA: checked
+            # only when the Render write nodes use them
+            checked = bool(in_tree)
+        elif item.properties.get("publish_type") not in ['BG_MATTEPAINT', 'RENDER_NUKE', 'IMAGE_PLANE', 'ALPHA_RENDER'] \
+                and not item.properties.get("external_dependency"):
             checked = False
 
         # log the accepted file and display a button to reveal it in the fs
@@ -290,6 +296,9 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         :returns: True if item is valid, False otherwise.
         """
+
+        if item.properties.get("external_dependency"):
+            return self._validate_external(item)
 
         publisher = self.parent
         path = item.properties.get("path")
@@ -404,12 +413,37 @@ class BasicFilePublishPlugin(HookBaseClass):
                 item.parent.parent.properties.sg_publish_data["id"]
             )
 
-        for i in nuke.allNodes("Read"):
-            if i['file'].value() == item.properties.path:
-                i.knob('file').setValue(str(publish_path).replace("\\", "/"))
+        new_read_path = str(publish_path).replace("\\", "/")
+        read_node_names = item.properties.get("read_nodes")
+        external = item.properties.get("external_dependency")
+        repointed = []
+        if external:
+            # material from outside the pipeline: transfer, write the
+            # fingerprint and reconnect the nodes
+            self._apply_external_dependency(item, new_read_path)
+            if external.get("relink_only"):
+                # it was published already, there is nothing to register
+                return
+        elif read_node_names:
+            # item collected from Read nodes (PRECOMP): repoint exactly those
+            for node_name in read_node_names:
+                read_node = nuke.toNode(node_name)
+                if read_node is not None:
+                    read_node.knob('file').setValue(new_read_path)
+                    repointed.append(read_node)
+        else:
+            for i in nuke.allNodes("Read"):
+                if i['file'].value() == item.properties.path:
+                    i.knob('file').setValue(new_read_path)
+                    repointed.append(i)
 
         # handle copying of work to publish if templates are in play
-        self._copy_work_to_publish(settings, item)
+        if not external:
+            self._copy_work_to_publish(settings, item)
+
+        # the files are in the new place now: reload the Read nodes so they do
+        # not stay in error
+        self._reload_read_nodes(repointed)
 
 
         # arguments for publish registration
@@ -476,6 +510,10 @@ class BasicFilePublishPlugin(HookBaseClass):
         """
 
         publisher = self.parent
+
+        external = item.properties.get("external_dependency")
+        if external and external.get("relink_only"):
+            return
 
         # get the data for the publish that was just created in SG
         publish_data = item.properties.sg_publish_data
@@ -769,6 +807,125 @@ class BasicFilePublishPlugin(HookBaseClass):
         return item.get_property("publish_kwargs", default_value={})
 
     ############################################################################
+    # external dependencies (see collector.collect_external_dependencies)
+
+    def _reload_read_nodes(self, nodes):
+        """
+        Reload Read nodes whose file was changed, so they stop showing an error.
+        """
+        for node in nodes:
+            try:
+                knob = node.knob("reload")
+                if knob is not None:
+                    knob.execute()
+            except Exception as e:
+                self.logger.debug("Could not reload '%s': %s" % (node.name(), e))
+
+    def _validate_external(self, item):
+        """
+        Validation of the items collected from the external dependencies of the
+        script: the sources must exist and no destination can hold another file.
+        """
+        plan = item.properties.get("external_dependency")
+        if plan.get("relink_only"):
+            self.logger.info("Already published, the nodes will be reconnected to:")
+            self.logger.info("  %s" % (item.properties.get("publish_path"),))
+            return True
+
+        for src, dst in plan.get("pairs", []):
+            if not os.path.isfile(src):
+                raise Exception("The source file does not exist: %s" % (src,))
+            if os.path.exists(dst) and os.path.getsize(dst) != os.path.getsize(src):
+                raise Exception(
+                    "The destination already exists and is different: %s" % (dst,)
+                )
+        action = "moved" if plan.get("move") else "copied"
+        self.logger.info(
+            "%d file(s) will be %s to %s"
+            % (len(plan.get("pairs", [])), action, item.properties.get("publish_path"))
+        )
+        return True
+
+    def _apply_external_dependency(self, item, new_path):
+        """
+        Move/copy the files of an external dependency, write the fingerprint
+        file and reconnect the nodes that read it.
+        """
+        plan = item.properties.get("external_dependency")
+
+        if not plan.get("relink_only"):
+            pairs = plan.get("pairs", [])
+            move = plan.get("move")
+            self.logger.info(
+                "%s %d file(s) to the publish location..."
+                % ("Moving" if move else "Copying", len(pairs))
+            )
+            self._transfer_external_files(pairs, move)
+
+            if plan.get("sidecar") and pairs and plan.get("fingerprint"):
+                sidecar = os.path.join(os.path.dirname(pairs[0][1]), "_fingerprint.txt")
+                try:
+                    with open(sidecar, "w") as handle:
+                        handle.write("%s\n%s\n" % (plan["fingerprint"], plan.get("source_path")))
+                except (OSError, IOError) as e:
+                    self.logger.warning("Could not write %s: %s" % (sidecar, e))
+
+        with nuke.root():
+            for node_name in plan.get("nodes", []):
+                node = nuke.toNode(node_name)
+                if node is None:
+                    self.logger.warning("Node not found, not reconnected: %s" % (node_name,))
+                    continue
+                node["file"].setValue(new_path)
+                self._reload_read_nodes([node])
+        self.logger.info("Reconnected %d node(s) to %s" % (len(plan.get("nodes", [])), new_path))
+
+    def _transfer_external_files(self, pairs, move):
+        """
+        Move (same volume: rename; otherwise copy, check the size and delete the
+        original) or copy the (source, destination) pairs.
+        """
+        from concurrent.futures import ThreadPoolExecutor
+
+        def transfer(pair):
+            src, dst = pair
+            if os.path.normcase(os.path.normpath(src)) == os.path.normcase(os.path.normpath(dst)):
+                return
+            ensure_folder_exists(os.path.dirname(dst))
+            if os.path.exists(dst):
+                if os.path.getsize(dst) != os.path.getsize(src):
+                    raise Exception("The destination already exists and is different: %s" % (dst,))
+                if move:
+                    os.remove(src)
+                return
+            if move:
+                try:
+                    os.rename(src, dst)
+                    return
+                except OSError:
+                    pass
+            shutil.copy2(src, dst)
+            if os.path.getsize(dst) != os.path.getsize(src):
+                os.remove(dst)
+                raise Exception("The copy of %s is incomplete" % (src,))
+            if move:
+                os.remove(src)
+
+        if len(pairs) > 8:
+            with ThreadPoolExecutor(max_workers=8) as pool:
+                list(pool.map(transfer, pairs))
+        else:
+            for pair in pairs:
+                transfer(pair)
+
+        if move:
+            for folder in set(os.path.dirname(src) for src, _ in pairs):
+                try:
+                    os.rmdir(folder)  # only succeeds when it is empty
+                except OSError:
+                    pass
+
+    ############################################################################
     # protected methods
 
     def _copy_work_to_publish(self, settings, item):
@@ -903,7 +1060,14 @@ class BasicFilePublishPlugin(HookBaseClass):
             if renderFolder[:-3] in renderVersion:
                 olderVersionsList.append(renderVersion)
 
-        if len(olderVersionsList) > 4:
+        if len(olderVersionsList) > 4 and os.path.normcase(
+            os.path.normpath(os.path.join(imagesFolder, olderVersionsList[0]))
+        ) == os.path.normcase(publish_folder):
+            # publishing an old version: never delete the one just published
+            self.logger.info(
+                "The oldest version is the one just published. Skipping the cleanup."
+            )
+        elif len(olderVersionsList) > 4:
             oldFolder = os.path.join(imagesFolder, olderVersionsList[0]) + os.sep
             self.logger.info(
                 "Unregistering %s " % (oldFolder)
