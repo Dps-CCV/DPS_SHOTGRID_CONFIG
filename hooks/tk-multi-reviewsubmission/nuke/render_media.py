@@ -10,6 +10,7 @@
 
 import sgtk
 import os
+import re
 import nuke
 import shutil
 from datetime import date
@@ -58,6 +59,63 @@ class RenderMedia(HookBaseClass):
             self._logo = self._logo.replace(os.sep, "/")
             self._burnin_nk = self._burnin_nk.replace(os.sep, "/")
 
+    @staticmethod
+    def _mp4_frame_count(path):
+        """Frames of the first video track of an mp4/mov, read from its headers (stts)."""
+        import struct
+
+        def boxes(f, start, end):
+            pos = start
+            while pos + 8 <= end:
+                f.seek(pos)
+                hdr = f.read(8)
+                if len(hdr) < 8:
+                    return
+                size, typ = struct.unpack(">I4s", hdr)
+                hlen = 8
+                if size == 1:
+                    size = struct.unpack(">Q", f.read(8))[0]
+                    hlen = 16
+                elif size == 0:
+                    size = end - pos
+                if size < hlen:
+                    return
+                yield typ, pos + hlen, pos + size
+                pos += size
+
+        with open(path, "rb") as f:
+            f.seek(0, 2)
+            fsize = f.tell()
+            for typ, s, e in boxes(f, 0, fsize):
+                if typ != b"moov":
+                    continue
+                for t2, s2, e2 in boxes(f, s, e):
+                    if t2 != b"trak":
+                        continue
+                    is_video, count = False, None
+                    for t3, s3, e3 in boxes(f, s2, e2):
+                        if t3 != b"mdia":
+                            continue
+                        for t4, s4, e4 in boxes(f, s3, e3):
+                            if t4 == b"hdlr":
+                                f.seek(s4 + 8)
+                                is_video = f.read(4) == b"vide"
+                            elif t4 == b"minf":
+                                for t5, s5, e5 in boxes(f, s4, e4):
+                                    if t5 != b"stbl":
+                                        continue
+                                    for t6, s6, e6 in boxes(f, s5, e5):
+                                        if t6 == b"stts":
+                                            f.seek(s6 + 4)
+                                            n = struct.unpack(">I", f.read(4))[0]
+                                            count = 0
+                                            for _ in range(n):
+                                                c, _d = struct.unpack(">II", f.read(8))
+                                                count += c
+                    if is_video and count:
+                        return count
+        return None
+
     def render(
         self,
         input_path,
@@ -88,6 +146,29 @@ class RenderMedia(HookBaseClass):
         """
         output_node = None
         ctx = self.__app.context
+
+        # PRECOMP dailies: name the movie (and so the Version) after the published
+        # frames instead of the generic movie template, so it does not overwrite
+        # the movie of the script/other renders.
+        _RM_BUILD = "render_media precomp-name v10 mp4 (2026-11-23 15:50)"
+        try:
+            _in = (input_path or "").replace("\\", "/")
+            if output_path and "/PRECOMP/" in _in.upper():
+                _base = os.path.basename(_in).split(".")[0]
+                if _base:
+                    _new_out = os.path.join(
+                        os.path.dirname(output_path), _base + ".mov"
+                    ).replace("\\", "/")
+                    self.__app.log_info(
+                        "[%s] PRECOMP movie renamed: %s -> %s"
+                        % (_RM_BUILD, output_path, _new_out)
+                    )
+                    output_path = _new_out
+                    name = _base
+            else:
+                self.__app.log_info("[%s] movie name unchanged: %s" % (_RM_BUILD, output_path))
+        except Exception as _e:
+            self.__app.log_warning("[%s] rename failed: %s" % (_RM_BUILD, _e))
 
 
         # create group where everything happens
@@ -129,14 +210,28 @@ class RenderMedia(HookBaseClass):
             local_input = input_path.replace(os.environ['MOUNT'], local)
             read = nuke.nodes.Read(name="source", file=local_input.replace(os.sep, "/"))
             read["on_error"].setValue("black")
-            read["first"].setValue(first_frame)
-            read["last"].setValue(last_frame)
-            read['reload'].execute()
+            is_mp4 = local_input.lower().endswith(".mp4")
+            if is_mp4:
+                # PRECOMP_MP4: the clip is numbered 1..N. Leave first/last/origfirst/origlast
+                # as Nuke detects them; only "start at" maps the clip to the script frames.
+                # The range to render is computed right before rendering.
+                try:
+                    read["frame_mode"].setValue("start at")
+                    read["frame"].setValue(str(first_frame))
+                except Exception as e:
+                    self.__app.log_warning("Could not set the start frame of the mp4: %s" % (e,))
+                read['reload'].execute()
+            else:
+                read["first"].setValue(first_frame)
+                read["last"].setValue(last_frame)
+                read['reload'].execute()
 
             ## Disable localization to ensure that frames are rendered without problems
             read["localizationPolicy"].setValue('off')
             #read.forceUpdateLocalization()
-            if "_IPL_" in read['file'].value():
+            if is_mp4:
+                read["colorspace"].setValue('Output - Rec.709')
+            elif "_IPL_" in read['file'].value():
                 read["colorspace"].setValue('Output - Rec.709')
             elif "_IMP_" in read['file'].value():
                 read["colorspace"].setValue('ACEScg')
@@ -223,6 +318,56 @@ class RenderMedia(HookBaseClass):
             self.__app.ensure_folder_exists(output_folder)
             read['reload'].execute()
             time.sleep(5)
+            if is_mp4:
+                try:
+                    clip_frames = int(read["origlast"].value()) - int(read["origfirst"].value()) + 1
+                    script_frames = int(last_frame) - int(first_frame) + 1
+                    self.__app.log_info(
+                        "mp4 read state: file=%s frame_mode=%s frame=%s first=%s last=%s origfirst=%s origlast=%s "
+                        "before=%s after=%s colorspace=%s clip_frames=%s script_frames=%s exists=%s size=%s"
+                        % (read["file"].value(), read["frame_mode"].value(), read["frame"].value(),
+                           read["first"].value(), read["last"].value(), read["origfirst"].value(),
+                           read["origlast"].value(), read["before"].value(), read["after"].value(),
+                           read["colorspace"].value(), clip_frames, script_frames,
+                           os.path.exists(local_input), os.path.getsize(local_input) if os.path.exists(local_input) else None)
+                    )
+                    # the frame count is read from the mp4 itself (its range can differ from the script's)
+                    real_frames = None
+                    try:
+                        real_frames = self._mp4_frame_count(local_input)
+                    except Exception as e:
+                        self.__app.log_warning("Could not read the frame count of the mp4: %s" % (e,))
+                    self.__app.log_info("mp4 frames in file: %s (nuke reports %s)" % (real_frames, clip_frames))
+                    if real_frames and real_frames != clip_frames:
+                        clip_frames = real_frames
+                        # force the clip numbering 1..N explicitly (Nuke did not probe the file)
+                        for _k, _v in (("origfirst", 1), ("origlast", clip_frames),
+                                       ("first", 1), ("last", clip_frames)):
+                            read[_k].setValue(_v)
+                        read["frame_mode"].setValue("start at")
+                        read["frame"].setValue(str(first_frame))
+                        read['reload'].execute()
+                        self.__app.log_info(
+                            "mp4 range forced: first=%s last=%s origfirst=%s origlast=%s frame=%s"
+                            % (read["first"].value(), read["last"].value(), read["origfirst"].value(),
+                               read["origlast"].value(), read["frame"].value())
+                        )
+                    start = int(read["frame"].value())
+                    mp4_first, mp4_last = start, start + clip_frames - 1
+                    self.__app.log_info(
+                        "mp4 source: first/last %s-%s, orig %s-%s, start at %s -> render %s-%s (script range %s-%s)"
+                        % (read["first"].value(), read["last"].value(), read["origfirst"].value(),
+                           read["origlast"].value(), start, mp4_first, mp4_last, first_frame, last_frame)
+                    )
+                    if clip_frames > 0:
+                        first_frame, last_frame = mp4_first, mp4_last
+                        try:
+                            _msg = burn.node("slate_info")["message"]
+                            _msg.setValue(re.sub(r"Frames: [^\n]*", "Frames: %s - %s" % (first_frame, last_frame), _msg.value()))
+                        except Exception:
+                            pass
+                except Exception as e:
+                    self.__app.log_warning("Could not compute the mp4 render range: %s" % (e,))
             nuke.showDag(group)
             self.__app.log_info("Rendering Qt")
             nuke.executeMultiple(

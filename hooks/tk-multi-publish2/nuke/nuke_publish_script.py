@@ -336,6 +336,21 @@ class NukeSessionPublishPlugin(HookBaseClass):
         # do the base class finalization
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
 
+        # All the publish tasks (externals, precomps, renders...) are done by
+        # now and the Read nodes point to their new paths: save the script again
+        # and overwrite the published .nk so it carries those changes.
+        try:
+            work_path = item.properties["path"]
+            publish_path = self.get_publish_path(settings, item)
+            if publish_path and os.path.normcase(os.path.normpath(publish_path)) != os.path.normcase(os.path.normpath(work_path)):
+                _save_session(work_path)
+                sgtk.util.filesystem.copy_file(work_path, publish_path)
+                self.logger.info("[resave v1 (2026-11-20 17:25)] Published script updated with the new Read paths: %s" % (publish_path,))
+            else:
+                self.logger.info("[resave v1 (2026-11-20 17:25)] No separate publish path, nothing to update")
+        except Exception as e:
+            self.logger.warning("[resave v1 (2026-11-20 17:25)] Could not update the published script: %s" % (e,))
+
         # EFECTOSCOPIO ARCHIVING
         scriptPath = os.path.normpath(nuke.root().name())
         base = os.path.basename(nuke.root().name()).split(".")[0]

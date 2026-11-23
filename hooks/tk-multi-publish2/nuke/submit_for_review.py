@@ -86,7 +86,7 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
         accept() method. Strings can contain glob patters such as *, for example
         ["maya.*", "file.maya"]
         """
-        return ["*.sequence"]
+        return ["*.sequence", "*.video"]
 
     def accept(self, settings, item):
         """
@@ -156,6 +156,10 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
                 "'path' property is not defined on the item. "
                 "Item will be skipped: %s." % (item.properties["publish_name"],)
             )
+
+        if item.type.endswith(".video") and item.properties.get("publish_type") != "PRECOMP":
+            # movies are only reviewed for the PRECOMP_MP4 renders
+            accepted = False
 
         if accepted:
             # log the accepted file and display a button to reveal it in the fs
@@ -319,9 +323,12 @@ class NukeSubmitForReviewPlugin(HookBaseClass):
             # The stock tk-multi-reviewsubmission submitter names the Version with
             # name.replace("_", " ").capitalize(), which lowercases everything but the
             # first letter. Restore the movie file name (same case, underscores kept).
+            # The real movie path is used (render_media may have renamed it).
             try:
-                movie_template = review_submission_app.get_template("movie_path_template")
-                movie_path = movie_template.apply_fields(render_path_fields)
+                movie_path = version.get("sg_path_to_movie")
+                if not movie_path:
+                    movie_template = review_submission_app.get_template("movie_path_template")
+                    movie_path = movie_template.apply_fields(render_path_fields)
                 version_name = os.path.splitext(os.path.basename(movie_path))[0]
                 if version_name and version.get("code") != version_name:
                     version_name_mod = version_name.replace('_', ' ')

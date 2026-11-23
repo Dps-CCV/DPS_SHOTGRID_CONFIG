@@ -76,6 +76,10 @@ keys:
     extension:
         type: str
 
+    # Name of the material published in VFX/ASSETS/EXTERNAL (Nuke publisher)
+    external_name:
+        type: str
+
     frame_num:
        type: int
        format_spec: "04"
@@ -264,6 +268,13 @@ paths:
 
     shot_alembic_cache:
         definition: 'VFX/{Episode}/{Sequence}/{Shot}/PUBLISH/GEO/{Step}/{Shot}_{Step}_GEO_{name}_v{version}.abc'
+
+    # Material that comes from outside the pipeline, published by the Nuke
+    # publisher when it is read by a render of a script
+    external_publish_seq:
+        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/v{version}/{external_name}.{SEQ}.{extension}'
+    external_publish_file:
+        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/v{version}/{external_name}.{extension}'
 
 
     ##########################################################################################
@@ -870,6 +881,10 @@ paths:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}/{Asset}_{nuke.output}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_precomp_pub_proxy:
         definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_v{version}_proxy/{Asset}_{nuke.output}_{task_name}_v{version}_proxy.{SEQ}.{FormExt}'
+    nuke_asset_precomp_h264:
+        definition: '@asset_root/STEPS/{Step}/NUKE/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Asset}_{nuke.output}_{task_name}_h264_v{version}.mp4'
+    nuke_asset_precomp_h264_pub:
+        definition: '@asset_root/PUBLISH/IMAGES/{Step}/PRECOMP/{nuke.output}_{task_name}_h264_v{version}/{Asset}_{nuke.output}_{task_name}_h264_v{version}.mp4'
     nuke_asset_render:
         definition: '@asset_root/STEPS/{Step}/NUKE/IMAGES/NUKE_{task_name}_v{version}/{Asset}_{Step}_{task_name}_v{version}.{SEQ}.{FormExt}'
     nuke_asset_render_proxy:
