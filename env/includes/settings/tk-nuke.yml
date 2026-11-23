@@ -410,12 +410,15 @@ settings.tk-nuke.shot_step:
     tk-nuke-writenode: "@settings.tk-nuke-writenode.shot"
     tk-multi-bugreporter: "@settings.tk-multi-bugreporter.main"
     tk-multi-data-validation: "@settings.tk-multi-data-validation.nuke"
+    tk-multi-contextsetup:
+      location: "@apps.tk-multi-contextsetup.location"
 
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open..., hotkey: Shift+Ctrl+o}
   - {app_instance: tk-multi-snapshot, name: Snapshot...}
   - {app_instance: tk-multi-workfiles2, name: File Save..., hotkey: Shift+Ctrl+s}
   - {app_instance: tk-multi-publish2, name: Publish..., hotkey: Shift+Ctrl+p}
+  - {app_instance: tk-multi-contextsetup, name: Setup Shot Scene}
   favourite_directories:
     - display_name: "Shot Root"
       template_directory: "shot_root"
