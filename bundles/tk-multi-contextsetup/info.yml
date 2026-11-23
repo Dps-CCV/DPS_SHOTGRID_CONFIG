@@ -1,0 +1,36 @@
+# Builds the Nuke scene of a shot from its publishes in Flow Production Tracking.
+
+configuration:
+  cut_in_field:
+    type: str
+    default_value: "sg_cut_in"
+    description: Shot field with the first frame of the shot.
+  cut_out_field:
+    type: str
+    default_value: "sg_cut_out"
+    description: Shot field with the last frame of the shot.
+  format_field:
+    type: str
+    default_value: "sg_formato___resolucion_proyecto"
+    description: Project field with the resolution, as text like 1920x1080.
+  fps_field:
+    type: str
+    default_value: "sg_fps"
+    description: >
+      Project field with the frame rate. If the field does not exist, the first
+      Project field whose name contains "fps" is used.
+  skip_published_file_types:
+    type: str
+    default_value: ""
+    description: Comma-separated published file types that must not be turned into nodes.
+
+supported_engines: [tk-nuke]
+
+display_name: "Setup Shot Scene"
+description: "Sets the frame range, fps and format of the script from FPT and creates the nodes of the publishes of the shot."
+
+requires_shotgun_version:
+requires_core_version: "v0.19.9"
+requires_engine_version:
+
+frameworks:
