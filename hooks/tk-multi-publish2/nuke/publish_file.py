@@ -1068,7 +1068,22 @@ class BasicFilePublishPlugin(HookBaseClass):
                 "The oldest version is the one just published. Skipping the cleanup."
             )
         elif len(olderVersionsList) > 4:
-            oldFolder = os.path.join(imagesFolder, olderVersionsList[0]) + os.sep
+            # never delete a version that a node of the current script is reading:
+            # take the oldest one that is not in use
+            in_use = self._read_node_paths()
+            oldFolder = None
+            for candidate in sorted(olderVersionsList):
+                candidate_path = os.path.normcase(os.path.normpath(os.path.join(imagesFolder, candidate)))
+                if candidate_path == os.path.normcase(publish_folder):
+                    continue
+                if any(p == candidate_path or p.startswith(candidate_path + os.sep) for p in in_use):
+                    self.logger.info("Old version %s is used by the script, it is kept." % (candidate,))
+                    continue
+                oldFolder = os.path.join(imagesFolder, candidate) + os.sep
+                break
+            if oldFolder is None:
+                self.logger.info("All the old versions are in use or just published. Skipping the cleanup.")
+                return
             self.logger.info(
                 "Unregistering %s " % (oldFolder)
             )
@@ -1085,6 +1100,25 @@ class BasicFilePublishPlugin(HookBaseClass):
 
 
 
+
+    def _read_node_paths(self):
+        """
+        Normalized paths of the files read by the nodes of the script (groups included).
+        """
+        paths = set()
+        try:
+            for node in nuke.allNodes(recurseGroups=True):
+                if node.Class() not in ("Read", "ReadGeo2", "ReadGeo", "Camera2", "Camera", "AudioRead", "DeepRead"):
+                    continue
+                knob = node.knob("file")
+                if not knob:
+                    continue
+                for value in (knob.value(), knob.evaluate()):
+                    if value:
+                        paths.add(os.path.normcase(os.path.normpath(os.path.dirname(value))))
+        except Exception as e:
+            self.logger.warning("Could not list the files read by the script: %s" % (e,))
+        return paths
 
     def _get_next_version_info(self, path, item):
         """
