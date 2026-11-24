@@ -272,9 +272,9 @@ paths:
     # Material that comes from outside the pipeline, published by the Nuke
     # publisher when it is read by a render of a script
     external_publish_seq:
-        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/v{version}/{external_name}.{SEQ}.{extension}'
+        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/PUBLISH/IMAGES/v{version}/{external_name}.{SEQ}.{extension}'
     external_publish_file:
-        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/v{version}/{external_name}.{extension}'
+        definition: 'VFX/ASSETS/EXTERNAL/{external_name}/PUBLISH/IMAGES/v{version}/{external_name}.{extension}'
 
 
     ##########################################################################################
