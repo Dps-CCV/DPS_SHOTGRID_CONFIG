@@ -1,0 +1,5 @@
+# Blender work area folder for a Step.
+# Created when Toolkit launches Blender (defer keyword = engine name) and
+# whenever a file is saved there.
+type: "static"
+defer_creation: "tk-blender"

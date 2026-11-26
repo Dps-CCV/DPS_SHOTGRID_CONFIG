@@ -71,6 +71,7 @@ settings.tk-desktop.project:
     - "*Mari*"
     - "*Max*"
     - "*Maya*"
+    - "*Blender*"
     - "*Motion*"
     - '*Unreal*'
     name: 3D

@@ -25,6 +25,12 @@ engines.tk-alias.location:
   type: app_store
   name: tk-alias
   version: v4.3.1
+# Blender (community tk-blender, adapted for Blender 4.x/5.x / PySide6; lives in this config)
+engines.tk-blender.location:
+  type: path
+  name: tk-blender
+  path: '{CONFIG_FOLDER}/bundles/tk-blender'
+
 engines.tk-desktop.location:
   type: app_store
   name: tk-desktop
